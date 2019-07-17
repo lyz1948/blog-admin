@@ -1,0 +1,53 @@
+.siderNav {
+  float: left;
+  min-height: 100%;
+  width: 200px;
+  background-color: #283847;
+}
+
+.siderNav .navItem {
+  color: #fff;
+  box-shadow:  0 0 2px #4d5b69;
+}
+.siderNav .navItem .content{
+  position: relative;
+  padding: 0 20px;
+  line-height: 45px;
+}
+
+.siderNav .navItem .content:hover{
+  background-color: #425668;
+}
+.siderNav .subNav {
+  padding: 8px 0;
+  color: #f0f0f0;
+  background-color: #2e4050;
+}
+.siderNav .subNav .content{
+  padding-left: 36px;
+  line-height: 35px;
+}
+.siderNav .navItem .dropIcon{
+  position: absolute;
+  right: 10px;
+}
+.siderNav .text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.hand {
+  cursor: pointer;
+}
+
+.line {
+  position: relative;
+}
+.line::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  box-shadow: 0 1px 2px #827d7d;
+}
