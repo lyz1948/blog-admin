@@ -16,7 +16,7 @@ export interface ArticleModel {
   password: string
   state: number
   thumb: string
-  [prosName: string]: any
+  [propName: string]: any
   // create_at: Date
   // update_at: Date
 }
@@ -26,5 +26,10 @@ export namespace ArticleModel {
     SHOW_ALL = 'ALL',
     SHOW_PUBLISH = 'PUBLISH',
     SHOW_PUBLIC = 'PUBLIC',
+  }
+  export enum State {
+    Password = 0,
+    Public = 1,
+    Secret = -1,
   }
 }

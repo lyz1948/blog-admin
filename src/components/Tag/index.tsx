@@ -1,11 +1,9 @@
 import *  as React from 'react'
 import { TagModel } from '@app/store/models'
-import { TagActions } from '@app/store/actions'
 
 export namespace Tag {
   export interface IProps {
-    tags: TagModel
-    actions: TagActions
+    tags: TagModel[]
   }
 }
 
@@ -15,8 +13,13 @@ export class TagComp extends React.Component<Tag.IProps> {
   }
 
   render() {
+    const { tags } = this.props
     return (
-      <div className="tag">Tags</div>
+      <div className="tag">
+        { tags.map(tag => (
+          <div key={tag._id}>{tag.name}</div>
+        ))}
+      </div>
     )
   }
 }

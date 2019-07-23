@@ -1,8 +1,9 @@
 import axios from 'axios'
 import * as CONFIG from '../app.config'
 import * as UTILS from '../utils'
-import { UserModel } from '@app/store/models'
 import { IResponseData } from '@app/store/types'
+import { UserModel } from '@app/store/models'
+
 const token = UTILS.getToken()
 
 const service = axios.create({
@@ -26,27 +27,76 @@ service.interceptors.response.use((response: any) => {
   }
 })
 
-export const fetchArticl = (): Promise<IResponseData> => {
-  return service.get('/article')
+interface IFatchData<T = any> {
+  message: string
+  result: T
+  status: string
+}
+/**
+ * 获取文章列表
+ */
+export const fetchArticl = <T>() => {
+  return service.get<IFatchData<T>>('/article')
 }
 
+/**
+ * 添加文章
+ * @param article 文章对象
+ */
+export const addArticl = (article: any): Promise<IResponseData> => {
+  return service.post('/article', { ...article })
+}
+
+/**
+ * 删除指定id文章
+ * @param id 文章id
+ */
 export const deleteArticl = (id: any): Promise<IResponseData> => {
-  console.log('api', id)
   return service.delete(`/article/${id}`)
 }
 
-export const fetchCategory = () => {
-  return service.get('/category')
+/**
+ * 获取文章分类
+ */
+export const fetchCategory = <T>() => {
+  return service.get<IFatchData<T>>('/category')
 }
 
-export const fetchTag = () => {
-  return service.get('/tag')
+/**
+ * 添加分类
+ * @param category 分类对象
+ */
+export const addCategory = (category: any): Promise<IResponseData> => {
+  return service.post('/category', { ...category })
 }
 
+/**
+ * 删除分类
+ * @param id 分类id
+ */
+export const deleteCategory = (id: any) => {
+  return service.delete(`/category/${id}`)
+}
+
+/**
+ * 获取文章的标签
+ */
+export const fetchTag = <T>() => {
+  return service.get<IFatchData<T>>('/tag')
+}
+
+/**
+ * 用户登录
+ * @param user 用户名和密码
+ */
 export const signIn = (user: UserModel): Promise<UserModel> => {
   return service.post('/user/login', { ...user })
 }
 
+/**
+ * 用户注册
+ * @param user 注册用户
+ */
 export const signUp = (user: UserModel): Promise<UserModel> => {
   return service.post('/user/signup', { ...user })
 }

@@ -1,9 +1,9 @@
 export interface TagModel {
-  id: number
+  _id: string
   name: string
-  content: string
-  description: string
   slug: string
+  extends?: []
+  [propName: string]: any
 }
 
 export namespace TagModel {

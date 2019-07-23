@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { ArticleModel } from '@app/store/models/article.model'
-import { ArticleActions } from '@app/store/actions/article'
+import { ArticleModel } from '@app/store/models'
+import { ArticleActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
 
 export namespace Article {

@@ -35,7 +35,6 @@ export const articleReducer = handleActions<RootState.ArticleState, ArticleModel
         const { result } = (action.payload!)
         return [
           ...result.data,
-          ...state,
         ]
       }
       return state

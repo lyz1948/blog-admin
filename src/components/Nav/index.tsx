@@ -93,12 +93,14 @@ export class NavComp extends React.Component<Nav.IProps> {
     return (
       <div className={styles.siderNav}>
         {menus.map((menu, idx) => (
-          <div
-            className={styles.navItem}
-            key={idx}
-            onClick={() => onClickFilter(NavModel.Filter[menu.name])}
-          >
-            <div className={styles.content}>
+          <div className={styles.navItem} key={idx}>
+            <div
+              className={styles.content}
+              onClick={(e) => {
+                e.stopPropagation()
+                onClickFilter(NavModel.Filter[menu.name])
+              }}
+            >
               <FontAwesomeIcon
                 icon={menu.icon}
                 style={{ marginRight: '5px' }}
@@ -114,7 +116,10 @@ export class NavComp extends React.Component<Nav.IProps> {
                   <div
                     className={styles.content}
                     key={child.text}
-                    onClick={() => onClickFilter(NavModel.Filter[child.name])}
+                    onClick={e => {
+                      e.stopPropagation()
+                      onClickFilter(NavModel.Filter[child.name])
+                    }}
                   >
                     <FontAwesomeIcon
                       icon={child.icon}

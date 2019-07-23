@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions'
 import { RootState } from './state'
 import { IResponseData } from '../types'
 import { UserActions } from '../actions'
+import * as CONFIG from '../../app.config'
 
 const initialState: RootState.UserState = {
   username: 'root',
@@ -13,8 +14,12 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
     [UserActions.Type.SIGN_IN]: (state, action) => {
       if (action.payload) {
         const { data } = (action.payload!)
+        // 存储token
+        data.result.expires_in = data.result.expires_in * 1000 + Date.now()
+        localStorage.setItem(CONFIG.APP.tokenKey, JSON.stringify(data.result))
+
         return {
-          data: data.result,
+          token: data.result,
           ...state,
         }
       }

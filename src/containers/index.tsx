@@ -3,15 +3,21 @@ import * as styles from './style.css'
 import * as CONFIG from '../app.config'
 
 import { connect } from 'react-redux'
-// import { omit } from '../utils'
-// import { bindActionCreators, Dispatch } from 'redux'
+import { omit } from '../utils'
+import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router'
-import { RootState } from '@app/store/reducers'
+import { RootState } from '../store/reducers'
 import { NavModel } from '../store/models'
 
 import {
   ArticleApp,
 } from './article'
+import {
+  CategoryApp,
+} from './category'
+import {
+  TagApp,
+} from './tag'
 
 // component
 import {
@@ -20,10 +26,14 @@ import {
   DashboardComp,
   ArticleAddComp,
 } from '../components'
+import { ArticleActions } from '../store/actions'
 
 export namespace App {
   export interface IProps extends RouteComponentProps<void> {
     filter: NavModel.Filter
+    actions: ArticleActions
+    categories: RootState.CategoryState
+    tags: RootState.TagState
   }
 }
 
@@ -32,17 +42,18 @@ const FILTER_COMPONMENT = (Object.keys(
 ) as (keyof typeof NavModel.Filter)[]).map(comp => NavModel.Filter[comp])
 
 @connect(
-  (state: RootState, ownProps): Pick<App.IProps, 'filter'> => {
+  (state: RootState, ownProps): Pick<App.IProps, 'filter' | 'categories' | 'tags'> => {
     const hash = ownProps.location && ownProps.location.hash.replace('#', '')
     const filter =
       FILTER_COMPONMENT.find(value => value === hash) ||
       NavModel.Filter.DASHBOARD
-    return { filter }
+    return { filter, categories: state.categories, tags: state.tags }
   },
-  // (dispatch: Dispatch): Pick<App.IProps, 'actions'> => ({
-  //   actions: bindActionCreators(omit(DialogActions, 'Type'), dispatch),
-  // }),
+  (dispatch: Dispatch): Pick<App.IProps, 'actions'> => ({
+    actions: bindActionCreators(omit(ArticleActions, 'Type'), dispatch),
+  }),
 )
+
 export class App extends React.Component<App.IProps> {
   constructor(props: App.IProps, context?: any) {
     super(props, context)
@@ -50,9 +61,9 @@ export class App extends React.Component<App.IProps> {
     this.handleFilterChange = this.handleFilterChange.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let token = localStorage.getItem(CONFIG.APP.tokenKey) as any
-    const now = Date.now()
+
     try {
       token = JSON.parse(token)
     } catch (error) {
@@ -60,7 +71,7 @@ export class App extends React.Component<App.IProps> {
     }
 
     // 凭证过期
-    if (!token || token.expires_in < now) {
+    if (!token || token.expires_in < Date.now()) {
       localStorage.removeItem(CONFIG.APP.tokenKey)
       this.props.history.push('/login')
     }
@@ -71,7 +82,7 @@ export class App extends React.Component<App.IProps> {
   }
 
   filterCompoent(): JSX.Element | void {
-    const { filter } = this.props
+    const { filter, actions, categories, tags } = this.props
 
     switch (filter) {
       case 'DASHBOARD':
@@ -79,7 +90,16 @@ export class App extends React.Component<App.IProps> {
       case 'ARTICLE':
         return <ArticleApp />
       case 'ARTICLE_ADD':
-        return <ArticleAddComp />
+        return <ArticleAddComp
+        tags={tags}
+        categories={categories}
+        addArticle={actions.addArticle}
+        getCategory={actions.getCategory}
+        getTag={actions.getTag}/>
+      case 'CATEGORY_MANAGE':
+        return <CategoryApp />
+      case 'TAG':
+        return <TagApp />
       default:
         return <DashboardComp />
     }

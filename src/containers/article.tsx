@@ -1,7 +1,6 @@
 import * as React from 'react'
-// import * as styles from './style.css'
 import { connect } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import { Dispatch, bindActionCreators } from 'redux'
 import { RouteComponentProps } from 'react-router'
 import { omit } from '../utils'
 import { RootState } from '../store/reducers'

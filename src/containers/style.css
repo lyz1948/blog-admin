@@ -23,6 +23,11 @@ ul {
   padding: 0;
 }
 
+/* bootstrap */
+.form-control {
+  background-color: #2e4050 !important;
+}
+
 /* 
 button {
   margin: 0;

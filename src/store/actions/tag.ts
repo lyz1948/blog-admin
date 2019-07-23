@@ -3,18 +3,18 @@ import { TagModel } from '@app/store/models'
 
 export namespace TagActions {
   export enum Type {
-    GET_ARTICLE = 'GET_ARTICLE',
-    EDIT_ARTICLE = 'EDIT_ARTICLE',
-    DELETE_ARTICLE = 'DELETE_ARTICLE',
-    ADD_ARTICLE = 'ADD_ARTICLE',
-    UPDATE_ARTICLE = 'UPDATE_ARTICLE',
-    PUBLISH_ARTICLE = 'PUBLISH_ARTICLE'
+    GET_TAG = 'GET_TAG',
+    EDIT_TAG = 'EDIT_TAG',
+    DELETE_TAG = 'DELETE_TAG',
+    ADD_TAG = 'ADD_TAG',
+    UPDATE_TAG = 'UPDATE_TAG',
+    PUBLISH_TAG = 'PUBLISH_TAG'
   }
 
-  export const addArticle = createAction<TagModel>(Type.ADD_ARTICLE)
-  export const deleteArticle = createAction<TagModel['id']>(Type.DELETE_ARTICLE)
-  export const getArticle = createAction(Type.GET_ARTICLE)
-  export const editArticle = createAction<PartialPick<TagModel, 'id'>>(Type.EDIT_ARTICLE)
+  export const addTag = createAction<TagModel>(Type.ADD_TAG)
+  export const deleteTag = createAction<TagModel['id']>(Type.DELETE_TAG)
+  export const getTag = createAction(Type.GET_TAG)
+  export const editTag = createAction<PartialPick<TagModel, 'id'>>(Type.EDIT_TAG)
 }
 
 export type TagActions = omit<typeof TagActions, 'Type'>
