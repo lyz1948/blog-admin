@@ -123,7 +123,7 @@ export class NavComp extends React.Component<Nav.IProps> {
                   >
                     <FontAwesomeIcon
                       icon={child.icon}
-                      style={{ marginRight: '5px', color: 'Tomato' }}
+                      style={{ marginRight: '5px', color: 'white' }}
                     />
                     <span className={styles.text}>{child.text}</span>
                   </div>

@@ -1,19 +1,32 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { CategoryModel, TagModel } from '../../store/models'
+import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
-import { Form, Badge } from 'react-bootstrap'
+import { Form, Badge, Button } from 'react-bootstrap'
 import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faBold, faItalic, faHeading, faQuoteLeft, faListUl, faListOl, faLink, faImage
+  faBold,
+  faItalic,
+  faHeading,
+  faQuoteLeft,
+  faListUl,
+  faListOl,
+  faLink,
+  faImage,
 } from '@fortawesome/free-solid-svg-icons'
 
+export enum IStatePublic {
+  Password = 0, // 密码访问
+  Public = 1, // 公开
+  Secret = -1, // 隐藏
+}
+
 const STATE_VALUE = [
-  { text: '公开', id: 0 },
-  { text: '密码访问', id: 1 },
-  { text: '私密', id: -1 },
+  { text: '密码访问', id: IStatePublic.Password },
+  { text: '公开', id: IStatePublic.Public },
+  { text: '私密', id: IStatePublic.Secret },
 ]
 const PUBLISH_VALUE = [
   { text: '原创', id: 0 },
@@ -34,22 +47,60 @@ export namespace ArticleAdd {
     Public?: string
     Password?: string
     Secret?: string
-    postValue?: string
-    contentEditable?: any
+    postContent?: string
+    radioPublic?: number
+    radioPublish?: number
+    checkedValues?: string[]
   }
 }
+
+const FancyInput = React.forwardRef((props: any, ref: any) => {
+  return (
+    <input
+      type="text"
+      ref={ref}
+      className={styles.formInput}
+      placeholder={props.tip}
+    />
+  )
+})
+
+const FancyTextarea = React.forwardRef((props: any, ref: any) => {
+  return (
+    <input
+      type="textarea"
+      ref={ref}
+      className={styles.formInput}
+      placeholder={props.tip}
+    />
+  )
+})
 
 export class ArticleAddComp extends React.Component<
   ArticleAdd.IProps,
   ArticleAdd.IState
 > {
+  private inputTitle = React.createRef<HTMLInputElement>()
+  private inputKeyword = React.createRef<HTMLInputElement>()
+  private inputSlug = React.createRef<HTMLInputElement>()
+  private inputDescription = React.createRef<HTMLInputElement>()
+  private inputCategory = React.createRef<HTMLInputElement>()
+
   constructor(props: ArticleAdd.IProps, context?: any) {
     super(props, context)
     this.state = {
-      postValue: '# h1 title',
+      postContent: '# h1 title',
+      radioPublic: 0,
+      radioPublish: 0,
+      checkedValues: [],
     }
+    this.handleSubmit = this.handleSubmit.bind(this)
     this.chooseTag = this.chooseTag.bind(this)
     this.processPost = this.processPost.bind(this)
+    this.changeCategory = this.changeCategory.bind(this)
+    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this)
+    this.changeStateRadio = this.changeStateRadio.bind(this)
+    this.changePublishRadio = this.changePublishRadio.bind(this)
   }
 
   componentWillMount() {
@@ -60,26 +111,96 @@ export class ArticleAddComp extends React.Component<
   chooseTag(name: TagModel, event: React.MouseEvent<HTMLButtonElement>) {}
 
   processPost(event: React.FocusEvent<HTMLInputElement>) {
-
     this.setState({
-      postValue: event.target.value,
+      postContent: event.target.value,
     })
   }
 
-  handleChange(event: any) {
-    console.log('event', event)
-  };
+  handleChange(event: any) {}
+
+  handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { checked, value } = event.target
+
+    const { checkedValues } = this.state
+    if (checked && checkedValues!.indexOf(value) === -1) {
+      checkedValues!.push(value)
+    } else {
+      checkedValues!.filter(item => item !== value)
+    }
+    this.setState({
+      checkedValues,
+    })
+  }
+
+  changeStateRadio(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({
+      radioPublic: Number(event.target.value),
+    })
+  }
+
+  changePublishRadio(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({
+      radioPublish: Number(event.target.value),
+    })
+  }
+
+  changeCategory(cate: any, event: React.ChangeEvent<HTMLInputElement>) {
+    const { checked } = event.target
+    const { checkedValues } = this.state
+
+    if (
+      checked &&
+      checkedValues!.filter((item: any) => item._id !== cate._id)
+    ) {
+      checkedValues!.push(cate)
+    }
+    this.setState(() => {
+      let temp = checkedValues!.filter((item: any) => item._id !== cate._id)
+      return { checkedValues: temp }
+    })
+    this.setState({
+      checkedValues,
+    })
+  }
+
+  handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault()
+    const { radioPublic, radioPublish, checkedValues } = this.state
+    const article: ArticleModel = {
+      title: this.inputTitle.current!.value,
+      content: this.state.postContent!,
+      description: this.inputDescription.current!.value,
+      slug: this.inputSlug.current!.value,
+      tag: [],
+      category: [...checkedValues!],
+      keywords: [...this.inputKeyword.current!.value.split(',')],
+      public: Number(radioPublish),
+      origin: Number(radioPublish),
+      state: Number(radioPublic),
+      author: 'admin',
+      password: '',
+      extends: [],
+      thumb: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4',
+    }
+    this.props.addArticle(article)
+  }
 
   renderMdEditor(): JSX.Element | void {
     return (
-      <ContentEditable innerRef={React.createRef()} html={this.state.postValue!} disabled={false} onChange={this.handleChange} tagName="article"/>
+      <ContentEditable
+        innerRef={React.createRef()}
+        html={this.state.postContent!}
+        disabled={false}
+        onChange={this.handleChange}
+        tagName="article"
+      />
     )
   }
 
   renderMdView(): JSX.Element | void {
     return (
       <div className={styles.markdownPreview}>
-        <ReactMarkdown source={this.state.postValue} />
+        <ReactMarkdown source={this.state.postContent} />
       </div>
     )
   }
@@ -92,32 +213,54 @@ export class ArticleAddComp extends React.Component<
           <h3>记录生活-发布文章</h3>
         </div>
         <div className={styles.content}>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>文章标题</Form.Label>
-            <Form.Control className={styles.formControl} type="text" placeholder="文章标题" />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>文章关键字</Form.Label>
-            <Form.Control className={styles.formControl} type="text" placeholder="文章关键字" />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>文章描述</Form.Label>
-            <Form.Control className={styles.formControl} as="textarea" rows="3" placeholder="文章描述" />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>文章编辑</Form.Label>
+          <div className={styles.field}>
+            <p>文章标题</p>
+            <FancyInput ref={this.inputTitle} tip={'文章标题'} />
+          </div>
+          <div className={styles.field}>
+            <p>文章关键字</p>
+            <FancyInput ref={this.inputKeyword} tip={'文章关键字'} />
+          </div>
+          <div className={styles.field}>
+            <p>文章slug</p>
+            <FancyInput ref={this.inputSlug} tip={'文章slug'} />
+          </div>
+          <div className={styles.field}>
+            <p>文章描述</p>
+            <FancyTextarea ref={this.inputDescription} tip={'文章描述'} />
+          </div>
+
+          <div className={styles.field}>
+            <p>文章编辑</p>
             <div className={styles.markdownBar}>
-              <a title="blod"><FontAwesomeIcon icon={faBold} /></a>
-              <a title="italic"><FontAwesomeIcon icon={faItalic} /></a>
-              <a title="heading"><FontAwesomeIcon icon={faHeading} /></a>
+              <a title="blod">
+                <FontAwesomeIcon icon={faBold} />
+              </a>
+              <a title="italic">
+                <FontAwesomeIcon icon={faItalic} />
+              </a>
+              <a title="heading">
+                <FontAwesomeIcon icon={faHeading} />
+              </a>
               <i className={styles.separator}>|</i>
-              <a title="Quote"><FontAwesomeIcon icon={faQuoteLeft} /></a>
-              <a title="eneric List"><FontAwesomeIcon icon={faListUl} /></a>
-              <a title="Numbered List"><FontAwesomeIcon icon={faListOl} /></a>
+              <a title="Quote">
+                <FontAwesomeIcon icon={faQuoteLeft} />
+              </a>
+              <a title="eneric List">
+                <FontAwesomeIcon icon={faListUl} />
+              </a>
+              <a title="Numbered List">
+                <FontAwesomeIcon icon={faListOl} />
+              </a>
               <i className={styles.separator}>|</i>
-              <a title="Create Link"><FontAwesomeIcon icon={faLink} /></a>
-              <a title="Insert Image"><FontAwesomeIcon icon={faImage} /></a>
+              <a title="Create Link">
+                <FontAwesomeIcon icon={faLink} />
+              </a>
+              <a title="Insert Image">
+                <FontAwesomeIcon icon={faImage} />
+              </a>
             </div>
+
             <div className={styles.markdownBox}>
               <div className={styles.markdowInput}>
                 <Form.Control
@@ -125,14 +268,23 @@ export class ArticleAddComp extends React.Component<
                   rows="10"
                   className={styles.formControl}
                   placeholder="文章内容"
-                  value={this.state.postValue}
+                  value={this.state.postContent}
                   onChange={(e: any) => this.processPost(e)}
                 />
               </div>
               {this.renderMdView()}
             </div>
-          </Form.Group>
-
+          </div>
+          <div className={styles.field}>
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              onClick={(e: any) => this.handleSubmit(e)}
+            >
+              创建文章
+            </Button>
+          </div>
         </div>
       </div>
     )
@@ -149,62 +301,76 @@ export class ArticleAddComp extends React.Component<
             <h3>文章分类</h3>
           </div>
           <div className={styles.content}>
-            <Form.Group controlId="exampleForm.ControlSelect1">
-              <Form.Label>归属分类</Form.Label>
-              <div>
-                {categories.map((cate: any) => (
-                  <Form.Check
-                    key={cate._id}
-                    type="checkbox"
-                    inline
-                    label={cate.name}
-                  />
+            <div className={styles.field}>
+              <p>归属分类</p>
+              <div className={styles.inputWrap}>
+                {categories.map((cate: any, index: number) => (
+                  <div className={styles.labelBox} key={index}>
+                    <input
+                      type="checkbox"
+                      id={cate._id}
+                      name={cate.name}
+                      onChange={(e: any) => this.changeCategory(cate, e)}
+                      ref={this.inputCategory}
+                    />
+                    <label htmlFor={cate._id}>{cate.name}</label>
+                  </div>
                 ))}
               </div>
-            </Form.Group>
+            </div>
           </div>
         </div>
+
         <div className={styles.sideBox}>
           <div className={styles.title}>
             <h3>文章状态</h3>
           </div>
           <div className={styles.content}>
-            <Form>
-              <Form.Group>
-                <Form.Label>文章状态: </Form.Label>
+            <div className={styles.field}>
+              <p>访问状态 </p>
+              <div className={styles.inputWrap}>
                 {STATE_VALUE.map((type, idx) => (
-                  <Form.Check
-                    key={idx}
-                    type="radio"
-                    inline
-                    name="formstate"
-                    id={String(type.id)}
-                    label={type.text}
-                  />
+                  <div className={styles.labelBox} key={idx}>
+                    <input
+                      type="radio"
+                      id={type.text}
+                      value={type.id}
+                      name="formstate"
+                      checked={this.state.radioPublic === type.id}
+                      onChange={(e: any) => this.changeStateRadio(e)}
+                    />
+                    <label htmlFor={type.text}>{type.text}</label>
+                  </div>
                 ))}
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>发布状态: </Form.Label>
+              </div>
+            </div>
+            <div className={styles.field}>
+              <p>发布状态</p>
+              <div className={styles.inputWrap}>
                 {PUBLISH_VALUE.map((type, idx) => (
-                  <Form.Check
-                    key={idx}
-                    type="radio"
-                    inline
-                    name="formpublish"
-                    id={String(type.id)}
-                    label={type.text}
-                  />
+                  <div className={styles.labelBox} key={idx}>
+                    <input
+                      type="radio"
+                      id={type.text}
+                      value={type.id}
+                      name="formpublish"
+                      checked={this.state.radioPublish === type.id}
+                      onChange={(e: any) => this.changePublishRadio(e)}
+                    />
+                    <label htmlFor={type.text}>{type.text}</label>
+                  </div>
                 ))}
-              </Form.Group>
-            </Form>
+              </div>
+            </div>
           </div>
         </div>
+
         <div className={styles.sideBox}>
           <div className={styles.title}>
             <h3>文章标签</h3>
           </div>
           <div className={styles.content}>
-            <h5>
+            <div className={styles.inputWrap}>
               {tags.map((tag: any) => (
                 <Badge
                   style={{ marginRight: '10px' }}
@@ -215,7 +381,7 @@ export class ArticleAddComp extends React.Component<
                   {tag.name}
                 </Badge>
               ))}
-            </h5>
+            </div>
           </div>
         </div>
       </div>

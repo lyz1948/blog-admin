@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as CONFIG from '../app.config'
 import * as UTILS from '../utils'
 import { IResponseData } from '@app/store/types'
-import { UserModel } from '@app/store/models'
+import { UserModel, ArticleModel } from '@app/store/models'
 
 const token = UTILS.getToken()
 
@@ -12,7 +12,6 @@ const service = axios.create({
 })
 
 service.interceptors.request.use((config: any) => {
-  // config.params = Object.assign(config.params || {}, { token })
   config.headers = Object.assign(config.headers || {}, {
     Authorization: 'Bearer ' + token
   })
@@ -35,7 +34,7 @@ interface IFatchData<T = any> {
 /**
  * 获取文章列表
  */
-export const fetchArticl = <T>() => {
+export const fetchArticle = <T>() => {
   return service.get<IFatchData<T>>('/article')
 }
 
@@ -43,7 +42,7 @@ export const fetchArticl = <T>() => {
  * 添加文章
  * @param article 文章对象
  */
-export const addArticl = (article: any): Promise<IResponseData> => {
+export const addArticle = (article: ArticleModel) => {
   return service.post('/article', { ...article })
 }
 
@@ -51,7 +50,7 @@ export const addArticl = (article: any): Promise<IResponseData> => {
  * 删除指定id文章
  * @param id 文章id
  */
-export const deleteArticl = (id: any): Promise<IResponseData> => {
+export const deleteArticle = (id: any): Promise<IResponseData> => {
   return service.delete(`/article/${id}`)
 }
 

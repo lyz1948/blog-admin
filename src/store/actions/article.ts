@@ -14,9 +14,9 @@ export namespace ArticleActions {
     PUBLISH_ARTICLE = 'PUBLISH_ARTICLE'
   }
 
-  export const addArticle = createAction<ArticleModel>(Type.ADD_ARTICLE)
-  export const deleteArticle = createAction(Type.DELETE_ARTICLE, API.deleteArticl)
-  export const getArticle = createAction(Type.GET_ARTICLE, API.fetchArticl)
+  export const addArticle = createAction(Type.ADD_ARTICLE, API.addArticle)
+  export const deleteArticle = createAction(Type.DELETE_ARTICLE, API.deleteArticle)
+  export const getArticle = createAction(Type.GET_ARTICLE, API.fetchArticle)
   export const getCategory = createAction(Type.GET_CATEGORY, API.fetchCategory)
   export const getTag = createAction(Type.GET_TAG, API.fetchTag)
 

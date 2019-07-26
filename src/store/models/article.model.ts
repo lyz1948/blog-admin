@@ -1,20 +1,19 @@
 export interface ArticleModel {
-  _id: string
+  _id?: string
   title: string
   content: string
   description: string
   slug: string
-  public: number
-  publish: number
   author: string
   tag: string[]
   category: string[]
-  extends: []
+  extends?: []
   keywords: string[]
-  meta: any
-  origin: 1
-  password: string
+  meta?: any
+  public: number
+  origin: number
   state: number
+  password?: string
   thumb: string
   [propName: string]: any
   // create_at: Date

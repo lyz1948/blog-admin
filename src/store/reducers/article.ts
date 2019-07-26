@@ -10,17 +10,16 @@ const initialState: RootState.ArticleState = [
     content: '测试内容',
     description: '测试描述',
     slug: 'test slug',
-    public: 1,
-    publish: 1,
     author: 'john',
     tag: [],
     category: [],
     extends: [],
     keywords: [],
     meta: {},
+    state: 1,
+    public: 1,
     origin: 1,
     password: '',
-    state: 1,
     thumb: '',
   }
 ]
@@ -28,6 +27,7 @@ const initialState: RootState.ArticleState = [
 export const articleReducer = handleActions<RootState.ArticleState, ArticleModel>(
   {
     [ArticleActions.Type.ADD_ARTICLE]: (state, action) => {
+      console.log('add articel action', action)
       return state
     },
     [ArticleActions.Type.GET_ARTICLE]: (state, action) => {
