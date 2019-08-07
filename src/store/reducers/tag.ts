@@ -19,7 +19,7 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
     [TagActions.Type.GET_TAG]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { result } = action.payload!
-        return [ ...result, ...state ]
+        return [ ...result ]
       }
       return state
     },

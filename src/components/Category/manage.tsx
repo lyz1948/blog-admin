@@ -2,18 +2,18 @@ import * as React from 'react'
 import * as styles from './style.css'
 import { CategoryModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
+import { Table, Button } from 'react-bootstrap'
 
 export namespace CategoryManage {
   export interface IProps {
     categories: CategoryModel[]
     getCategory: typeof CategoryActions.getCategory
-    // addCategory: typeof CategoryActions.addCategory
     deleteCategory: typeof CategoryActions.deleteCategory
     editCategory: typeof CategoryActions.editCategory
   }
 }
 
-export class CategoryManageComp extends React.Component<CategoryManage.IProps> {
+export class CategoryComp extends React.Component<CategoryManage.IProps> {
   constructor(props: CategoryManage.IProps, context?: any) {
     super(props, context)
 
@@ -35,15 +35,33 @@ export class CategoryManageComp extends React.Component<CategoryManage.IProps> {
 
   render() {
     const { categories } = this.props
-    console.log('categories', categories)
+    const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
     return (
     <div className={styles.module}>
-      { categories.map((cat, idx) => (
-        <div key={idx}>
-          <div onClick={(e: any) => this.handleDelete(cat._id, e)}>{cat.name}</div>
-          <div onClick={(e: any) => this.handleEditor(cat._id, e)}>{cat.description}</div>
-        </div>
-      ))}
+      <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              {tableHeads.map(h => (
+                <th key={h}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((it: any, index: number) => (
+              <tr key={index}>
+                <td>{it.name}</td>
+                <td>{it.description}</td>
+                <td>{it.slug}</td>
+                <td>{it.update_at}</td>
+                <td>
+                  <Button size="sm" variant="info" style={{marginRight: '5px'}}>查看</Button>
+                  <Button size="sm" variant="primary" style={{marginRight: '5px'}} onClick={(e: any) => this.handleEditor(it._id, e)}>修改</Button>
+                  <Button size="sm" variant="danger" onClick={(e: any) => this.handleDelete(it._id, e)}>删除</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
     </div>)
   }
 }

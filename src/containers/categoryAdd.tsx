@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router'
 import { omit } from '../utils'
 import { RootState } from '../store/reducers'
 import { CategoryActions } from '../store/actions'
-import { CategoryComp } from '../components'
+import { CategoryAddComp } from '../components'
 import { CategoryModel } from '../store/models'
 
 export namespace Category {
@@ -24,7 +24,7 @@ export namespace Category {
     actions: bindActionCreators(omit(CategoryActions, 'Type'), dispatch),
   }),
 )
-export class CategoryApp extends React.Component<Category.IProps> {
+export class CategoryAddApp extends React.Component<Category.IProps> {
   static defaultProps: Partial<Category.IProps> = {
     filter: CategoryModel.Filter.SHOW_ALL,
   }
@@ -34,13 +34,6 @@ export class CategoryApp extends React.Component<Category.IProps> {
   }
 
   render() {
-    const { categories, actions } = this.props
-    return (
-    <CategoryComp
-      categories={categories}
-      getCategory={actions.getCategory}
-      deleteCategory={actions.deleteCategory}
-      editCategory={actions.editCategory}
-    />)
+    return <CategoryAddComp/>
   }
 }

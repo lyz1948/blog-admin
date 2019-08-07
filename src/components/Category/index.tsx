@@ -1,2 +1,2 @@
 export { CategoryAddComp } from './add'
-export { CategoryManageComp } from './manage'
+export { CategoryComp } from './manage'

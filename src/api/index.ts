@@ -2,13 +2,13 @@ import axios from 'axios'
 import * as CONFIG from '../app.config'
 import * as UTILS from '../utils'
 import { IResponseData } from '@app/store/types'
-import { UserModel, ArticleModel } from '@app/store/models'
+import { UserModel, ArticleModel, TagModel } from '@app/store/models'
 
 const token = UTILS.getToken()
 
 const service = axios.create({
   timeout: 5000,
-  baseURL: CONFIG.APP.api,
+  baseURL: CONFIG.APP.API,
 })
 
 service.interceptors.request.use((config: any) => {
@@ -82,6 +82,30 @@ export const deleteCategory = (id: any) => {
  */
 export const fetchTag = <T>() => {
   return service.get<IFatchData<T>>('/tag')
+}
+
+/**
+ * 添加标签
+ * @param tag 标签对象
+ */
+export const addTag = (tag: TagModel) => {
+  return service.post('/tag', { ...tag })
+}
+
+/**
+ * 编辑标签
+ * @param id 标签id
+ */ 
+export const editTag = (id: string | number) => {
+  return service.post(`/tag/${id}`)
+}
+
+/**
+ * 删除标签
+ * @param id 标签id
+ */
+export const deleteTag = (id: string | number) => {
+  return service.post(`/tag/${id}`)
 }
 
 /**

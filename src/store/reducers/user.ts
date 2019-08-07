@@ -16,7 +16,7 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
         const { data } = (action.payload!)
         // 存储token
         data.result.expires_in = data.result.expires_in * 1000 + Date.now()
-        localStorage.setItem(CONFIG.APP.tokenKey, JSON.stringify(data.result))
+        localStorage.setItem(CONFIG.APP.TOKEN_KEY, JSON.stringify(data.result))
 
         return {
           token: data.result,

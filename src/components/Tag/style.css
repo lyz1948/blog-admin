@@ -3,7 +3,7 @@
   background-color: #4d5b69;
   display: flex;
 }
-.module > .main{
+.module .main{
   flex: 1;
 }
 

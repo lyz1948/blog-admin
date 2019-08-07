@@ -15,31 +15,33 @@ import {
   faListOl,
   faLink,
   faImage,
+  faInbox
 } from '@fortawesome/free-solid-svg-icons'
 
 export enum IStatePublic {
   Password = 0, // 密码访问
   Public = 1, // 公开
-  Secret = -1, // 隐藏
+  Secret = -1 // 隐藏
 }
 
 const STATE_VALUE = [
   { text: '密码访问', id: IStatePublic.Password },
   { text: '公开', id: IStatePublic.Public },
-  { text: '私密', id: IStatePublic.Secret },
+  { text: '私密', id: IStatePublic.Secret }
 ]
+
 const PUBLISH_VALUE = [
   { text: '原创', id: 0 },
   { text: '转载', id: 1 },
-  { text: '混合', id: -1 },
+  { text: '混合', id: -1 }
 ]
 
 export namespace ArticleAdd {
   export interface IProps {
-    categories: CategoryModel[]
     tags: TagModel[]
-    getCategory: typeof CategoryActions.getCategory
+    categories: CategoryModel[]
     getTag: typeof TagActions.getTag
+    getCategory: typeof CategoryActions.getCategory
     addArticle: typeof ArticleActions.addArticle
   }
 
@@ -51,6 +53,7 @@ export namespace ArticleAdd {
     radioPublic?: number
     radioPublish?: number
     checkedValues?: string[]
+    thumburl?: string
   }
 }
 
@@ -93,6 +96,7 @@ export class ArticleAddComp extends React.Component<
       radioPublic: 0,
       radioPublish: 0,
       checkedValues: [],
+      thumburl: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.chooseTag = this.chooseTag.bind(this)
@@ -112,7 +116,7 @@ export class ArticleAddComp extends React.Component<
 
   processPost(event: React.FocusEvent<HTMLInputElement>) {
     this.setState({
-      postContent: event.target.value,
+      postContent: event.target.value
     })
   }
 
@@ -128,19 +132,19 @@ export class ArticleAddComp extends React.Component<
       checkedValues!.filter(item => item !== value)
     }
     this.setState({
-      checkedValues,
+      checkedValues
     })
   }
 
   changeStateRadio(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      radioPublic: Number(event.target.value),
+      radioPublic: Number(event.target.value)
     })
   }
 
   changePublishRadio(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      radioPublish: Number(event.target.value),
+      radioPublish: Number(event.target.value)
     })
   }
 
@@ -159,8 +163,21 @@ export class ArticleAddComp extends React.Component<
       return { checkedValues: temp }
     })
     this.setState({
-      checkedValues,
+      checkedValues
     })
+  }
+
+  async changeFile(event: React.ChangeEvent<HTMLInputElement>) {
+    const fd = new FormData()
+    const fileEl = document.getElementById('file') as HTMLInputElement
+
+    if (fileEl.files) {
+      const thumburl = URL.createObjectURL(fileEl.files[0])
+      this.setState({
+        thumburl
+      })
+      fd.append('file', fileEl.files[0])
+    }
   }
 
   handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
@@ -180,9 +197,22 @@ export class ArticleAddComp extends React.Component<
       author: 'admin',
       password: '',
       extends: [],
-      thumb: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4',
+      thumb: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4'
     }
     this.props.addArticle(article)
+  }
+
+  renderThumb(): JSX.Element | void {
+    const { thumburl } = this.state
+    return thumburl ? (
+      <div className={styles.thumb}>
+        <img src={thumburl} alt="缩略图" />
+      </div>
+    ) : (
+      <div className={styles.thumb}>
+        <FontAwesomeIcon icon={faInbox} />
+      </div>
+    )
   }
 
   renderMdEditor(): JSX.Element | void {
@@ -280,8 +310,7 @@ export class ArticleAddComp extends React.Component<
               type="submit"
               variant="primary"
               size="lg"
-              onClick={(e: any) => this.handleSubmit(e)}
-            >
+              onClick={(e: any) => this.handleSubmit(e)}>
               创建文章
             </Button>
           </div>
@@ -376,12 +405,27 @@ export class ArticleAddComp extends React.Component<
                   style={{ marginRight: '10px' }}
                   key={tag._id}
                   variant="primary"
-                  onClick={(e: any) => this.chooseTag(tag.name, e)}
-                >
+                  onClick={(e: any) => this.chooseTag(tag.name, e)}>
                   {tag.name}
                 </Badge>
               ))}
             </div>
+          </div>
+        </div>
+
+        <div className={styles.sideBox}>
+          <div className={styles.title}>
+            <h3>文章缩略图</h3>
+          </div>
+          <div className={styles.content}>
+            <div className={styles.inputWrap}>
+              <input
+                type="file"
+                id="file"
+                onChange={this.changeFile.bind(this)}
+              />
+            </div>
+            {this.renderThumb()}
           </div>
         </div>
       </div>

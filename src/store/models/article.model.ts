@@ -16,8 +16,6 @@ export interface ArticleModel {
   password?: string
   thumb: string
   [propName: string]: any
-  // create_at: Date
-  // update_at: Date
 }
 
 export namespace ArticleModel {
