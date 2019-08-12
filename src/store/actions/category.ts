@@ -15,7 +15,7 @@ export namespace CategoryActions {
   // export const addCategory = createAction<CategoryModel>(Type.ADD_CATEGORY)
   export const deleteCategory = createAction(Type.DELETE_CATEGORY, API.deleteCategory)
   export const getCategory = createAction(Type.GET_CATEGORY, API.fetchCategory)
-
+  export const addCategory = createAction(Type.GET_CATEGORY, API.addCategory)
   export const editCategory = createAction<PartialPick<CategoryModel, '_id'>>(Type.EDIT_CATEGORY)
 }
 

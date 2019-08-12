@@ -3,6 +3,7 @@ import * as styles from './style.css'
 import { CategoryModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
+import { ConfirmModal } from '../Global/Modal'
 
 export namespace CategoryManage {
   export interface IProps {
@@ -11,13 +12,20 @@ export namespace CategoryManage {
     deleteCategory: typeof CategoryActions.deleteCategory
     editCategory: typeof CategoryActions.editCategory
   }
+
+  export interface IState {
+    cateId: string
+    showModal: boolean
+  }
 }
 
-export class CategoryComp extends React.Component<CategoryManage.IProps> {
+export class CategoryComp extends React.Component<CategoryManage.IProps, CategoryManage.IState> {
   constructor(props: CategoryManage.IProps, context?: any) {
     super(props, context)
-
-    this.handleDelete = this.handleDelete.bind(this)
+    this.state = {
+      cateId: '',
+      showModal: false,
+    }
     this.handleEditor = this.handleEditor.bind(this)
   }
 
@@ -25,8 +33,11 @@ export class CategoryComp extends React.Component<CategoryManage.IProps> {
     this.props.getCategory()
   }
 
-  handleDelete(id: string, event: React.MouseEvent<HTMLButtonElement>) {
-    this.props.deleteCategory(id)
+  openModal(id: string) {
+    this.setState({
+      cateId: id,
+      showModal: true,
+    })
   }
 
   handleEditor(id: any, event: React.MouseEvent<HTMLButtonElement>) {
@@ -35,9 +46,19 @@ export class CategoryComp extends React.Component<CategoryManage.IProps> {
 
   render() {
     const { categories } = this.props
+    const { showModal } = this.state
     const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
+    
     return (
     <div className={styles.module}>
+      <ConfirmModal 
+        show={showModal} 
+        onHide={() => this.setState({ showModal: false })}
+        onClose={() => {
+          this.props.deleteCategory(this.state.cateId)
+          this.setState({ showModal: false })
+        }}
+      />
       <Table striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -56,7 +77,7 @@ export class CategoryComp extends React.Component<CategoryManage.IProps> {
                 <td>
                   <Button size="sm" variant="info" style={{marginRight: '5px'}}>查看</Button>
                   <Button size="sm" variant="primary" style={{marginRight: '5px'}} onClick={(e: any) => this.handleEditor(it._id, e)}>修改</Button>
-                  <Button size="sm" variant="danger" onClick={(e: any) => this.handleDelete(it._id, e)}>删除</Button>
+                  <Button size="sm" variant="danger" onClick={() => this.openModal(it._id)}>删除</Button>
                 </td>
               </tr>
             ))}

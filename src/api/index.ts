@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as CONFIG from '../app.config'
 import * as UTILS from '../utils'
 import { IResponseData } from '@app/store/types'
-import { UserModel, ArticleModel, TagModel } from '@app/store/models'
+import { UserModel, ArticleModel } from '@app/store/models'
 
 const token = UTILS.getToken()
 
@@ -65,7 +65,7 @@ export const fetchCategory = <T>() => {
  * 添加分类
  * @param category 分类对象
  */
-export const addCategory = (category: any): Promise<IResponseData> => {
+export const addCategory = (category: any) => {
   return service.post('/category', { ...category })
 }
 
@@ -88,16 +88,16 @@ export const fetchTag = <T>() => {
  * 添加标签
  * @param tag 标签对象
  */
-export const addTag = (tag: TagModel) => {
+export const addTag = (tag: any) => {
   return service.post('/tag', { ...tag })
 }
 
 /**
- * 编辑标签
+ * 更新标签
  * @param id 标签id
  */ 
-export const editTag = (id: string | number) => {
-  return service.post(`/tag/${id}`)
+export const updateTag = (id: string | number) => {
+  return service.put(`/tag/${id}`)
 }
 
 /**
@@ -105,7 +105,7 @@ export const editTag = (id: string | number) => {
  * @param id 标签id
  */
 export const deleteTag = (id: string | number) => {
-  return service.post(`/tag/${id}`)
+  return service.delete(`/tag/${id}`)
 }
 
 /**

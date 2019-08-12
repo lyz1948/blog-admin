@@ -34,6 +34,7 @@ export class TagAddApp extends React.Component<Tag.IProps> {
   }
 
   render() {
-    return <TagAddComp/>
+    const { actions } = this.props
+    return <TagAddComp addTag={actions.addTag} />
   }
 }

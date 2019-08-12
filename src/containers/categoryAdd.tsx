@@ -34,6 +34,7 @@ export class CategoryAddApp extends React.Component<Category.IProps> {
   }
 
   render() {
-    return <CategoryAddComp/>
+    const { actions } = this.props
+    return <CategoryAddComp addCategory={actions.addCategory}/>
   }
 }

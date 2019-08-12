@@ -7,6 +7,7 @@ import { RootState } from '../store/reducers'
 import { TagActions } from '../store/actions'
 import { TagComp } from '../components'
 import { TagModel } from '../store/models'
+// import { TagAddApp } from './tagAdd'
 
 export namespace Tag {
   export interface IProps extends RouteComponentProps<void> {
@@ -17,7 +18,7 @@ export namespace Tag {
 }
 
 @connect(
-  (state: RootState): Pick<Tag.IProps, 'tags'> => {
+  (state: RootState, ownProps): Pick<Tag.IProps, 'tags'> => {
     return { tags: state.tags }
   },
   (dispatch: Dispatch): Pick<Tag.IProps, 'actions'> => ({
@@ -31,6 +32,11 @@ export class TagApp extends React.Component<Tag.IProps> {
 
   constructor(props: Tag.IProps, context?: any) {
     super(props, context)
+    this.handleEdit = this.handleEdit.bind(this)
+  }
+  
+  handleEdit(): void {
+    this.props.history.push('#TAG_ADD')
   }
 
   render() {
@@ -38,7 +44,7 @@ export class TagApp extends React.Component<Tag.IProps> {
     return (<TagComp
       tags={tags} 
       getTag={actions.getTag}
-      editTag={actions.editTag}
+      onClickFilter={this.handleEdit}
       deleteTag={actions.deleteTag}
     />)
   }

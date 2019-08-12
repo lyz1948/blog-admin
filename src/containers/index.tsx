@@ -92,8 +92,8 @@ export class App extends React.Component<App.IProps> {
 
   filterCompoent(): JSX.Element | void {
     const { filter } = this.props
-    this.hasPermission()
     console.log(filter)
+    this.hasPermission()
     switch (filter) {
       case 'DASHBOARD':
         return <DashboardComp />
@@ -122,7 +122,7 @@ export class App extends React.Component<App.IProps> {
 
   render() {
     return (
-      <div className="layout">
+      <div className={styles.container}>
         <NavComp onClickFilter={this.handleFilterChange} />
         <div className={styles.main}>
           <TopNavComp />

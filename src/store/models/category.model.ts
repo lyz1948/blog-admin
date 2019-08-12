@@ -1,8 +1,8 @@
 export interface CategoryModel {
-  _id: string
   name: string
-  description: string
   slug: string
+  description: string
+  pid: object
   extends?: []
   [propName: string]: any
 }

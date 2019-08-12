@@ -1,8 +1,10 @@
 .siderNav {
+  position: absolute;
   float: left;
   min-height: 100%;
   width: 200px;
   background-color: #283847;
+  z-index: 10;
 }
 
 .siderNav .navItem {
