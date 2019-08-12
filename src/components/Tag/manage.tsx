@@ -3,7 +3,7 @@ import * as styles from './style.css'
 import { TagModel } from '@app/store/models'
 import { TagActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
-import { ConfirmModal } from '../Global/Modal'
+import { ConfirmModal } from '../index'
 
 export namespace TagManage {
   export interface IProps {

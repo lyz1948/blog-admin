@@ -3,7 +3,7 @@ import * as styles from './style.css'
 import { CategoryModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
-import { ConfirmModal } from '../Global/Modal'
+import { ConfirmModal } from '../index'
 
 export namespace CategoryManage {
   export interface IProps {
@@ -40,7 +40,7 @@ export class CategoryComp extends React.Component<CategoryManage.IProps, Categor
     })
   }
 
-  handleEditor(id: any, event: React.MouseEvent<HTMLButtonElement>) {
+  handleEditor(id: any) {
     this.props.editCategory(id)
   }
 
@@ -76,7 +76,7 @@ export class CategoryComp extends React.Component<CategoryManage.IProps, Categor
                 <td>{it.update_at}</td>
                 <td>
                   <Button size="sm" variant="info" style={{marginRight: '5px'}}>查看</Button>
-                  <Button size="sm" variant="primary" style={{marginRight: '5px'}} onClick={(e: any) => this.handleEditor(it._id, e)}>修改</Button>
+                  <Button size="sm" variant="primary" style={{marginRight: '5px'}} onClick={() => this.handleEditor(it._id)}>修改</Button>
                   <Button size="sm" variant="danger" onClick={() => this.openModal(it._id)}>删除</Button>
                 </td>
               </tr>
