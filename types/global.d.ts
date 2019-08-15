@@ -9,6 +9,12 @@ declare var promiseMiddleware: any
 
 declare var API: any
 
+declare interface Loading {
+  newInstance: {
+    new (): any
+  }
+}
+
 declare interface NodeModule {
   hot: {
     accept(path?: () => void, callback?: () => void): void
