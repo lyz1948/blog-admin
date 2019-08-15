@@ -4,7 +4,7 @@ import Toast from 'react-bootstrap/Toast'
 import * as styles from './style.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCheck
+  faCheck, faInfo, faExclamationTriangle, faExclamation
 } from '@fortawesome/free-solid-svg-icons'
 
 enum IPosition {
@@ -20,12 +20,13 @@ enum IType {
   ERROR = 'error',
 }
 
+// type InfoProp = IType.SUCCESS | IType.INFO | IType.WARN | IType.ERROR
+
 // type Pos = IPosition.LEFT | IPosition.RIGHT | IPosition.CENTER
 
 interface IProps {
   type?: string
   position?: string
-  title?: string
   content?: string
   show: boolean
   autohide?: boolean
@@ -33,16 +34,28 @@ interface IProps {
   [propName: string]: any
 }
 
-const PropState = {
-  type: 'default',
-  position: 'center',
-  title: '提示',
-  content: '操作成功！',
-  show: false,
-  autohide: true,
+// const PropState = {
+//   type: 'info',
+//   position: 'center',
+//   content: '操作成功！',
+//   show: false,
+//   autohide: false,
+// }
+
+function ToastIcon(props: any) {
+  switch(props.type) {
+    case 'success':
+      return <FontAwesomeIcon icon={faCheck} style={{ marginRight: '10px', color: '#fff' }}/>
+    case 'warn':
+      return <FontAwesomeIcon icon={faExclamation} style={{ marginRight: '10px', color: '#fff' }}/>
+    case 'error':
+      return <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: '10px', color: '#fff' }}/>
+    default:
+      return <FontAwesomeIcon icon={faInfo} style={{ marginRight: '10px', color: '#fff' }}/>
+  }
 }
 
-export function Notication(props: IProps = PropState) {
+export function Notication(props: IProps) {
   const classes = classNames({
     [styles.posRight]: props.position === IPosition.RIGHT,
     [styles.posLeft]: props.position === IPosition.LEFT,
@@ -69,7 +82,7 @@ export function Notication(props: IProps = PropState) {
         <strong className="mr-auto">{props.title}</strong>
       </Toast.Header> */}
       <Toast.Body bsPrefix={classesSuccess}>
-        <FontAwesomeIcon icon={faCheck} style={{ marginRight: '10px', color: '#fff' }}/>
+        <ToastIcon type={props.type} />
         {props.content}
       </Toast.Body>
     </Toast>

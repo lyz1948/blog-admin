@@ -78,12 +78,12 @@ export class CategoryAddComp extends React.Component<CategoryAdd.IProps, Categor
     }
 
     if (!slug) {
-      this.showNotice({ type: 'warn', content: 'slug不能为空' })
+      this.showNotice({ type: 'error', content: 'slug不能为空' })
       return
     }
 
     if (!description) {
-      this.showNotice({ type: 'warn', content: '描述不能为空' })
+      this.showNotice({ type: '', content: '描述不能为空' })
       return
     }
     

@@ -22,7 +22,7 @@
 
 .toastBody {
   min-width: 10rem;
-  padding: .5rem .75rem;
+  padding: .75rem 1rem;
   color: #fff;
   font-weight: bold;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
