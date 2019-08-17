@@ -11,3 +11,6 @@ export { TopNavComp } from './TopNav'
 export { DashboardComp } from './Dashboard'
 export { ConfirmModal } from './Global/Modal'
 export { Notication } from './Global/Notication'
+
+// Style components
+export { Container, Nav, GridCard } from './styleComponents'

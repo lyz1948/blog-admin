@@ -21,5 +21,7 @@ declare interface NodeModule {
   }
 }
 
+declare module 'react-fusioncharts';
+
 type omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type PartialPick<T, K extends keyof T> = Partial<T> & Pick<T, K>;

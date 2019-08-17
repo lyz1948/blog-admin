@@ -3,3 +3,64 @@
   background-color: #4d5b69;
   display: flex;
 }
+.red {
+  color: red;
+}
+.isLightText {
+  color: #fff;
+}
+
+.isDarkText {
+  color: rgb(67, 68, 86);
+}
+
+.isDarkText1 {
+  color: rgb(128, 145, 171);
+}
+
+.isCardDark{
+  background: #202a3b!important;
+}
+
+.chart-card, .grid-card {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  height: 100%;
+}
+
+.grid-card {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  padding: 1.5rem;
+  height: calc(100%);
+}
+
+.chart-card {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem .75rem 1.5rem;
+  height: calc(100%);
+}
