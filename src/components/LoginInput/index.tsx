@@ -34,8 +34,7 @@ export class LoginInputComp extends React.Component<
 
   handleBlur(event: React.FocusEvent<HTMLInputElement>) {
     const text = event.target.value.trim()
-    console.log(text)
-
+    console.log(text);
     this.setState({ text })
   }
 

@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { UserComp } from '../components'
-import { UserActions } from '../store/actions'
-import { RootState } from '../store/reducers'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router'
+import { UserComp } from '../components'
+import { UserActions } from '../store/actions'
+import { RootState } from '../store/reducers'
 import { omit } from '../utils'
 
 export namespace User {
@@ -30,6 +30,7 @@ export class UserApp extends React.Component<User.IProps> {
     const { user, actions } = this.props
     if (user && user.token) {
       this.props.history.push('/#DASHBOARD')
+      return null
     }
     return (
       <UserComp user={user} onLogin={actions.signIn} />

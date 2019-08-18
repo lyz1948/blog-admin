@@ -1,5 +1,5 @@
 export * from './token'
-import * as CONFIG from '../app.config'
+import * as CONFIG from '../config/app.config'
 
 export const getStatus = (response: any) => !!response.status && response.data && Object.is(response.status, CONFIG.APP.ERR_NO)
 

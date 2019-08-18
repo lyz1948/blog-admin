@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import * as CONFIG from '../app.config'
+import * as CONFIG from '../config/app.config'
 
 import { connect } from 'react-redux'
 import { omit } from '../utils'

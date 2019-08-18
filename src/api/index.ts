@@ -1,5 +1,5 @@
 import axios from 'axios'
-import * as CONFIG from '../app.config'
+import * as CONFIG from '../config/app.config'
 import * as UTILS from '../utils'
 import { IResponseData } from '@app/store/types'
 import { UserModel, ArticleModel } from '@app/store/models'

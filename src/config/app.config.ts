@@ -1,5 +1,5 @@
 // import { argv } from 'yargs'
-import * as ENVIROMENT from './environment'
+import * as ENVIROMENT from '../environment'
 
 export const APP = {
   PORT: 3000,

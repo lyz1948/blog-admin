@@ -13,4 +13,4 @@ export { ConfirmModal } from './Global/Modal'
 export { Notication } from './Global/Notication'
 
 // Style components
-export { Container, Nav, GridCard } from './styleComponents'
+export * from './styledComponents'

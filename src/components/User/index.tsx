@@ -1,9 +1,10 @@
 import * as React from 'react'
 import * as styles from './style.css'
 import { Form, Button } from 'react-bootstrap'
+import { UserModel } from '../../store/models'
+import { UserActions } from '../../store/actions'
 import { LoginInputComp } from '../LoginInput'
-import { UserModel } from '@app/store/models'
-import { UserActions } from '@app/store/actions'
+import { Base64 } from 'js-base64'
 
 export namespace UserComp {
   export interface IProps {
@@ -28,7 +29,10 @@ export class UserComp extends React.Component<UserComp.IProps, UserComp.IState> 
   }
 
   signIn() {
-    this.props.onLogin(this.props.user)
+    let { username, password } = this.props.user
+    password = password ? Base64.encode(password) : password
+    const user = { username, password }
+    this.props.onLogin(user)
   }
 
   render() {

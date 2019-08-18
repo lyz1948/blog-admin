@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions'
 import { RootState } from './state'
 import { IResponseData } from '../types'
 import { UserActions } from '../actions'
-import * as CONFIG from '../../app.config'
+import * as CONFIG from '../../config/app.config'
 
 const initialState: RootState.UserState = {
   username: 'root',
