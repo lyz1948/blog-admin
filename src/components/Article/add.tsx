@@ -3,7 +3,7 @@ import * as styles from './style.css'
 import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
-import { Form, Badge, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -17,6 +17,7 @@ import {
   faImage,
   faInbox
 } from '@fortawesome/free-solid-svg-icons'
+import { Notication } from '../index'
 
 export enum IStatePublic {
   Password = 0, // 密码访问
@@ -37,6 +38,7 @@ const PUBLISH_VALUE = [
 ]
 
 export namespace ArticleAdd {
+
   export interface IProps {
     tags: TagModel[]
     categories: CategoryModel[]
@@ -54,6 +56,14 @@ export namespace ArticleAdd {
     radioPublish?: number
     checkedValues?: string[]
     thumburl?: string
+    show: boolean
+    type: string
+    content: string
+  }
+
+  export interface INotice {
+    type: string
+    content: string
   }
 }
 
@@ -81,7 +91,8 @@ const FancyTextarea = React.forwardRef((props: any, ref: any) => {
 
 export class ArticleAddComp extends React.Component<
   ArticleAdd.IProps,
-  ArticleAdd.IState
+  ArticleAdd.IState,
+  ArticleAdd.INotice
 > {
   private inputTitle = React.createRef<HTMLInputElement>()
   private inputKeyword = React.createRef<HTMLInputElement>()
@@ -96,7 +107,10 @@ export class ArticleAddComp extends React.Component<
       radioPublic: 0,
       radioPublish: 0,
       checkedValues: [],
-      thumburl: ''
+      thumburl: '',
+      show: false,
+      type: 'info',
+      content: '添加成功'
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.chooseTag = this.chooseTag.bind(this)
@@ -173,16 +187,45 @@ export class ArticleAddComp extends React.Component<
 
     if (fileEl.files) {
       const thumburl = URL.createObjectURL(fileEl.files[0])
+      console.log(thumburl);
+      
       this.setState({
         thumburl
       })
-      fd.append('file', fileEl.files[0])
+      fd.append('image', fileEl.files[0])
     }
   }
 
   handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
+    const title = this.inputTitle.current!.value
+    const content = this.state.postContent!
+    const description = this.inputDescription.current!.value
+    const slug = this.inputSlug.current!.value
+    const { thumburl } = this.state
     const { radioPublic, radioPublish, checkedValues } = this.state
+    
+    if (!title) {
+      this.showNotice({ type: 'warn', content: '标题不能为空！' })
+      return
+    }
+    if (!content) {
+      this.showNotice({ type: 'warn', content: '内容不能为空！' })
+      return
+    }
+    if (!description) {
+      this.showNotice({ type: 'warn', content: '描述不能为空！' })
+      return
+    }
+    if (!slug) {
+      this.showNotice({ type: 'warn', content: 'slug不能为空！' })
+      return
+    }
+    if (!thumburl) {
+      this.showNotice({ type: 'warn', content: '文章缩略图不能为空！' })
+      return
+    }
+    
     const article: ArticleModel = {
       title: this.inputTitle.current!.value,
       content: this.state.postContent!,
@@ -200,6 +243,15 @@ export class ArticleAddComp extends React.Component<
       thumb: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4'
     }
     this.props.addArticle(article)
+  }
+
+  showNotice(obj: ArticleAdd.INotice) {
+    const { type, content } = obj
+    this.setState({
+      show: true,
+      type,
+      content
+    })
   }
 
   renderThumb(): JSX.Element | void {
@@ -237,8 +289,17 @@ export class ArticleAddComp extends React.Component<
 
   renderMain(): JSX.Element | void {
     // const tagType = ['primary', 'secondary', 'success', 'danger', 'warning', 'info']
+    const { show, type, content } = this.state
     return (
       <div className={styles.articleMain}>
+        <Notication 
+          show={show}
+          type={type}
+          content={content}
+          onClose={() => { this.setState({ show: false })}}
+          autohide
+        />
+
         <div className={styles.title}>
           <h3>记录生活-发布文章</h3>
         </div>
@@ -401,13 +462,13 @@ export class ArticleAddComp extends React.Component<
           <div className={styles.content}>
             <div className={styles.inputWrap}>
               {tags.map((tag: any) => (
-                <Badge
+                <Button
                   style={{ marginRight: '10px' }}
                   key={tag._id}
                   variant="primary"
                   onClick={(e: any) => this.chooseTag(tag.name, e)}>
                   {tag.name}
-                </Badge>
+                </Button>
               ))}
             </div>
           </div>
