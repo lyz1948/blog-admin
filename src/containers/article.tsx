@@ -6,7 +6,7 @@ import { omit } from '../utils'
 import { RootState } from '../store/reducers'
 import { ArticleModel } from '../store/models'
 import { ArticleActions } from '../store/actions'
-import { ArticleComp, ArticleAddComp } from '../components'
+import { ArticleComp } from '../components'
 
 export namespace Article {
   export interface IProps extends RouteComponentProps<void> {
@@ -37,36 +37,15 @@ export class ArticleApp extends React.Component<Article.IProps> {
   }
 
   render() {
-    const { articles, actions } = this.props
+    const { articles, actions, tags } = this.props
 
     return (
       <ArticleComp
+        tags={tags}
         articles={articles}
         getArticle={actions.getArticle}
         deleteArticle={actions.deleteArticle}
         editArticle={actions.editArticle}
-      />
-    )
-  }
-}
-
-export class ArticleAddApp extends React.Component<Article.IProps> {
-  // static defaultProps: Partial<Article.IProps> = {
-  //   filter: ArticleModel.Filter.SHOW_ALL
-  // }
-  constructor(props: Article.IProps, context?: any) {
-    super(props, context)
-  }
-
-  render() {
-    const { actions, categories, tags } = this.props
-    return (
-      <ArticleAddComp
-        tags={tags}
-        getTag={actions.getTag}
-        categories={categories}
-        getCategory={actions.getCategory}
-        addArticle={actions.addArticle}
       />
     )
   }

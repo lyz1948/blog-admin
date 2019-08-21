@@ -46,6 +46,10 @@ export const addArticle = (article: ArticleModel) => {
   return service.post('/article', { ...article })
 }
 
+export const uploadThumb = (file: any) => {
+  return service.post('/upload/article', file)
+}
+
 /**
  * 删除指定id文章
  * @param id 文章id

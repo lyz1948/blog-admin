@@ -45,6 +45,7 @@ export namespace ArticleAdd {
     getTag: typeof TagActions.getTag
     getCategory: typeof CategoryActions.getCategory
     addArticle: typeof ArticleActions.addArticle
+    uploadThumb: typeof ArticleActions.uplodThumb
   }
 
   export interface IState {
@@ -187,13 +188,13 @@ export class ArticleAddComp extends React.Component<
 
     if (fileEl.files) {
       const thumburl = URL.createObjectURL(fileEl.files[0])
-      console.log(thumburl);
-      
       this.setState({
         thumburl
       })
+
       fd.append('image', fileEl.files[0])
-    }
+      this.props.uploadThumb(fd)
+    } 
   }
 
   handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
@@ -225,6 +226,10 @@ export class ArticleAddComp extends React.Component<
       this.showNotice({ type: 'warn', content: '文章缩略图不能为空！' })
       return
     }
+    if (!checkedValues || checkedValues!.length <= 0) {
+      this.showNotice({ type: 'warn', content: '请选择分类！' })
+      return
+    }
     
     const article: ArticleModel = {
       title: this.inputTitle.current!.value,
@@ -240,9 +245,10 @@ export class ArticleAddComp extends React.Component<
       author: 'admin',
       password: '',
       extends: [],
-      thumb: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4'
+      thumb: thumburl
     }
     this.props.addArticle(article)
+    this.showNotice({ type: 'success', content: '添加成功！' })
   }
 
   showNotice(obj: ArticleAdd.INotice) {
@@ -394,8 +400,8 @@ export class ArticleAddComp extends React.Component<
             <div className={styles.field}>
               <p>归属分类</p>
               <div className={styles.inputWrap}>
-                {categories.map((cate: any, index: number) => (
-                  <div className={styles.labelBox} key={index}>
+                {categories.map((cate: any) => (
+                  <div className={styles.labelBox} key={cate._id}>
                     <input
                       type="checkbox"
                       id={cate._id}

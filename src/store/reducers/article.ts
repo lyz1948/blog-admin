@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions'
 import { RootState } from './state'
 import { ArticleModel } from '../models'
 import { ArticleActions } from '../actions'
-
 const initialState: RootState.ArticleState = [
   {
     _id: '',
@@ -28,6 +27,14 @@ export const articleReducer = handleActions<RootState.ArticleState, ArticleModel
   {
     [ArticleActions.Type.ADD_ARTICLE]: (state, action) => {
       console.log('add articel action', action)
+      return state
+    },
+    [ArticleActions.Type.UPLOAD_ARTICLE_THUMB]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { result } = (action.payload!)
+        console.log('result', result);
+        console.log(state);
+      }
       return state
     },
     [ArticleActions.Type.GET_ARTICLE]: (state, action) => {

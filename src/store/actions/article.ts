@@ -11,7 +11,8 @@ export namespace ArticleActions {
     DELETE_ARTICLE = 'DELETE_ARTICLE',
     ADD_ARTICLE = 'ADD_ARTICLE',
     UPDATE_ARTICLE = 'UPDATE_ARTICLE',
-    PUBLISH_ARTICLE = 'PUBLISH_ARTICLE'
+    PUBLISH_ARTICLE = 'PUBLISH_ARTICLE',
+    UPLOAD_ARTICLE_THUMB = 'UPLOAD_ARTICLE_THUMB',
   }
 
   export const addArticle = createAction(Type.ADD_ARTICLE, API.addArticle)
@@ -19,6 +20,7 @@ export namespace ArticleActions {
   export const getArticle = createAction(Type.GET_ARTICLE, API.fetchArticle)
   export const getCategory = createAction(Type.GET_CATEGORY, API.fetchCategory)
   export const getTag = createAction(Type.GET_TAG, API.fetchTag)
+  export const uplodThumb = createAction(Type.UPLOAD_ARTICLE_THUMB, API.uploadThumb)
 
   export const editArticle = createAction<PartialPick<ArticleModel, '_id'>>(Type.EDIT_ARTICLE)
 }

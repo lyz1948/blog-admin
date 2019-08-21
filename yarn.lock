@@ -654,8 +654,8 @@
 
 "@types/qiniu@^7.0.1":
   version "7.0.1"
-  resolved "https://registry.npm.taobao.org/@types/qiniu/download/@types/qiniu-7.0.1.tgz#5394fea99ea366be7daaa5a9198aab2dea97aba0"
-  integrity sha1-U5T+qZ6jZr59qqWpGYqrLeqXq6A=
+  resolved "https://registry.yarnpkg.com/@types/qiniu/-/qiniu-7.0.1.tgz#5394fea99ea366be7daaa5a9198aab2dea97aba0"
+  integrity sha512-3n2X3Dl89rDPGu/zROIN+Dqu9yUWN5cBbDiWwE/gRbE1X+7BhoGM2/eyM4GMstdLa8w3Ns9yW1fGDPYALuWwMA==
   dependencies:
     qiniu "*"
 
@@ -5194,6 +5194,11 @@ nan@^2.12.1:
   version "2.14.0"
   resolved "https://registry.npm.taobao.org/nan/download/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha1-eBj3IgJ7JFmobwKV1DTR/CM2xSw=
+
+nanoid@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.0.3.tgz#dde999e173bc9d7bd2ee2746b89909ade98e075e"
+  integrity sha512-NbaoqdhIYmY6FXDRB4eYtDVC9Z9eCbn8TyaiC16LNKtpPv/aqa0tOPD8y6gNE4yUNnaZ7LLhYtXOev/6+cBtfw==
 
 nanomatch@^1.2.9:
   version "1.2.13"

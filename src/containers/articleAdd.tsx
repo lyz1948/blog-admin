@@ -45,6 +45,7 @@ export class ArticleAddApp extends React.Component<Article.IProps> {
         categories={categories}
         getCategory={actions.getCategory}
         addArticle={actions.addArticle}
+        uploadThumb={actions.uplodThumb}
       />
     )
   }

@@ -1,11 +1,12 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { ArticleModel } from '@app/store/models'
+import { ArticleModel, TagModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
 
 export namespace Article {
   export interface IProps {
+    tags: TagModel[]
     articles: ArticleModel[]
     getArticle: typeof ArticleActions.getArticle
     deleteArticle: typeof ArticleActions.deleteArticle
@@ -65,7 +66,9 @@ export class ArticleComp extends React.Component<Article.IProps> {
                 </td>
                 <td>{it.create_at}</td>
                 <td>
-                  <Button size="sm" variant="info" style={{marginRight: '5px'}}>查看</Button>
+                  <Button size="sm" variant="info" style={{marginRight: '5px'}}>
+                    <a href={'http://localhost:3000/article/' + it._id} target="_blank">查看</a>
+                  </Button>
                   <Button size="sm" variant="primary" style={{marginRight: '5px'}} onClick={this.handleUpdate}>修改</Button>
                   <Button size="sm" variant="danger" onClick={(e: any) => this.handleDelete(it._id, e)}>删除</Button>
                 </td>
