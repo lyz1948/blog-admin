@@ -101,7 +101,6 @@ input[type='checkbox'] {
   position: absolute;
   left: 0;
   right: 0;
-  height: 100%;
   padding-left: 200px;
   background-color: #4d5b69;
 }

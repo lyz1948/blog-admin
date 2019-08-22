@@ -14,13 +14,14 @@ import World from 'fusioncharts/maps/fusioncharts.world'
 import {
   chartConfigs,
   mapConfigs,
-  gaugeConfigs,
+  // gaugeConfigs,
   doughuntConfigs,
 } from '../../config'
 
 // styled components
 import {
   Container,
+  GridCard,
   GridCardDark,
   Row,
   TextXLarge,
@@ -35,96 +36,86 @@ export class DashboardComp extends React.Component {
   render() {
     return (
       <Container className={styles.module}>
-        <Container className="container-fuild">
-          <Row>
-            <Container className="col-lg-3 col-sm-6">
-              <GridCardDark className="card">
-                <Container className="card-heading">
-                  <GridCardParagraph>Total Revenue</GridCardParagraph>
-                </Container>
-                <Container mt="20px">
-                  <TextMedium>$</TextMedium>
-                  <TextXLarge>10.5</TextXLarge>
-                </Container>
-              </GridCardDark>
-            </Container>
-            <Container className="col-lg-3 col-sm-6">
-              <GridCardDark>
-                <Container className="card-heading">
-                  <Container>Total Revenue</Container>
-                </Container>
-                <Container mt="20px">
-                  <TextMedium>$</TextMedium>
-                  <TextXLarge>10.5</TextXLarge>
-                </Container>
-              </GridCardDark>
-            </Container>
-            <Container className="col-lg-3 col-sm-6">
-              <GridCardDark>
-                <Container className="card-heading">
-                  <Container>Total Revenue</Container>
-                </Container>
-                <Container mt="20px">
-                  <TextMedium>$</TextMedium>
-                  <TextXLarge>10.5</TextXLarge>
-                </Container>
-              </GridCardDark>
-            </Container>
-            <Container className="col-lg-3 col-sm-6">
-              <GridCardDark>
-                <Container className="card-heading">
-                  <Container>Total Revenue</Container>
-                </Container>
-                <Container mt="20px">
-                  <TextMedium>$</TextMedium>
-                  <TextXLarge>10.5</TextXLarge>
-                </Container>
-              </GridCardDark>
-            </Container>
-          </Row>
-          <Row>
-            <Container className="col-md-4 col-lg-3">
-              <GridCardDark className="card">
-                <Container className="card-heading">
-                  <Container>Total Revenue</Container>
-                </Container>
-                <Container>
-                  <TextMedium>$</TextMedium>
-                  <TextXLarge>10.5</TextXLarge>
-                </Container>
-              </GridCardDark>
-            </Container>
-            <Container className="col-md-8">
-              <Container className="row">
-                <Container className="col-sm-4">
-                  <ReactFC {...doughuntConfigs} />
-                </Container>
-                <Container className="col-sm-4">
-                  <ReactFC {...gaugeConfigs} />
-                </Container>
-                <Container className="col-sm-4">
-                  <ReactFC {...gaugeConfigs} />
-                </Container>
+        <Row>
+          <Container className="col-lg-3 col-sm-6">
+            <GridCardDark className="card">
+              <Container className="card-heading">
+                <GridCardParagraph>Total Revenue</GridCardParagraph>
               </Container>
-            </Container>
-          </Row>
-          <Row>
-            <Container className="col-md-6">
-              <Container className="card">
-                <Container className="chart-div">
-                  <ReactFC {...chartConfigs} />
-                </Container>
+              <Container mt="20px">
+                <TextMedium>$</TextMedium>
+                <TextXLarge>10.5</TextXLarge>
               </Container>
-            </Container>
-            <Container className="col-md-6">
-              <Container className="card">
-                <Container className="map-div">
-                  <ReactFC {...mapConfigs} />
-                </Container>
+            </GridCardDark>
+          </Container>
+          <Container className="col-lg-3 col-sm-6">
+            <GridCardDark>
+              <Container className="card-heading">
+                <Container>Total Revenue</Container>
               </Container>
-            </Container>
-          </Row>
-        </Container>
+              <Container mt="20px">
+                <TextMedium>$</TextMedium>
+                <TextXLarge>10.5</TextXLarge>
+              </Container>
+            </GridCardDark>
+          </Container>
+          <Container className="col-lg-3 col-sm-6">
+            <GridCardDark>
+              <Container className="card-heading">
+                <Container>Total Revenue</Container>
+              </Container>
+              <Container mt="20px">
+                <TextMedium>$</TextMedium>
+                <TextXLarge>10.5</TextXLarge>
+              </Container>
+            </GridCardDark>
+          </Container>
+          <Container className="col-lg-3 col-sm-6">
+            <GridCardDark>
+              <Container className="card-heading">
+                <Container>Total Revenue</Container>
+              </Container>
+              <Container mt="20px">
+                <TextMedium>$</TextMedium>
+                <TextXLarge>10.5</TextXLarge>
+              </Container>
+            </GridCardDark>
+          </Container>
+        </Row>
+        <Row>
+          <Container className="col-md-4 col-lg-3">
+            <GridCard className="card">
+              <Container className="card-heading">
+                <Container>Total Revenue</Container>
+              </Container>
+              <Container>
+                <TextMedium>$</TextMedium>
+                <TextXLarge>10.5</TextXLarge>
+              </Container>
+            </GridCard>
+          </Container>
+          <Container className="row col-md-8">
+            <GridCard className="card">
+              <ReactFC {...doughuntConfigs} />
+            </GridCard>
+          </Container>
+        </Row>
+        <Row>
+          <Container className="col-md-6">
+            <GridCard className="card">
+              <Container className="chart-div">
+                <ReactFC {...chartConfigs} />
+              </Container>
+            </GridCard>
+          </Container>
+          <Container className="col-md-6">
+            <GridCard className="card">
+              <Container className="map-div">
+                <ReactFC {...mapConfigs} />
+              </Container>
+            </GridCard>
+          </Container>
+        </Row>
       </Container>
     )
   }

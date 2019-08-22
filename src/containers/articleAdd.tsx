@@ -34,18 +34,26 @@ export class ArticleAddApp extends React.Component<Article.IProps> {
 
   constructor(props: Article.IProps, context?: any) {
     super(props, context)
+    this.handleNewArticle = this.handleNewArticle.bind(this)
+  }
+
+  handleNewArticle(article: ArticleModel): any {
+    const { thumb } = this.props.articles[0];
+    article.thumb = thumb
+    this.props.actions.addArticle(article)
   }
 
   render() {
-    const { actions, categories, tags } = this.props
+    const { categories, tags, actions } = this.props
+    
     return (
       <ArticleAddComp
         tags={tags}
-        getTag={actions.getTag}
         categories={categories}
+        getTag={actions.getTag}
         getCategory={actions.getCategory}
-        addArticle={actions.addArticle}
         uploadThumb={actions.uplodThumb}
+        addArticle={this.handleNewArticle}
       />
     )
   }

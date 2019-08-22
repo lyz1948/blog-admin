@@ -46,8 +46,8 @@ export const gaugeConfigs = {
 
 export const chartConfigs = {
   type: 'column2d', // The chart type
-  width: '600', // Width of the chart
-  height: '450', // Height of the chart
+  width: '100%', // Width of the chart
+  height: '300', // Height of the chart
   dataFormat: 'json', // Data type
   dataSource: {
     // Chart Configuration
@@ -100,7 +100,7 @@ export const chartConfigs = {
 export const mapConfigs = {
   type: 'world',
   width: '100%',
-  height: '450',
+  height: '300',
   dataFormat: 'json',
   dataSource: {
     // Map Configuration

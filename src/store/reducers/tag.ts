@@ -23,6 +23,9 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
     [TagActions.Type.GET_TAG]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { result } = action.payload!
+        result.map((it: TagModel) => {
+          it.isSelected = false
+        })
         return [ ...result ]
       }
       return state

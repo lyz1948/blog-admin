@@ -60,6 +60,7 @@ export namespace ArticleAdd {
     show: boolean
     type: string
     content: string
+    [propName: string]: any
   }
 
   export interface INotice {
@@ -111,7 +112,8 @@ export class ArticleAddComp extends React.Component<
       thumburl: '',
       show: false,
       type: 'info',
-      content: '添加成功'
+      content: '添加成功',
+      formData: {}
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.chooseTag = this.chooseTag.bind(this)
@@ -127,7 +129,10 @@ export class ArticleAddComp extends React.Component<
     this.props.getCategory()
   }
 
-  chooseTag(name: TagModel, event: React.MouseEvent<HTMLButtonElement>) {}
+  chooseTag(tag: any): void {
+    console.log('click tag', tag);
+    tag.isSelected = !tag.isSelected
+  }
 
   processPost(event: React.FocusEvent<HTMLInputElement>) {
     this.setState({
@@ -188,11 +193,12 @@ export class ArticleAddComp extends React.Component<
 
     if (fileEl.files) {
       const thumburl = URL.createObjectURL(fileEl.files[0])
-      this.setState({
-        thumburl
-      })
-
+      
       fd.append('image', fileEl.files[0])
+      this.setState({
+        thumburl,
+        formData: fd
+      })
       this.props.uploadThumb(fd)
     } 
   }
@@ -247,6 +253,7 @@ export class ArticleAddComp extends React.Component<
       extends: [],
       thumb: thumburl
     }
+    // this.props.uploadThumb(this.state.formData)
     this.props.addArticle(article)
     this.showNotice({ type: 'success', content: '添加成功！' })
   }
@@ -400,8 +407,8 @@ export class ArticleAddComp extends React.Component<
             <div className={styles.field}>
               <p>归属分类</p>
               <div className={styles.inputWrap}>
-                {categories.map((cate: any) => (
-                  <div className={styles.labelBox} key={cate._id}>
+                {categories.map((cate: any, index: number) => (
+                  <div className={styles.labelBox} key={index}>
                     <input
                       type="checkbox"
                       id={cate._id}
@@ -467,12 +474,12 @@ export class ArticleAddComp extends React.Component<
           </div>
           <div className={styles.content}>
             <div className={styles.inputWrap}>
-              {tags.map((tag: any) => (
+              {tags.map((tag: TagModel, index: number) => (
                 <Button
                   style={{ marginRight: '10px' }}
-                  key={tag._id}
-                  variant="primary"
-                  onClick={(e: any) => this.chooseTag(tag.name, e)}>
+                  key={index}
+                  variant={tag.isSelected ? 'danger' : 'primary'}
+                  onClick={(tag: any) => { tag.isSelected = !tag.isSelected }}>
                   {tag.name}
                 </Button>
               ))}
@@ -495,6 +502,7 @@ export class ArticleAddComp extends React.Component<
             {this.renderThumb()}
           </div>
         </div>
+
       </div>
     )
   }

@@ -46,7 +46,7 @@ export const addArticle = (article: ArticleModel) => {
   return service.post('/article', { ...article })
 }
 
-export const uploadThumb = (file: any) => {
+export const uploadThumb = (file: any): Promise<IResponseData> => {
   return service.post('/upload/article', file)
 }
 

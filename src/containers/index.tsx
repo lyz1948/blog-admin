@@ -92,7 +92,6 @@ export class App extends React.Component<App.IProps> {
 
   filterCompoent(): JSX.Element | void {
     const { filter } = this.props
-    console.log(filter)
     this.hasPermission()
     switch (filter) {
       case 'DASHBOARD':

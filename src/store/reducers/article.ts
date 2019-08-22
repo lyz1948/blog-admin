@@ -26,14 +26,17 @@ const initialState: RootState.ArticleState = [
 export const articleReducer = handleActions<RootState.ArticleState, ArticleModel>(
   {
     [ArticleActions.Type.ADD_ARTICLE]: (state, action) => {
-      console.log('add articel action', action)
+      if (action.payload) {
+        return [ action.payload as any, ...state ]
+      }
       return state
     },
     [ArticleActions.Type.UPLOAD_ARTICLE_THUMB]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { result } = (action.payload!)
-        console.log('result', result);
-        console.log(state);
+        console.log('state', state);
+        
+        initialState[0].thumb = result
       }
       return state
     },
