@@ -13,6 +13,8 @@ export namespace ArticleActions {
     UPDATE_ARTICLE = 'UPDATE_ARTICLE',
     PUBLISH_ARTICLE = 'PUBLISH_ARTICLE',
     UPLOAD_ARTICLE_THUMB = 'UPLOAD_ARTICLE_THUMB',
+    SELECT_TAG = 'SELECT_TAG',
+    SELECT_CATEGORY = 'SELECT_CATEGORY',
   }
 
   export const addArticle = createAction(Type.ADD_ARTICLE, API.addArticle)
@@ -21,7 +23,8 @@ export namespace ArticleActions {
   export const getCategory = createAction(Type.GET_CATEGORY, API.fetchCategory)
   export const getTag = createAction(Type.GET_TAG, API.fetchTag)
   export const uplodThumb = createAction(Type.UPLOAD_ARTICLE_THUMB, API.uploadThumb)
-
+  export const selectTag = createAction(Type.SELECT_TAG)
+  export const selectCategory = createAction(Type.SELECT_CATEGORY)
   export const editArticle = createAction<PartialPick<ArticleModel, '_id'>>(Type.EDIT_ARTICLE)
 }
 

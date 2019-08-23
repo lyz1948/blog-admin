@@ -53,6 +53,8 @@ export class ArticleAddApp extends React.Component<Article.IProps> {
         getTag={actions.getTag}
         getCategory={actions.getCategory}
         uploadThumb={actions.uplodThumb}
+        selectTag={actions.selectTag}
+        selectCategory={actions.selectCategory}
         addArticle={this.handleNewArticle}
       />
     )

@@ -20,14 +20,48 @@
 
 .inputWrap {
   display: flex;
+  flex-wrap: wrap;
 }
 
-.inputWrap .labelBox {
+.inputWrap .labelBox  {
   margin-right: 10px;
+  margin-bottom: 10px;
+  min-width: 60px;
+  text-align: center;
+  color: #fff;
+  background-color: #6c757d;
+  line-height: 30px;
+  border-radius: 3px;
+  font-weight: bold;
+  padding: 0 10px;
 }
 
-.inputWrap .labelBox label {
-  margin-left: 5px;
+
+.inputWrap .labelBox.info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+.inputWrap .labelBox.primary {
+  background: #007bff;
+  border-color: #007bff;
+}
+
+.inputWrap .labelBox.success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.inputWrap .labelBox.danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.inputWrap .labelBox input {
+  display: none;
+}
+
+.inputWrap .labelBox .labelName {
+  margin: 0;
 }
 
 .module {

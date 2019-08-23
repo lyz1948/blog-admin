@@ -9,6 +9,7 @@ const initialState: RootState.TagState = [
     slug: 'tag slug',
     description: 'tag description',
     extends: [],
+    isSelected: false,
   }
 ]
 
@@ -29,6 +30,17 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
         return [ ...result ]
       }
       return state
+    },
+    [TagActions.Type.SELECT_TAG]: (state, action) => {
+      return state.map(category => {
+        if (!category || !action || !action.payload) {
+          return category
+        }
+        if (category._id === action.payload._id) {
+          category.isSelected = !category.isSelected
+        }
+        return category
+      })
     },
     [TagActions.Type.DELETE_TAG]: (state, action) => {
       const { _id: id } = (action.payload as any).result

@@ -1,10 +1,12 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
+import classNames from 'classnames'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
 import { Form, Button } from 'react-bootstrap'
+import { Notication } from '../index'
 import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
+import { CategoryModel, TagModel, ArticleModel } from '@app/store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBold,
@@ -15,30 +17,28 @@ import {
   faListOl,
   faLink,
   faImage,
-  faInbox
+  faInbox,
 } from '@fortawesome/free-solid-svg-icons'
-import { Notication } from '../index'
 
 export enum IStatePublic {
   Password = 0, // 密码访问
   Public = 1, // 公开
-  Secret = -1 // 隐藏
+  Secret = -1, // 隐藏
 }
 
 const STATE_VALUE = [
   { text: '密码访问', id: IStatePublic.Password },
   { text: '公开', id: IStatePublic.Public },
-  { text: '私密', id: IStatePublic.Secret }
+  { text: '私密', id: IStatePublic.Secret },
 ]
 
 const PUBLISH_VALUE = [
   { text: '原创', id: 0 },
   { text: '转载', id: 1 },
-  { text: '混合', id: -1 }
+  { text: '混合', id: -1 },
 ]
 
 export namespace ArticleAdd {
-
   export interface IProps {
     tags: TagModel[]
     categories: CategoryModel[]
@@ -46,6 +46,8 @@ export namespace ArticleAdd {
     getCategory: typeof CategoryActions.getCategory
     addArticle: typeof ArticleActions.addArticle
     uploadThumb: typeof ArticleActions.uplodThumb
+    selectTag: typeof TagActions.selectTag
+    selectCategory: typeof CategoryActions.selectCategory
   }
 
   export interface IState {
@@ -56,6 +58,7 @@ export namespace ArticleAdd {
     radioPublic?: number
     radioPublish?: number
     checkedValues?: string[]
+    checkedTagValues?: string[]
     thumburl?: string
     show: boolean
     type: string
@@ -101,6 +104,7 @@ export class ArticleAddComp extends React.Component<
   private inputSlug = React.createRef<HTMLInputElement>()
   private inputDescription = React.createRef<HTMLInputElement>()
   private inputCategory = React.createRef<HTMLInputElement>()
+  private inputTag = React.createRef<HTMLInputElement>()
 
   constructor(props: ArticleAdd.IProps, context?: any) {
     super(props, context)
@@ -108,18 +112,19 @@ export class ArticleAddComp extends React.Component<
       postContent: '# h1 title',
       radioPublic: 0,
       radioPublish: 0,
-      checkedValues: [],
+      checkedValues: [], // 选择的分类
+      checkedTagValues: [], // 选择的tag
       thumburl: '',
       show: false,
       type: 'info',
       content: '添加成功',
-      formData: {}
+      formData: {},
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.chooseTag = this.chooseTag.bind(this)
     this.processPost = this.processPost.bind(this)
+    this.changeTag = this.changeTag.bind(this)
     this.changeCategory = this.changeCategory.bind(this)
-    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this)
     this.changeStateRadio = this.changeStateRadio.bind(this)
     this.changePublishRadio = this.changePublishRadio.bind(this)
   }
@@ -130,42 +135,48 @@ export class ArticleAddComp extends React.Component<
   }
 
   chooseTag(tag: any): void {
-    console.log('click tag', tag);
+    console.log('click tag', tag)
     tag.isSelected = !tag.isSelected
   }
 
   processPost(event: React.FocusEvent<HTMLInputElement>) {
     this.setState({
-      postContent: event.target.value
+      postContent: event.target.value,
     })
   }
 
   handleChange(event: any) {}
 
-  handleCheckBoxChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { checked, value } = event.target
-
-    const { checkedValues } = this.state
-    if (checked && checkedValues!.indexOf(value) === -1) {
-      checkedValues!.push(value)
-    } else {
-      checkedValues!.filter(item => item !== value)
-    }
-    this.setState({
-      checkedValues
-    })
-  }
-
   changeStateRadio(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      radioPublic: Number(event.target.value)
+      radioPublic: Number(event.target.value),
     })
   }
 
   changePublishRadio(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      radioPublish: Number(event.target.value)
+      radioPublish: Number(event.target.value),
     })
+  }
+
+  changeTag(tag: any, event: React.ChangeEvent<HTMLInputElement>) {
+    const { checked } = event.target
+    const { checkedTagValues } = this.state
+
+    if (
+      checked &&
+      checkedTagValues!.filter((item: any) => item._id !== tag._id)
+    ) {
+      checkedTagValues!.push(tag)
+    }
+    this.setState(() => {
+      let temp = checkedTagValues!.filter((item: any) => item._id !== tag._id)
+      return { checkedTagValues: temp }
+    })
+    this.setState({
+      checkedTagValues,
+    })
+    this.props.selectTag({ _id: tag._id })
   }
 
   changeCategory(cate: any, event: React.ChangeEvent<HTMLInputElement>) {
@@ -183,8 +194,9 @@ export class ArticleAddComp extends React.Component<
       return { checkedValues: temp }
     })
     this.setState({
-      checkedValues
+      checkedValues,
     })
+    this.props.selectCategory({ _id: cate._id })
   }
 
   async changeFile(event: React.ChangeEvent<HTMLInputElement>) {
@@ -193,14 +205,14 @@ export class ArticleAddComp extends React.Component<
 
     if (fileEl.files) {
       const thumburl = URL.createObjectURL(fileEl.files[0])
-      
+
       fd.append('image', fileEl.files[0])
       this.setState({
         thumburl,
-        formData: fd
+        formData: fd,
       })
       this.props.uploadThumb(fd)
-    } 
+    }
   }
 
   handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
@@ -210,8 +222,8 @@ export class ArticleAddComp extends React.Component<
     const description = this.inputDescription.current!.value
     const slug = this.inputSlug.current!.value
     const { thumburl } = this.state
-    const { radioPublic, radioPublish, checkedValues } = this.state
-    
+    const { radioPublic, radioPublish, checkedValues, checkedTagValues } = this.state
+
     if (!title) {
       this.showNotice({ type: 'warn', content: '标题不能为空！' })
       return
@@ -236,13 +248,13 @@ export class ArticleAddComp extends React.Component<
       this.showNotice({ type: 'warn', content: '请选择分类！' })
       return
     }
-    
+
     const article: ArticleModel = {
       title: this.inputTitle.current!.value,
       content: this.state.postContent!,
       description: this.inputDescription.current!.value,
       slug: this.inputSlug.current!.value,
-      tag: [],
+      tag: [...checkedTagValues!],
       category: [...checkedValues!],
       keywords: [...this.inputKeyword.current!.value.split(',')],
       public: Number(radioPublish),
@@ -251,7 +263,7 @@ export class ArticleAddComp extends React.Component<
       author: 'admin',
       password: '',
       extends: [],
-      thumb: thumburl
+      thumb: thumburl,
     }
     // this.props.uploadThumb(this.state.formData)
     this.props.addArticle(article)
@@ -263,7 +275,7 @@ export class ArticleAddComp extends React.Component<
     this.setState({
       show: true,
       type,
-      content
+      content,
     })
   }
 
@@ -305,11 +317,13 @@ export class ArticleAddComp extends React.Component<
     const { show, type, content } = this.state
     return (
       <div className={styles.articleMain}>
-        <Notication 
+        <Notication
           show={show}
           type={type}
           content={content}
-          onClose={() => { this.setState({ show: false })}}
+          onClose={() => {
+            this.setState({ show: false })
+          }}
           autohide
         />
 
@@ -384,7 +398,8 @@ export class ArticleAddComp extends React.Component<
               type="submit"
               variant="primary"
               size="lg"
-              onClick={(e: any) => this.handleSubmit(e)}>
+              onClick={(e: any) => this.handleSubmit(e)}
+            >
               创建文章
             </Button>
           </div>
@@ -405,10 +420,15 @@ export class ArticleAddComp extends React.Component<
           </div>
           <div className={styles.content}>
             <div className={styles.field}>
-              <p>归属分类</p>
               <div className={styles.inputWrap}>
                 {categories.map((cate: any, index: number) => (
-                  <div className={styles.labelBox} key={index}>
+                  <div
+                    className={classNames({
+                      [styles.labelBox]: true,
+                      [styles.info]: cate.isSelected,
+                    })}
+                    key={index}
+                  >
                     <input
                       type="checkbox"
                       id={cate._id}
@@ -416,7 +436,9 @@ export class ArticleAddComp extends React.Component<
                       onChange={(e: any) => this.changeCategory(cate, e)}
                       ref={this.inputCategory}
                     />
-                    <label htmlFor={cate._id}>{cate.name}</label>
+                    <label className={styles.labelName} htmlFor={cate._id}>
+                      {cate.name}
+                    </label>
                   </div>
                 ))}
               </div>
@@ -433,7 +455,7 @@ export class ArticleAddComp extends React.Component<
               <p>访问状态 </p>
               <div className={styles.inputWrap}>
                 {STATE_VALUE.map((type, idx) => (
-                  <div className={styles.labelBox} key={idx}>
+                  <div className={styles.radioBox} key={idx}>
                     <input
                       type="radio"
                       id={type.text}
@@ -451,7 +473,7 @@ export class ArticleAddComp extends React.Component<
               <p>发布状态</p>
               <div className={styles.inputWrap}>
                 {PUBLISH_VALUE.map((type, idx) => (
-                  <div className={styles.labelBox} key={idx}>
+                  <div className={styles.radioBox} key={idx}>
                     <input
                       type="radio"
                       id={type.text}
@@ -474,14 +496,25 @@ export class ArticleAddComp extends React.Component<
           </div>
           <div className={styles.content}>
             <div className={styles.inputWrap}>
-              {tags.map((tag: TagModel, index: number) => (
-                <Button
-                  style={{ marginRight: '10px' }}
+              {tags.map((tag: any, index: number) => (
+                <div
+                  className={classNames({
+                    [styles.labelBox]: true,
+                    [styles.info]: tag.isSelected,
+                  })}
                   key={index}
-                  variant={tag.isSelected ? 'danger' : 'primary'}
-                  onClick={(tag: any) => { tag.isSelected = !tag.isSelected }}>
-                  {tag.name}
-                </Button>
+                >
+                  <input
+                    type="checkbox"
+                    id={tag._id}
+                    name={tag.name}
+                    onChange={(e: any) => this.changeTag(tag, e)}
+                    ref={this.inputTag}
+                  />
+                  <label className={styles.labelName} htmlFor={tag._id}>
+                    {tag.name}
+                  </label>
+                </div>
               ))}
             </div>
           </div>
@@ -502,7 +535,6 @@ export class ArticleAddComp extends React.Component<
             {this.renderThumb()}
           </div>
         </div>
-
       </div>
     )
   }

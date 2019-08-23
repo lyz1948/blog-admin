@@ -9,7 +9,7 @@ export namespace TagActions {
     ADD_TAG = 'ADD_TAG',
     UPDATE_TAG = 'UPDATE_TAG',
     PUBLISH_TAG = 'PUBLISH_TAG',
-    SELECTED_TAG = 'SELECTED_TAG',
+    SELECT_TAG = 'SELECT_TAG',
   }
 
   export const addTag = createAction(Type.ADD_TAG, API.addTag)
@@ -17,7 +17,7 @@ export namespace TagActions {
   export const deleteTag = createAction(Type.DELETE_TAG, API.deleteTag)
   export const editTag = createAction(Type.EDIT_TAG)
   export const updateTag = createAction(Type.EDIT_TAG, API.updateTag)
-  export const selectedTag = createAction(Type.SELECTED_TAG)
+  export const selectTag = createAction(Type.SELECT_TAG)
 }
 
 export type TagActions = omit<typeof TagActions, 'Type'>
