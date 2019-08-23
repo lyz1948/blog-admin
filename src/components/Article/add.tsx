@@ -85,10 +85,9 @@ const FancyInput = React.forwardRef((props: any, ref: any) => {
 
 const FancyTextarea = React.forwardRef((props: any, ref: any) => {
   return (
-    <input
-      type="textarea"
+    <textarea
       ref={ref}
-      className={styles.formInput}
+      className={styles.formTextarea}
       placeholder={props.tip}
     />
   )
@@ -121,7 +120,6 @@ export class ArticleAddComp extends React.Component<
       formData: {},
     }
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.chooseTag = this.chooseTag.bind(this)
     this.processPost = this.processPost.bind(this)
     this.changeTag = this.changeTag.bind(this)
     this.changeCategory = this.changeCategory.bind(this)
@@ -132,11 +130,6 @@ export class ArticleAddComp extends React.Component<
   componentWillMount() {
     this.props.getTag()
     this.props.getCategory()
-  }
-
-  chooseTag(tag: any): void {
-    console.log('click tag', tag)
-    tag.isSelected = !tag.isSelected
   }
 
   processPost(event: React.FocusEvent<HTMLInputElement>) {
@@ -222,7 +215,12 @@ export class ArticleAddComp extends React.Component<
     const description = this.inputDescription.current!.value
     const slug = this.inputSlug.current!.value
     const { thumburl } = this.state
-    const { radioPublic, radioPublish, checkedValues, checkedTagValues } = this.state
+    const {
+      radioPublic,
+      radioPublish,
+      checkedValues,
+      checkedTagValues,
+    } = this.state
 
     if (!title) {
       this.showNotice({ type: 'warn', content: '标题不能为空！' })
@@ -350,58 +348,50 @@ export class ArticleAddComp extends React.Component<
 
           <div className={styles.field}>
             <p>文章编辑</p>
-            <div className={styles.markdownBar}>
-              <a title="blod">
-                <FontAwesomeIcon icon={faBold} />
-              </a>
-              <a title="italic">
-                <FontAwesomeIcon icon={faItalic} />
-              </a>
-              <a title="heading">
-                <FontAwesomeIcon icon={faHeading} />
-              </a>
-              <i className={styles.separator}>|</i>
-              <a title="Quote">
-                <FontAwesomeIcon icon={faQuoteLeft} />
-              </a>
-              <a title="eneric List">
-                <FontAwesomeIcon icon={faListUl} />
-              </a>
-              <a title="Numbered List">
-                <FontAwesomeIcon icon={faListOl} />
-              </a>
-              <i className={styles.separator}>|</i>
-              <a title="Create Link">
-                <FontAwesomeIcon icon={faLink} />
-              </a>
-              <a title="Insert Image">
-                <FontAwesomeIcon icon={faImage} />
-              </a>
-            </div>
-
-            <div className={styles.markdownBox}>
-              <div className={styles.markdowInput}>
-                <Form.Control
-                  as="textarea"
-                  rows="10"
-                  className={styles.formControl}
-                  placeholder="文章内容"
-                  value={this.state.postContent}
-                  onChange={(e: any) => this.processPost(e)}
-                />
+            <div className={styles.markdownWrap}>
+              <div className={styles.markdownBar}>
+                <a title="blod">
+                  <FontAwesomeIcon icon={faBold} />
+                </a>
+                <a title="italic">
+                  <FontAwesomeIcon icon={faItalic} />
+                </a>
+                <a title="heading">
+                  <FontAwesomeIcon icon={faHeading} />
+                </a>
+                <i className={styles.separator}>|</i>
+                <a title="Quote">
+                  <FontAwesomeIcon icon={faQuoteLeft} />
+                </a>
+                <a title="eneric List">
+                  <FontAwesomeIcon icon={faListUl} />
+                </a>
+                <a title="Numbered List">
+                  <FontAwesomeIcon icon={faListOl} />
+                </a>
+                <i className={styles.separator}>|</i>
+                <a title="Create Link">
+                  <FontAwesomeIcon icon={faLink} />
+                </a>
+                <a title="Insert Image">
+                  <FontAwesomeIcon icon={faImage} />
+                </a>
               </div>
-              {this.renderMdView()}
+
+              <div className={styles.markdownBox}>
+                <div className={styles.markdowInput}>
+                  <Form.Control
+                    as="textarea"
+                    rows="10"
+                    className={styles.formTextarea}
+                    placeholder="文章内容"
+                    value={this.state.postContent}
+                    onChange={(e: any) => this.processPost(e)}
+                  />
+                </div>
+                {/* {this.renderMdView()} */}
+              </div>
             </div>
-          </div>
-          <div className={styles.field}>
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              onClick={(e: any) => this.handleSubmit(e)}
-            >
-              创建文章
-            </Button>
           </div>
         </div>
       </div>
@@ -419,29 +409,57 @@ export class ArticleAddComp extends React.Component<
             <h3>文章分类</h3>
           </div>
           <div className={styles.content}>
-            <div className={styles.field}>
-              <div className={styles.inputWrap}>
-                {categories.map((cate: any, index: number) => (
-                  <div
-                    className={classNames({
-                      [styles.labelBox]: true,
-                      [styles.info]: cate.isSelected,
-                    })}
-                    key={index}
-                  >
-                    <input
-                      type="checkbox"
-                      id={cate._id}
-                      name={cate.name}
-                      onChange={(e: any) => this.changeCategory(cate, e)}
-                      ref={this.inputCategory}
-                    />
-                    <label className={styles.labelName} htmlFor={cate._id}>
-                      {cate.name}
-                    </label>
-                  </div>
-                ))}
-              </div>
+            <div className={styles.inputWrap}>
+              {categories.map((cate: any, index: number) => (
+                <div
+                  className={classNames({
+                    [styles.labelBox]: true,
+                    [styles.info]: cate.isSelected,
+                  })}
+                  key={index}
+                >
+                  <input
+                    type="checkbox"
+                    id={cate._id}
+                    name={cate.name}
+                    onChange={(e: any) => this.changeCategory(cate, e)}
+                    ref={this.inputCategory}
+                  />
+                  <label className={styles.labelName} htmlFor={cate._id}>
+                    {cate.name}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.sideBox}>
+          <div className={styles.title}>
+            <h3>文章标签</h3>
+          </div>
+          <div className={styles.content}>
+            <div className={styles.inputWrap}>
+              {tags.map((tag: any, index: number) => (
+                <div
+                  className={classNames({
+                    [styles.labelBox]: true,
+                    [styles.info]: tag.isSelected,
+                  })}
+                  key={index}
+                >
+                  <input
+                    type="checkbox"
+                    id={tag._id}
+                    name={tag.name}
+                    onChange={(e: any) => this.changeTag(tag, e)}
+                    ref={this.inputTag}
+                  />
+                  <label className={styles.labelName} htmlFor={tag._id}>
+                    {tag.name}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -492,46 +510,14 @@ export class ArticleAddComp extends React.Component<
 
         <div className={styles.sideBox}>
           <div className={styles.title}>
-            <h3>文章标签</h3>
-          </div>
-          <div className={styles.content}>
-            <div className={styles.inputWrap}>
-              {tags.map((tag: any, index: number) => (
-                <div
-                  className={classNames({
-                    [styles.labelBox]: true,
-                    [styles.info]: tag.isSelected,
-                  })}
-                  key={index}
-                >
-                  <input
-                    type="checkbox"
-                    id={tag._id}
-                    name={tag.name}
-                    onChange={(e: any) => this.changeTag(tag, e)}
-                    ref={this.inputTag}
-                  />
-                  <label className={styles.labelName} htmlFor={tag._id}>
-                    {tag.name}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.sideBox}>
-          <div className={styles.title}>
             <h3>文章缩略图</h3>
           </div>
-          <div className={styles.content}>
-            <div className={styles.inputWrap}>
-              <input
-                type="file"
-                id="file"
-                onChange={this.changeFile.bind(this)}
-              />
-            </div>
+          <div className={classNames(styles.content, styles.thumbBox)}>
+            <input
+              type="file"
+              id="file"
+              onChange={this.changeFile.bind(this)}
+            />
             {this.renderThumb()}
           </div>
         </div>
@@ -541,9 +527,20 @@ export class ArticleAddComp extends React.Component<
 
   render() {
     return (
-      <div className={styles.module}>
-        {this.renderMain()}
-        {this.renderSide()}
+      <div className={styles.articleAdd}>
+        <div className={styles.topBar}>
+          <Button
+            type="submit"
+            variant="primary"
+            onClick={(e: any) => this.handleSubmit(e)}
+          >
+            创建文章
+          </Button>
+        </div>
+        <div className={styles.module}>
+          {this.renderMain()}
+          {this.renderSide()}
+        </div>
       </div>
     )
   }

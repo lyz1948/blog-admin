@@ -34,9 +34,7 @@ export const articleReducer = handleActions<RootState.ArticleState, ArticleModel
     [ArticleActions.Type.UPLOAD_ARTICLE_THUMB]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { result } = (action.payload!)
-        console.log('state', state);
-        
-        initialState[0].thumb = result
+        state[0].thumb = result
       }
       return state
     },

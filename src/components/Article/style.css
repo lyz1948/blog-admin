@@ -1,7 +1,4 @@
-.formControl {
-  background-color: #2e4050 !important;
-  color: #d3e5f7 !important;
-}
+
 .formInput {
   display: block;
   width: 100%;
@@ -11,19 +8,33 @@
   font-weight: 400;
   line-height: 1.5;
   color: #d3e5f7;
-  background-color: #2e4050;
+  background-color: #4d5b69;
   background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
+  border: none;
+  /* border-radius: 0.25rem; */
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.formTextarea {
+  width: 100%;
+  height: 120px;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #d3e5f7;
+  background-color: #4d5b69;
+  background-clip: padding-box;
+  border: none;
+  resize: none;
+}
+
 .inputWrap {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
 }
 
-.inputWrap .labelBox  {
+.inputWrap .labelBox {
   margin-right: 10px;
   margin-bottom: 10px;
   min-width: 60px;
@@ -34,8 +45,12 @@
   border-radius: 3px;
   font-weight: bold;
   padding: 0 10px;
+  cursor: pointer;
 }
 
+.inputWrap .labelBox:hover {
+  background-color: #17a2b8;
+}
 
 .inputWrap .labelBox.info {
   background-color: #17a2b8;
@@ -64,6 +79,44 @@
   margin: 0;
 }
 
+.inputWrap .radioBox {
+  margin-right: 0.5rem;
+}
+
+.inputWrap .radioBox label {
+  margin-left: 0.3125rem;
+  font-weight: 500;
+  color: #f9f9f9;
+  cursor: pointer;
+}
+
+.thumbBox {
+  position: relative;
+  height: 200px;
+}
+
+.thumbBox input[type='file'] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.thumbBox .thumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+}
+
+.topBar {
+  padding: 1.5rem;
+  clear: both;
+}
+
 .module {
   padding: 20px;
   background-color: #4d5b69;
@@ -73,6 +126,10 @@
 .module .articleMain {
   flex: 0 0 70%;
   box-shadow: 0 2px 12px #283847;
+}
+
+.module .articleMain .content{
+  padding-right: 100px;
 }
 
 .module .articleSide {
@@ -93,7 +150,7 @@
 .module .field p {
   font-size: 14px;
   color: #f8f8ff;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .module .title {
@@ -111,21 +168,25 @@
   margin-bottom: 20px;
 }
 
-.module .sideBox .thumb img{
+.module .sideBox .thumb img {
   width: 100%;
   max-height: 300px;
 }
 
+.markdownWrap {
+  background-color: #4d5b69;
+}
+
 .markdownBar {
-  border: 1px solid #bbb;
-  padding: 5px;
-  border-radius: 4px;
+  padding: 10px;
+  border-bottom: 1px solid #9c9c9c;
 }
 .markdownBar a {
   display: inline-block;
   width: 30px;
   height: 30px;
   line-height: 30px;
+  font-size: 16px;
   text-align: center;
   border: 1px solid transparent;
 }
@@ -146,12 +207,21 @@
 
 .markdownBox {
   display: flex;
-  padding-top: 10px;
 }
 
 .markdownBox .markdowInput {
-  flex: 0 0 48%;
-  margin-right: 20px;
+  flex: 1;
+  /* border-top: 1px solid #f9f9f9; */
+}
+
+.markdownBox .markdowInput .formTextarea {
+  background-color: #4d5b69 !important;
+  color: #d3e5f7 !important;
+  font-size: 1.2rem;
+  border-radius: 0;
+  /* 
+  outline: none;
+  resize: none; */
 }
 
 .markdownBox .markdownPreview {
