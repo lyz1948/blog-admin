@@ -6739,7 +6739,7 @@ q@^1.1.2:
   resolved "https://registry.npm.taobao.org/q/download/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qiniu@*, qiniu@^7.2.2:
+qiniu@*:
   version "7.2.2"
   resolved "https://registry.npm.taobao.org/qiniu/download/qiniu-7.2.2.tgz#94425193f6b1dbd093fd78583070a64dde6cc5e7"
   integrity sha1-lEJRk/ax29CT/XhYMHCmTd5sxec=
