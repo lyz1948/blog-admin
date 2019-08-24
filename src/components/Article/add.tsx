@@ -18,6 +18,7 @@ import {
   faLink,
   faImage,
   faInbox,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons'
 
 export enum IStatePublic {
@@ -27,8 +28,8 @@ export enum IStatePublic {
 }
 
 const STATE_VALUE = [
-  { text: '密码访问', id: IStatePublic.Password },
   { text: '公开', id: IStatePublic.Public },
+  { text: '密码访问', id: IStatePublic.Password },
   { text: '私密', id: IStatePublic.Secret },
 ]
 
@@ -101,6 +102,7 @@ export class ArticleAddComp extends React.Component<
   private inputTitle = React.createRef<HTMLInputElement>()
   private inputKeyword = React.createRef<HTMLInputElement>()
   private inputSlug = React.createRef<HTMLInputElement>()
+  private inputPassword = React.createRef<HTMLInputElement>()
   private inputDescription = React.createRef<HTMLInputElement>()
   private inputCategory = React.createRef<HTMLInputElement>()
   private inputTag = React.createRef<HTMLInputElement>()
@@ -108,8 +110,8 @@ export class ArticleAddComp extends React.Component<
   constructor(props: ArticleAdd.IProps, context?: any) {
     super(props, context)
     this.state = {
-      postContent: '# h1 title',
-      radioPublic: 0,
+      postContent: '',
+      radioPublic: 1,
       radioPublish: 0,
       checkedValues: [], // 选择的分类
       checkedTagValues: [], // 选择的tag
@@ -275,6 +277,18 @@ export class ArticleAddComp extends React.Component<
       type,
       content,
     })
+  }
+
+  renderPassword() {
+    const { radioPublic } = this.state
+    if (radioPublic !== 0) {
+      return null
+    }
+    return (
+      <div className={styles.passwordWrap}>
+        <FancyInput ref={this.inputPassword} tip={'文章访问密码'} />
+      </div>
+    )
   }
 
   renderThumb(): JSX.Element | void {
@@ -461,6 +475,9 @@ export class ArticleAddComp extends React.Component<
                 </div>
               ))}
             </div>
+            <div className={styles.inputWrap}>
+              <FontAwesomeIcon icon={faPlus} />
+            </div>
           </div>
         </div>
 
@@ -473,7 +490,11 @@ export class ArticleAddComp extends React.Component<
               <p>访问状态 </p>
               <div className={styles.inputWrap}>
                 {STATE_VALUE.map((type, idx) => (
-                  <div className={styles.radioBox} key={idx}>
+                  <div className={
+                    classNames({
+                      [styles.radioBox]: true, 
+                      [styles.info]: this.state.radioPublic === type.id
+                    })} key={idx}>
                     <input
                       type="radio"
                       id={type.text}
@@ -486,12 +507,16 @@ export class ArticleAddComp extends React.Component<
                   </div>
                 ))}
               </div>
+              {this.renderPassword()}
             </div>
             <div className={styles.field}>
               <p>发布状态</p>
               <div className={styles.inputWrap}>
                 {PUBLISH_VALUE.map((type, idx) => (
-                  <div className={styles.radioBox} key={idx}>
+                  <div className={classNames({
+                    [styles.radioBox]: true, 
+                    [styles.info]: this.state.radioPublish === type.id
+                  })} key={idx}>
                     <input
                       type="radio"
                       id={type.text}
@@ -529,13 +554,15 @@ export class ArticleAddComp extends React.Component<
     return (
       <div className={styles.articleAdd}>
         <div className={styles.topBar}>
-          <Button
-            type="submit"
-            variant="primary"
-            onClick={(e: any) => this.handleSubmit(e)}
-          >
-            创建文章
-          </Button>
+          <div className={styles.inner}>
+            <Button
+              type="submit"
+              variant="primary"
+              onClick={(e: any) => this.handleSubmit(e)}
+            >
+              创建文章
+            </Button>
+          </div>
         </div>
         <div className={styles.module}>
           {this.renderMain()}

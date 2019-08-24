@@ -1,8 +1,8 @@
 import * as React from 'react'
 import * as styles from './style.css'
 import { Form, Button } from 'react-bootstrap'
-import { UserModel } from '../../store/models'
-import { UserActions } from '../../store/actions'
+import { UserModel } from '@app/store/models'
+import { UserActions } from '@app/store/actions'
 import { LoginInputComp } from '../LoginInput'
 import { Base64 } from 'js-base64'
 

@@ -26,8 +26,8 @@ const initialState: RootState.ArticleState = [
 export const articleReducer = handleActions<RootState.ArticleState, ArticleModel>(
   {
     [ArticleActions.Type.ADD_ARTICLE]: (state, action) => {
-      if (action.payload) {
-        return [ action.payload as any, ...state ]
+      if (action.payload && action.payload.result) {
+        return action.payload.result
       }
       return state
     },
@@ -35,6 +35,7 @@ export const articleReducer = handleActions<RootState.ArticleState, ArticleModel
       if (action.payload && action.payload.result) {
         const { result } = (action.payload!)
         state[0].thumb = result
+        return { ...state, ...{ thumb: result }}
       }
       return state
     },

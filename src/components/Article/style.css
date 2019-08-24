@@ -1,4 +1,3 @@
-
 .formInput {
   display: block;
   width: 100%;
@@ -32,6 +31,10 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
+}
+
+.passwordWrap {
+  margin-top: 10px;
 }
 
 .inputWrap .labelBox {
@@ -80,11 +83,30 @@
 }
 
 .inputWrap .radioBox {
-  margin-right: 0.5rem;
+  background-color: #6c757d;
+  line-height: 36px;
+  padding-right: 12px;
+}
+
+.inputWrap .radioBox.info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.inputWrap .radioBox:first-child {
+  border-radius: 3px 0 0 3px;
+}
+
+.inputWrap .radioBox:last-child {
+  border-radius: 0 3px 3px 0;
+}
+
+.inputWrap .radioBox input[type='radio'] {
+  opacity: 0;
 }
 
 .inputWrap .radioBox label {
-  margin-left: 0.3125rem;
+  margin: 0;
   font-weight: 500;
   color: #f9f9f9;
   cursor: pointer;
@@ -113,8 +135,19 @@
 }
 
 .topBar {
-  padding: 1.5rem;
-  clear: both;
+  padding: 1rem 1.5rem 0;
+}
+
+.topBar .inner {
+  position: relative;
+  height: 4rem;
+  background: #283847;
+}
+
+.topBar .inner button {
+  position: absolute;
+  right: 1.5rem;
+  top: 1rem;
 }
 
 .module {
@@ -128,7 +161,7 @@
   box-shadow: 0 2px 12px #283847;
 }
 
-.module .articleMain .content{
+.module .articleMain .content {
   padding-right: 100px;
 }
 
@@ -211,7 +244,6 @@
 
 .markdownBox .markdowInput {
   flex: 1;
-  /* border-top: 1px solid #f9f9f9; */
 }
 
 .markdownBox .markdowInput .formTextarea {
@@ -219,9 +251,6 @@
   color: #d3e5f7 !important;
   font-size: 1.2rem;
   border-radius: 0;
-  /* 
-  outline: none;
-  resize: none; */
 }
 
 .markdownBox .markdownPreview {
