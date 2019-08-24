@@ -78,7 +78,7 @@ const FancyInput = React.forwardRef((props: any, ref: any) => {
     <input
       type="text"
       ref={ref}
-      className={styles.formInput}
+      className="formInput"
       placeholder={props.tip}
     />
   )
@@ -88,7 +88,7 @@ const FancyTextarea = React.forwardRef((props: any, ref: any) => {
   return (
     <textarea
       ref={ref}
-      className={styles.formTextarea}
+      className="formTextarea"
       placeholder={props.tip}
     />
   )
@@ -216,6 +216,7 @@ export class ArticleAddComp extends React.Component<
     const content = this.state.postContent!
     const description = this.inputDescription.current!.value
     const slug = this.inputSlug.current!.value
+    const password = this.inputPassword.current!.value
     const { thumburl } = this.state
     const {
       radioPublic,
@@ -248,6 +249,10 @@ export class ArticleAddComp extends React.Component<
       this.showNotice({ type: 'warn', content: '请选择分类！' })
       return
     }
+    if (radioPublic === 0 && (!password || password.trim() === '')) {
+      this.showNotice({ type: 'warn', content: '请填写访问密码！' })
+      return
+    }
 
     const article: ArticleModel = {
       title: this.inputTitle.current!.value,
@@ -261,7 +266,7 @@ export class ArticleAddComp extends React.Component<
       origin: Number(radioPublish),
       state: Number(radioPublic),
       author: 'admin',
-      password: '',
+      password,
       extends: [],
       thumb: thumburl,
     }
@@ -476,7 +481,16 @@ export class ArticleAddComp extends React.Component<
               ))}
             </div>
             <div className={styles.inputWrap}>
-              <FontAwesomeIcon icon={faPlus} />
+              <div className={styles.labelBox}>
+              <input
+                  type="checkbox"
+                  id="newTag"
+                  name="newtag"
+                  />
+                  <label className={styles.labelName} htmlFor="newTag">
+                    <FontAwesomeIcon icon={faPlus} />
+                  </label>
+              </div>
             </div>
           </div>
         </div>

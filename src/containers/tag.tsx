@@ -5,9 +5,8 @@ import { RouteComponentProps } from 'react-router'
 import { omit } from '../utils'
 import { RootState } from '../store/reducers'
 import { TagActions } from '../store/actions'
-import { TagComp } from '../components'
+import { Tag } from '../components'
 import { TagModel } from '../store/models'
-// import { TagAddApp } from './tagAdd'
 
 export namespace Tag {
   export interface IProps extends RouteComponentProps<void> {
@@ -41,10 +40,11 @@ export class TagApp extends React.Component<Tag.IProps> {
 
   render() {
     const { tags, actions } = this.props
-    return (<TagComp
+    return (<Tag
       tags={tags} 
       getTag={actions.getTag}
       onClickFilter={this.handleEdit}
+      addTag={actions.addTag}
       deleteTag={actions.deleteTag}
     />)
   }

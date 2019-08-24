@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router'
 import { omit } from '../utils'
 import { RootState } from '../store/reducers'
 import { CategoryActions } from '../store/actions'
-import { CategoryComp } from '../components'
+import { Category } from '../components'
 import { CategoryModel } from '../store/models'
 
 export namespace Category {
@@ -36,9 +36,10 @@ export class CategoryApp extends React.Component<Category.IProps> {
   render() {
     const { categories, actions } = this.props
     return (
-    <CategoryComp
+    <Category
       categories={categories}
       getCategory={actions.getCategory}
+      addCategory={actions.addCategory}
       deleteCategory={actions.deleteCategory}
       editCategory={actions.editCategory}
     />)

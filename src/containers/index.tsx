@@ -12,9 +12,7 @@ import { NavModel } from '../store/models'
 import { ArticleApp } from './article'
 import { ArticleAddApp } from './articleAdd'
 import { CategoryApp } from './category'
-import { CategoryAddApp } from './categoryAdd'
 import { TagApp } from './tag'
-import { TagAddApp } from './tagAdd'
 
 // component
 import {
@@ -94,26 +92,15 @@ export class App extends React.Component<App.IProps> {
     const { filter } = this.props
     this.hasPermission()
     switch (filter) {
-      case 'DASHBOARD':
-        return <DashboardComp />
-      
-        case 'ARTICLE':
-      case 'ARTICLE_MANAGE':
+      case 'ARTICLE':
+      case 'ARTICLE_LIST':
         return <ArticleApp />
       case 'ARTICLE_ADD':
         return <ArticleAddApp />
-
-      case 'CATEGORY_MANAGE':
+      case 'ARTICLE_CATEGORY':
         return <CategoryApp />
-      case 'CATEGORY_ADD':
-        return <CategoryAddApp />
-
-      case 'TAG':
-      case 'TAG_MANAGE':
+      case 'ARTICLE_TAG':
         return <TagApp />
-      case 'TAG_ADD':
-        return <TagAddApp />
-
       default:
         return <DashboardComp />
     }

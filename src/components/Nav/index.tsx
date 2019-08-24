@@ -3,21 +3,17 @@ import * as styles from './style.css'
 
 // model
 import { NavModel } from '../../store/models'
-
 // bootstrap
 import { Nav } from 'react-bootstrap'
-
 // Icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAngleDown,
-  faTags,
   faToolbox,
   faTachometerAlt,
   faCalendarPlus,
   faSlidersH,
   faMailBulk,
-  faSprayCan,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -32,6 +28,7 @@ const menus = [
     text: '仪表盘',
     name: NavModel.Filter.DASHBOARD,
     icon: faTachometerAlt,
+    child: [],
   },
   {
     text: '文章',
@@ -44,38 +41,22 @@ const menus = [
         icon: faCalendarPlus,
       },
       {
-        name: NavModel.Filter.ARTICLE_MANAGE,
+        name: NavModel.Filter.ARTICLE_LIST,
         text: '管理文章',
         icon: faSlidersH,
       },
-    ],
-  },
-  {
-    text: '分类',
-    name: NavModel.Filter.CATEGORY,
-    icon: faSprayCan,
-    child: [
       {
-        name: NavModel.Filter.CATEGORY_ADD,
-        text: '添加分类',
-        icon: faCalendarPlus,
-      },
-      {
-        name: NavModel.Filter.CATEGORY_MANAGE,
-        text: '管理分类',
+        name: NavModel.Filter.ARTICLE_CATEGORY,
+        text: '文章分类',
         icon: faToolbox,
       },
+      { name: 
+        NavModel.Filter.ARTICLE_TAG, 
+        text: '文章标签', 
+        icon: faWrench,
+      },
     ],
-  },
-  {
-    text: '标签',
-    name: NavModel.Filter.TAG,
-    icon: faTags,
-    child: [
-      { name: NavModel.Filter.TAG_ADD, text: '添加标签', icon: faCalendarPlus },
-      { name: NavModel.Filter.TAG_MANAGE, text: '管理标签', icon: faWrench },
-    ],
-  },
+  }
 ]
 
 export class NavComp extends React.Component<Nav.IProps> {
@@ -96,10 +77,10 @@ export class NavComp extends React.Component<Nav.IProps> {
           <div className={styles.navItem} key={idx}>
             <div
               className={styles.content}
-              onClick={(e) => {
-                e.stopPropagation()
-                onClickFilter(NavModel.Filter[menu.name])
-              }}
+              // onClick={e => {
+              //   e.stopPropagation()
+              //   onClickFilter(NavModel.Filter[menu.name])
+              // }}
             >
               <FontAwesomeIcon
                 icon={menu.icon}
@@ -118,7 +99,7 @@ export class NavComp extends React.Component<Nav.IProps> {
                     key={child.text}
                     onClick={e => {
                       e.stopPropagation()
-                      onClickFilter(NavModel.Filter[child.name])
+                      onClickFilter(child.name)
                     }}
                   >
                     <FontAwesomeIcon
