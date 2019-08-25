@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
 import { Form, Button } from 'react-bootstrap'
-import { Notication } from '../index'
 import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
 import { CategoryModel, TagModel, ArticleModel } from '@app/store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -20,6 +19,7 @@ import {
   faInbox,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons'
+import { Notication, FancyInput, FancyTextarea } from '../index'
 
 export enum IStatePublic {
   Password = 0, // 密码访问
@@ -72,27 +72,6 @@ export namespace ArticleAdd {
     content: string
   }
 }
-
-const FancyInput = React.forwardRef((props: any, ref: any) => {
-  return (
-    <input
-      type="text"
-      ref={ref}
-      className="formInput"
-      placeholder={props.tip}
-    />
-  )
-})
-
-const FancyTextarea = React.forwardRef((props: any, ref: any) => {
-  return (
-    <textarea
-      ref={ref}
-      className="formTextarea"
-      placeholder={props.tip}
-    />
-  )
-})
 
 export class ArticleAddComp extends React.Component<
   ArticleAdd.IProps,
@@ -216,7 +195,6 @@ export class ArticleAddComp extends React.Component<
     const content = this.state.postContent!
     const description = this.inputDescription.current!.value
     const slug = this.inputSlug.current!.value
-    const password = this.inputPassword.current!.value
     const { thumburl } = this.state
     const {
       radioPublic,
@@ -249,9 +227,17 @@ export class ArticleAddComp extends React.Component<
       this.showNotice({ type: 'warn', content: '请选择分类！' })
       return
     }
-    if (radioPublic === 0 && (!password || password.trim() === '')) {
-      this.showNotice({ type: 'warn', content: '请填写访问密码！' })
-      return
+
+    let password = ''
+    if (radioPublic === 0) {
+      if (!password || password === '') {
+        this.showNotice({ type: 'warn', content: '请填写访问密码！' })
+        return
+      } else {
+        if (this.inputPassword.current) {
+          password = this.inputPassword.current!.value
+        }
+      }
     }
 
     const article: ArticleModel = {

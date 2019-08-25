@@ -2,11 +2,11 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
 import { RouteComponentProps } from 'react-router'
-import { omit } from '../utils'
 import { RootState } from '../store/reducers'
 import { TagActions } from '../store/actions'
-import { Tag } from '../components'
 import { TagModel } from '../store/models'
+import { omit } from '../utils'
+import { Tag } from '../components'
 
 export namespace Tag {
   export interface IProps extends RouteComponentProps<void> {
@@ -31,21 +31,19 @@ export class TagApp extends React.Component<Tag.IProps> {
 
   constructor(props: Tag.IProps, context?: any) {
     super(props, context)
-    this.handleEdit = this.handleEdit.bind(this)
-  }
-  
-  handleEdit(): void {
-    this.props.history.push('#TAG_ADD')
   }
 
   render() {
     const { tags, actions } = this.props
-    return (<Tag
+
+    return (
+    <Tag
       tags={tags} 
       getTag={actions.getTag}
-      onClickFilter={this.handleEdit}
       addTag={actions.addTag}
+      updateTag={actions.updateTag}
       deleteTag={actions.deleteTag}
-    />)
+    />
+    )
   }
 }

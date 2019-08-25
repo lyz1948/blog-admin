@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as styles from './style.css'
+import classNames from 'classnames'
 import { Form, Button } from 'react-bootstrap'
 import { UserModel } from '@app/store/models'
 import { UserActions } from '@app/store/actions'
@@ -39,10 +40,10 @@ export class UserComp extends React.Component<UserComp.IProps, UserComp.IState> 
     const { user } = this.props
 
     return (
-      <div className={styles.userLogin}>
-        <div className={styles.content}>
+      <div className={classNames(styles.userLogin, 'pos-full')}>
+        <div className={classNames(styles.content, 'pos-center')}>
           <h2>博客后台管理系统</h2>
-          <Form className={styles.userForm}>
+          <Form className="userForm">
             <Form.Group>
               <Form.Label>Username</Form.Label>
               <LoginInputComp text={user.username} type={this.state.textType} />

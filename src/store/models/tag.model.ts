@@ -1,8 +1,9 @@
 export interface TagModel {
+  _id?: string
   name: string
   slug: string
   description: string
-  extends?: []
+  extends: []
   [propName: string]: any
 }
 

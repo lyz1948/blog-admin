@@ -25,31 +25,26 @@ const initialState: RootState.ArticleState = [
 
 export const articleReducer = handleActions<RootState.ArticleState, ArticleModel>(
   {
+    [ArticleActions.Type.GET_ARTICLE]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { data } = (action.payload.result!)
+        return [
+          ...data,
+        ]
+      }
+      return state
+    },
     [ArticleActions.Type.ADD_ARTICLE]: (state, action) => {
       if (action.payload && action.payload.result) {
         return action.payload.result
       }
       return state
     },
-    [ArticleActions.Type.UPLOAD_ARTICLE_THUMB]: (state, action) => {
-      if (action.payload && action.payload.result) {
-        const { result } = (action.payload!)
-        state[0].thumb = result
-        return { ...state, ...{ thumb: result }}
-      }
-      return state
-    },
-    [ArticleActions.Type.GET_ARTICLE]: (state, action) => {
-      if (action.payload && action.payload.result) {
-        const { result } = (action.payload!)
-        return [
-          ...result.data,
-        ]
-      }
-      return state
-    },
     [ArticleActions.Type.DELETE_ARTICLE]: (state, action) => {
-      return state.filter(article => article._id !== (action.payload as any))
+      if (action.payload && action.payload.result) {
+        return state.filter(article => article._id !== (action.payload!.result))
+      }
+      return state
     },
     [ArticleActions.Type.EDIT_ARTICLE]: (state, action) => {
       return state.map(article => {
@@ -58,7 +53,15 @@ export const articleReducer = handleActions<RootState.ArticleState, ArticleModel
         }
         return article._id === action.payload._id ? { ...article } : article
       })
-    }
+    },
+    [ArticleActions.Type.UPLOAD_ARTICLE_THUMB]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { result } = (action.payload!)
+        initialState[0].thumb = result
+        return { ...initialState, ...{ thumb: result }, ...state }
+      }
+      return state
+    },
   },
   initialState,
 )

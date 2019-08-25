@@ -3,7 +3,7 @@ import * as styles from './style.css'
 import { CategoryModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
-import { ConfirmModal } from '../index'
+import { ConfirmModal, FancyInput, FancyTextarea } from '../index'
 
 export namespace CategoryManage {
   export interface IProps {
@@ -20,49 +20,34 @@ export namespace CategoryManage {
     show: boolean
     type: string
     content: string
+    isUpdate: boolean
   }
+
   export interface INotice {
     type: string
     content: string
   }
 }
 
-const FancyInput = React.forwardRef((props: any, ref: any) => {
-  return (
-    <input
-      type="text"
-      ref={ref}
-      className="formInput"
-      placeholder={props.tip}
-    />
-  )
-})
-
-const FancyTextarea = React.forwardRef((props: any, ref: any) => {
-  return (
-    <textarea
-      ref={ref}
-      className="formTextarea"
-      placeholder={props.tip}
-    />
-  )
-})
-
-export class Category extends React.Component<CategoryManage.IProps, CategoryManage.IState> {
+export class Category extends React.Component<
+  CategoryManage.IProps,
+  CategoryManage.IState
+> {
   private inputName = React.createRef<HTMLInputElement>()
   private inputSlug = React.createRef<HTMLInputElement>()
   private inputDescription = React.createRef<HTMLInputElement>()
 
   constructor(props: CategoryManage.IProps, context?: any) {
     super(props, context)
+
     this.state = {
       cateId: '',
       showModal: false,
       show: false,
       type: 'info',
-      content: '添加成功'
+      content: '添加成功',
+      isUpdate: false,
     }
-    this.handleEditor = this.handleEditor.bind(this)
   }
 
   componentWillMount() {
@@ -76,11 +61,19 @@ export class Category extends React.Component<CategoryManage.IProps, CategoryMan
     })
   }
 
-  handleEditor(id: any) {
-    this.props.editCategory(id)
+  handleEditor(category: CategoryModel) {
+    const { name, slug, description } = category
+
+    this.inputName.current!.value = name
+    this.inputSlug.current!.value = slug
+    this.inputDescription.current!.value = description
+    
+    this.setState({
+      isUpdate: true
+    })
   }
 
-  handleNewCate() {
+  handleCreate() {
     let name = this.inputName.current!.value
     let slug = this.inputSlug.current!.value
     let description = this.inputDescription.current!.value
@@ -98,12 +91,12 @@ export class Category extends React.Component<CategoryManage.IProps, CategoryMan
       this.showNotice({ type: '', content: '描述不能为空' })
       return
     }
-    
+
     const cateObj = {
       name: name,
       slug: slug,
       description: description,
-      extends: []
+      extends: [],
     }
 
     if (name && slug && description) {
@@ -114,19 +107,19 @@ export class Category extends React.Component<CategoryManage.IProps, CategoryMan
       description = ''
     }
   }
-  
+
   showNotice(obj: CategoryManage.INotice) {
     const { type, content } = obj
     this.setState({
       show: true,
       type,
-      content
+      content,
     })
   }
 
   hideNotice() {
     this.setState({
-      show: false
+      show: false,
     })
   }
 
@@ -140,36 +133,49 @@ export class Category extends React.Component<CategoryManage.IProps, CategoryMan
           <h3>添加分类</h3>
         </div>
         <div className={styles.content}>
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              {tableHeads.map(h => (
-                <th key={h}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((it: any, index: number) => (
-              <tr key={index}>
-                <td>{it.name}</td>
-                <td>{it.description}</td>
-                <td>{it.slug}</td>
-                <td>{it.update_at}</td>
-                <td>
-                  <Button size="sm" variant="info" style={{marginRight: '5px'}}>查看</Button>
-                  <Button size="sm" variant="primary" style={{marginRight: '5px'}} onClick={() => this.handleEditor(it._id)}>修改</Button>
-                  <Button size="sm" variant="danger" onClick={() => this.openModal(it._id)}>删除</Button>
-                </td>
+          <Table striped bordered hover variant="dark">
+            <thead>
+              <tr>
+                {tableHeads.map(h => (
+                  <th key={h}>{h}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {categories.map((it: any, index: number) => (
+                <tr key={index}>
+                  <td>{it.name}</td>
+                  <td>{it.description}</td>
+                  <td>{it.slug}</td>
+                  <td>{it.update_at}</td>
+                  <td>
+                    <Button
+                      size="sm"
+                      variant="info"
+                      style={{ marginRight: '5px' }}
+                      onClick={() => this.handleEditor(it)}
+                    >
+                      修改
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      onClick={() => this.openModal(it._id)}
+                    >
+                      删除
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </div>
       </div>
     )
   }
 
   renderCreate(): JSX.Element | void {
+    const { isUpdate } = this.state
     return (
       <div className={styles.categoryNew}>
         <div className={styles.title}>
@@ -189,9 +195,10 @@ export class Category extends React.Component<CategoryManage.IProps, CategoryMan
             <FancyTextarea ref={this.inputDescription} tip={'分类描述'} />
           </div>
           <div className={styles.field}>
-            <Button variant="primary" onClick={this.handleNewCate}>创建</Button>
+            <Button variant="primary" onClick={this.handleCreate}>
+              { isUpdate ? '更新分类' : '创建分类' }
+            </Button>
           </div>
-
         </div>
       </div>
     )
@@ -199,11 +206,11 @@ export class Category extends React.Component<CategoryManage.IProps, CategoryMan
 
   render() {
     const { showModal } = this.state
-    
+
     return (
       <div className="category">
-        <ConfirmModal 
-          show={showModal} 
+        <ConfirmModal
+          show={showModal}
           onHide={() => this.setState({ showModal: false })}
           onClose={() => {
             this.props.deleteCategory(this.state.cateId)

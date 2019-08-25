@@ -16,18 +16,19 @@ const initialState: RootState.TagState = [
 export const tagReducer = handleActions<RootState.TagState, TagModel>(
   {
     [TagActions.Type.ADD_TAG]: (state, action) => {
-      if (action.payload) {
-        return [ action.payload as any, ...state ]
+      if (action.payload && action.payload.result) {
+        const { result } = action.payload
+        return [ result, ...state ]
       }
       return state
     },
     [TagActions.Type.GET_TAG]: (state, action) => {
       if (action.payload && action.payload.result) {
-        const { result } = action.payload!
-        result.map((it: TagModel) => {
+        const { data } = action.payload.result!
+        data.map((it: TagModel) => {
           it.isSelected = false
         })
-        return [ ...result ]
+        return [ ...data ]
       }
       return state
     },
@@ -46,14 +47,17 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
       const { _id: id } = (action.payload as any).result
       return state.filter(tag => tag._id !== id)
     },
-    // [TagActions.Type.EDIT_TAG]: (state, action) => {
-    //   return state.map(tag => {
-    //     if (!tag || !action || !action.payload) {
-    //       return tag
-    //     }
-    //     return tag._id === action.payload._id ? { ...tag } : tag
-    //   })
-    // },
+    [TagActions.Type.UPDATE_TAG]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { result } = action.payload
+        state.map((tag, index) => {
+          if (tag._id === result._id) {
+            state.splice(index, 1, result)
+          }
+        })
+      }
+      return state
+    },
   },
   initialState,
 )

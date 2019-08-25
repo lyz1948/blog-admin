@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as styles from './style.css'
 import * as CONFIG from '../config/app.config'
 
 import { connect } from 'react-redux'
@@ -20,7 +19,7 @@ import {
   TopNavComp,
   DashboardComp,
 } from '../components'
-import { ArticleActions } from '../store/actions'
+import { ArticleActions, UserActions } from '../store/actions'
 
 export namespace App {
   export interface IProps extends RouteComponentProps<void> {
@@ -29,6 +28,8 @@ export namespace App {
     articles: RootState.ArticleState
     categories: RootState.CategoryState
     tags: RootState.TagState
+    users: RootState.UserState
+    fetchUser: typeof UserActions.fetchUser
   }
 }
 
@@ -40,13 +41,14 @@ const FILTER_COMPONMENT = (Object.keys(
   (
     state: RootState,
     ownProps
-  ): Pick<App.IProps, 'filter' | 'articles' | 'categories' | 'tags'> => {
+  ): Pick<App.IProps, 'filter' | 'articles' | 'categories' | 'tags' | 'users'> => {
     const hash = ownProps.location && ownProps.location.hash.replace('#', '')
     const filter =
       FILTER_COMPONMENT.find(value => value === hash) ||
       NavModel.Filter.DASHBOARD
     return {
       filter,
+      users: state.user,
       articles: state.articles,
       categories: state.categories,
       tags: state.tags
@@ -66,6 +68,10 @@ export class App extends React.Component<App.IProps> {
 
   componentDidMount() {
     this.hasPermission()
+  }
+
+  getUserInfo() {
+
   }
 
   hasPermission() {
@@ -108,9 +114,9 @@ export class App extends React.Component<App.IProps> {
 
   render() {
     return (
-      <div className={styles.container}>
+      <div className="home">
         <NavComp onClickFilter={this.handleFilterChange} />
-        <div className={styles.main}>
+        <div className="main">
           <TopNavComp />
           {this.filterCompoent()}
         </div>

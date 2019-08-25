@@ -1,20 +1,12 @@
 .userLogin {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #000;
+  background-color: #2f4050;
 }
 
 .userLogin .content {
-  position: absolute;
-  left: 50%;
-  top: 50%;
   min-width: 500px;
   padding: 30px 20px;
-  transform: translate(-50%, -50%);
   color: #fff;
-  background-color: #212529;
+  background-color: #4d5b69;
 }
 
 .userLogin h2 {

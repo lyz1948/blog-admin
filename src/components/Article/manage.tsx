@@ -3,6 +3,7 @@ import * as styles from './style.css'
 import { ArticleModel, TagModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
+import { ConfirmModal } from '../index'
 
 export namespace Article {
   export interface IProps {
@@ -12,13 +13,22 @@ export namespace Article {
     deleteArticle: typeof ArticleActions.deleteArticle
     editArticle: typeof ArticleActions.editArticle
   }
+
+  export interface IState {
+    showModal: boolean
+    articleId: string
+  }
 }
 
-export class ArticleComp extends React.Component<Article.IProps> {
+export class ArticleComp extends React.Component<Article.IProps, Article.IState> {
   constructor(props: Article.IProps, context?: any) {
     super(props, context)
+
+    this.state = {
+      showModal: false,
+      articleId: '',
+    }
     this.getArticles = this.getArticles.bind(this)
-    // this.handleDelete = this.handleDelete.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
   }
 
@@ -30,8 +40,20 @@ export class ArticleComp extends React.Component<Article.IProps> {
     this.props.getArticle()
   }
 
-  handleDelete(id: string, event: React.MouseEvent<HTMLButtonElement>) {
-    this.props.deleteArticle(id)
+  
+  openModal(id: string) {
+    this.setState({
+      articleId: id,
+      showModal: true,
+    })
+  }
+  
+  handleDelete(e: React.MouseEvent<HTMLButtonElement>) {
+    this.props.deleteArticle(this.state.articleId)
+    this.setState({
+      articleId: '',
+      showModal: false,
+    })
   }
 
   handleUpdate() {
@@ -40,12 +62,19 @@ export class ArticleComp extends React.Component<Article.IProps> {
 
   render() {
     const { articles } = this.props
+    const { showModal } = this.state
     const artHeads = ['标题', '内容', '描述', '关键字', '类型', '时间', '操作']
     if (articles.length === 0) {
-      return <div>暂无数据</div>
+      return <div className="pos-center">暂无数据</div>
     }
+
     return (
       <div className={styles.module}>
+        <ConfirmModal
+          show={showModal}
+          onHide={() => this.setState({ showModal: false })}
+          onClose={(e: any) => this.handleDelete(e)}
+        />
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -66,11 +95,13 @@ export class ArticleComp extends React.Component<Article.IProps> {
                 </td>
                 <td>{it.create_at}</td>
                 <td>
-                  <Button size="sm" variant="info" style={{marginRight: '5px'}}>
-                    <a href={'http://localhost:3000/article/' + it._id} target="_blank">查看</a>
-                  </Button>
+                  <a href={'http://localhost:3000/article/' + it._id} target="_blank">
+                    <Button size="sm" variant="info" style={{marginRight: '5px'}}>
+                    查看
+                    </Button>
+                  </a>
                   <Button size="sm" variant="primary" style={{marginRight: '5px'}} onClick={this.handleUpdate}>修改</Button>
-                  <Button size="sm" variant="danger" onClick={(e: any) => this.handleDelete(it._id, e)}>删除</Button>
+                  <Button size="sm" variant="danger" onClick={() => this.openModal(it._id)}>删除</Button>
                 </td>
               </tr>
             ))}

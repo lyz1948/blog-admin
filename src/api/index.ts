@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as CONFIG from '../config/app.config'
 import * as UTILS from '../utils'
 import { IResponseData } from '@app/store/types'
-import { UserModel, ArticleModel } from '@app/store/models'
+import { UserModel, ArticleModel, TagModel } from '@app/store/models'
 
 const token = UTILS.getToken()
 
@@ -85,7 +85,7 @@ export const deleteCategory = (id: any) => {
  * 获取文章的标签
  */
 export const fetchTag = <T>() => {
-  return service.get<IFatchData<T>>('/tag')
+  return service.get<IFatchData<T>>(`/tag`)
 }
 
 /**
@@ -100,8 +100,9 @@ export const addTag = (tag: any) => {
  * 更新标签
  * @param id 标签id
  */ 
-export const updateTag = (id: string | number) => {
-  return service.put(`/tag/${id}`)
+export const updateTag = (newTag: TagModel) => {
+  const { _id } = newTag
+  return service.put(`/tag/${_id}`, newTag)
 }
 
 /**
@@ -126,4 +127,19 @@ export const signIn = (user: UserModel): Promise<UserModel> => {
  */
 export const signUp = (user: UserModel): Promise<UserModel> => {
   return service.post('/user/signup', { ...user })
+}
+
+/**
+ * 获取用户列表
+ */
+export const fetchUser = (): Promise<UserModel> => {
+  return service.get('/user')
+}
+
+/**
+ * 获取指定用户
+ * @param id 用户id
+ */
+export const getUser = (id: UserModel): Promise<UserModel> => {
+  return service.post(`/user/${id}`)
 }

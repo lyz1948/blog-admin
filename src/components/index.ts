@@ -9,8 +9,9 @@ export { UserComp } from './User'
 export { NavComp } from './Nav'
 export { TopNavComp } from './TopNav'
 export { DashboardComp } from './Dashboard'
-export { ConfirmModal } from './Global/Modal'
-export { Notication } from './Global/Notication'
+
+// global
+export { ConfirmModal, Notication, FancyInput, FancyTextarea } from './Global'
 
 // Style components
 export * from './styledComponents'

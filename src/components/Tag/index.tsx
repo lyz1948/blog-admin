@@ -3,61 +3,75 @@ import * as styles from './style.css'
 import { TagModel } from '@app/store/models'
 import { TagActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
-import { ConfirmModal } from '../index'
+import { Notication, ConfirmModal, FancyInput, FancyTextarea } from '../index'
 
-export namespace TagManage {
+export namespace TagComp {
   export interface IProps {
     tags: TagModel[]
     getTag: typeof TagActions.getTag
     addTag: typeof TagActions.addTag
+    updateTag: typeof TagActions.updateTag
     deleteTag: typeof TagActions.deleteTag
-    onClickFilter: () => void
   }
 
   export interface IState {
-    showModal: boolean
     tagId: string
+    showModal: boolean
+    isUpdate: boolean
+    show: boolean
+    type: string
+    content: string
+  }
+
+  export interface INotice {
+    type: string
+    content: string
   }
 }
 
-const FancyInput = React.forwardRef((props: any, ref: any) => {
-  return (
-    <input
-      type="text"
-      ref={ref}
-      className="formInput"
-      placeholder={props.tip}
-    />
-  )
-})
+// const FancyInput = React.forwardRef((props: any, ref: any) => {
+//   return (
+//     <input
+//       type="text"
+//       ref={ref}
+//       className="formInput"
+//       placeholder={props.tip}
+//     />
+//   )
+// })
 
-const FancyTextarea = React.forwardRef((props: any, ref: any) => {
-  return (
-    <textarea
-      ref={ref}
-      className="formTextarea"
-      placeholder={props.tip}
-    />
-  )
-})
+// const FancyTextarea = React.forwardRef((props: any, ref: any) => {
+//   return (
+//     <textarea
+//       ref={ref}
+//       className="formTextarea"
+//       placeholder={props.tip}
+//     />
+//   )
+// })
 
 export class Tag extends React.Component<
-  TagManage.IProps,
-  TagManage.IState
+  TagComp.IProps,
+  TagComp.IState,
+  TagComp.INotice
 > {
   private inputName = React.createRef<HTMLInputElement>()
   private inputSlug = React.createRef<HTMLInputElement>()
   private inputDescription = React.createRef<HTMLInputElement>()
 
-  constructor(props: TagManage.IProps, context?: any) {
+  constructor(props: TagComp.IProps, context?: any) {
     super(props, context)
 
     this.state = {
       tagId: '',
+      show: false,
       showModal: false,
+      isUpdate: false,
+      type: 'info',
+      content: '添加成功',
     }
     this.handleDelete = this.handleDelete.bind(this)
-    // this.handleEditor = this.handleEditor.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
   }
 
   componentWillMount() {
@@ -71,6 +85,26 @@ export class Tag extends React.Component<
     })
   }
 
+  showNotice(obj: TagComp.INotice) {
+    const { type, content } = obj
+    this.setState({
+      show: true,
+      type,
+      content,
+    })
+  }
+
+  handleEdit(tag: any, e: React.MouseEvent<HTMLButtonElement>) {
+    const { _id, name, slug, description } = tag
+    this.inputName.current!.value = name
+    this.inputSlug.current!.value = slug
+    this.inputDescription.current!.value = description
+    this.setState({
+      tagId: _id!,
+      isUpdate: true
+    })
+  }
+
   handleDelete() {
     this.props.deleteTag(this.state.tagId)
     this.setState({
@@ -78,15 +112,51 @@ export class Tag extends React.Component<
     })
   }
 
-  handleNewTag(event: React.ChangeEvent<HTMLButtonElement>) {
-    const tagObj = {
-      name: this.inputName.current!.value,
-      slug: this.inputSlug.current!.value,
-      description: this.inputDescription.current!.value,
-      extends: [],
-    }
-    this.props.addTag(tagObj)
+  handleCreate() {
+    let name = this.inputName.current!.value
+    let slug = this.inputSlug.current!.value
+    let description = this.inputDescription.current!.value
 
+    if(!name) {
+      this.showNotice({ type: 'warn', content: '标题不能为空！' })
+      return
+    }
+
+    if(!slug) {
+      this.showNotice({ type: 'warn', content: 'slug不能为空！' })
+      return
+    }
+
+    if(!description) {
+      this.showNotice({ type: 'warn', content: '描述不能为空！' })
+      return
+    }
+
+    const { isUpdate, tagId } = this.state
+    let tagObj = {
+      name,
+      slug,
+      description,
+      extends: []
+    }
+    if (isUpdate) {
+      tagObj = Object.assign(tagObj, { _id: tagId })
+      this.props.updateTag(tagObj as TagModel)
+      
+      this.showNotice({ type: 'success', content: '更新成功！' })
+      
+      this.setState({
+        tagId: '',
+        isUpdate: false
+      })
+    } else {
+      this.props.addTag(tagObj)
+      this.showNotice({ type: 'success', content: '添加成功！' })
+    }
+    this.handleResize()
+  }
+  // 重置
+  handleResize() {
     this.inputName.current!.value = ''
     this.inputSlug.current!.value = ''
     this.inputDescription.current!.value = ''
@@ -119,20 +189,12 @@ export class Tag extends React.Component<
                   <td>
                     <Button
                       size="sm"
-                      variant="info"
+                      variant="primary"
                       style={{ marginRight: '5px' }}
+                      onClick={(e: any) => this.handleEdit(it, e)}
                     >
-                      查看
+                      编辑
                     </Button>
-                    <a href={`/#TAG_ADD?id=${it._id}`}>
-                      <Button
-                        size="sm"
-                        variant="primary"
-                        style={{ marginRight: '5px' }}
-                      >
-                        修改
-                      </Button>
-                    </a>
                     <Button
                       size="sm"
                       variant="danger"
@@ -151,6 +213,7 @@ export class Tag extends React.Component<
   }
 
   renderCreated(): JSX.Element | void {
+    const { isUpdate } = this.state
     return (
       <div className={styles.tagNew}>
         <div className={styles.title}>
@@ -172,9 +235,9 @@ export class Tag extends React.Component<
           <div className={styles.field}>
             <Button
               variant="primary"
-              onClick={(e: any) => this.handleNewTag(e)}
+              onClick={this.handleCreate.bind(this)}
             >
-              创建
+              { isUpdate ? '更新标签' : '创建标签' }
             </Button>
           </div>
         </div>
@@ -183,9 +246,18 @@ export class Tag extends React.Component<
   }
 
   render() {
-    const { showModal } = this.state
+    const { showModal, show, type, content } = this.state
     return (
       <div className={styles.tag}>
+        <Notication
+          show={show}
+          type={type}
+          content={content}
+          onClose={() => {
+            this.setState({ show: false })
+          }}
+          autohide
+        />
         <ConfirmModal
           show={showModal}
           onHide={() => this.setState({ showModal: false })}

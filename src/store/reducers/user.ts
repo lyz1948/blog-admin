@@ -28,6 +28,12 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
     [UserActions.Type.SIGN_UP]: (state, action) => {
       return state
     },
+    [UserActions.Type.FETCH_USER]: (state, action) => {
+      return state
+    },
+    [UserActions.Type.GET_USER]: (state, action) => {
+      return state
+    },
   },
   initialState,
 )
