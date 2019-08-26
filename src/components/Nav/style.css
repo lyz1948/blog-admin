@@ -7,10 +7,32 @@
   z-index: 10;
 }
 
+.profile {
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+}
+
+.profile .siteTitle {
+  font-size: 30px;
+  color: #fcfcfc;
+}
+
+.profile .name {
+  height: 45px;
+  padding: 10px 0;
+  font-size: 1.5rem;
+}
+
+.profile .slogan {
+  font-size: 1.2rem;
+}
+
 .siderNav .navItem {
   color: #fff;
-  box-shadow:  0 0 2px #4d5b69;
+  box-shadow: 0 1px 2px #334c59;
 }
+
 .siderNav .navItem .content{
   position: relative;
   padding: 0 20px;
@@ -20,20 +42,24 @@
 .siderNav .navItem .content:hover{
   background-color: #425668;
 }
+
 .siderNav .subNav {
   padding: 8px 0;
   /* color: #f0f0f0; */
   color: #79fded;
   background-color: #2e4050;
 }
+
 .siderNav .subNav .content{
   padding-left: 36px;
   line-height: 35px;
 }
+
 .siderNav .navItem .dropIcon{
   position: absolute;
   right: 10px;
 }
+
 .siderNav .text {
   /* color: #fff; */
   color: #79fded;
@@ -48,6 +74,7 @@
 .line {
   position: relative;
 }
+
 .line::after {
   content: '';
   position: absolute;

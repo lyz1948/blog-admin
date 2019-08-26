@@ -1,5 +1,7 @@
 import * as React from 'react'
-import { Form } from 'react-bootstrap'
+// import { Form } from 'react-bootstrap'
+// import { FancyInput } from '../index'
+
 export namespace LoginInput {
   export interface IProps {
     text?: string
@@ -29,24 +31,32 @@ export class LoginInputComp extends React.Component<
   }
 
   handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ text: event.target.value })
+    const text = event.target.value
+    this.setState({ text })
+    this.props
   }
 
   handleBlur(event: React.FocusEvent<HTMLInputElement>) {
     const text = event.target.value.trim()
-    console.log(text);
     this.setState({ text })
   }
 
   render() {
     return (
-      <Form.Control
+      <input
         type={this.state.type}
         value={this.state.text}
         onBlur={this.handleBlur}
-        onChange={(e: any) => this.handleChange(e)}
         placeholder={this.props.placeholder}
+        onChange={(e: any) => this.handleChange(e)}
       />
+      // <Form.Control
+      //   type={this.state.type}
+      //   value={this.state.text}
+      //   onBlur={this.handleBlur}
+      //   placeholder={this.props.placeholder}
+      //   onChange={(e: any) => this.handleChange(e)}
+      // />
     )
   }
 }

@@ -12,14 +12,15 @@ const initialState: RootState.UserState = {
 export const userReducer = handleActions<RootState.UserState, IResponseData>(
   {
     [UserActions.Type.SIGN_IN]: (state, action) => {
-      if (action.payload) {
-        const { data } = (action.payload!)
+      
+      if (action.payload && action.payload.result) {
+        const { result } = (action.payload!)
         // 存储token
-        data.result.expires_in = data.result.expires_in * 1000 + Date.now()
-        localStorage.setItem(CONFIG.APP.TOKEN_KEY, JSON.stringify(data.result))
+        result.expires_in = result.expires_in * 1000 + Date.now()
+        localStorage.setItem(CONFIG.APP.TOKEN_KEY, JSON.stringify(result))
 
         return {
-          token: data.result,
+          data: result,
           ...state,
         }
       }

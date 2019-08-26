@@ -6,7 +6,8 @@
   min-width: 500px;
   padding: 30px 20px;
   color: #fff;
-  background-color: #4d5b69;
+  background-color: #2e4050;
+  box-shadow: 2px 2px 12px #112525;
 }
 
 .userLogin h2 {

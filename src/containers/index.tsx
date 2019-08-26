@@ -28,8 +28,12 @@ export namespace App {
     articles: RootState.ArticleState
     categories: RootState.CategoryState
     tags: RootState.TagState
-    users: RootState.UserState
+    user: RootState.UserState
     fetchUser: typeof UserActions.fetchUser
+  }
+
+  export interface IState {
+    userinfo?: any
   }
 }
 
@@ -41,14 +45,14 @@ const FILTER_COMPONMENT = (Object.keys(
   (
     state: RootState,
     ownProps
-  ): Pick<App.IProps, 'filter' | 'articles' | 'categories' | 'tags' | 'users'> => {
+  ): Pick<App.IProps, 'filter' | 'articles' | 'categories' | 'tags' | 'user'> => {
     const hash = ownProps.location && ownProps.location.hash.replace('#', '')
     const filter =
       FILTER_COMPONMENT.find(value => value === hash) ||
       NavModel.Filter.DASHBOARD
     return {
       filter,
-      users: state.user,
+      user: state.user,
       articles: state.articles,
       categories: state.categories,
       tags: state.tags
@@ -58,9 +62,14 @@ const FILTER_COMPONMENT = (Object.keys(
     actions: bindActionCreators(omit(ArticleActions, 'Type'), dispatch)
   })
 )
-export class App extends React.Component<App.IProps> {
+
+export class App extends React.Component<App.IProps, App.IState> {
   constructor(props: App.IProps, context?: any) {
     super(props, context)
+
+    this.state = {
+      userinfo: null
+    }
     this.filterCompoent = this.filterCompoent.bind(this)
     this.hasPermission = this.hasPermission.bind(this)
     this.handleFilterChange = this.handleFilterChange.bind(this)
@@ -69,25 +78,33 @@ export class App extends React.Component<App.IProps> {
   componentDidMount() {
     this.hasPermission()
   }
-
-  getUserInfo() {
-
+  
+  componentWillMount() {
+    this.getUserInfoFromStorage()
   }
 
   hasPermission() {
-    let token = localStorage.getItem(CONFIG.APP.TOKEN_KEY) as any
-    try {
-      token = JSON.parse(token)
-    } catch (error) {
-      throw new Error(error)
-    }
-
-    // 凭证过期
-    if (!token || token.expires_in < Date.now()) {
+    const { userinfo } = this.state
+     // 凭证过期
+     if (!userinfo || userinfo.expires_in < Date.now()) {
       localStorage.removeItem(CONFIG.APP.TOKEN_KEY)
       this.props.history.push('/login')
       return
     }
+    // let token = localStorage.getItem(CONFIG.APP.TOKEN_KEY) as any
+    // try {
+    //   token = JSON.parse(token)
+    // } catch (error) {
+    //   throw new Error(error)
+    // }
+
+    // // 凭证过期
+    // if (!token || token.expires_in < Date.now()) {
+    //   localStorage.removeItem(CONFIG.APP.TOKEN_KEY)
+    //   this.props.history.push('/login')
+    //   return
+    // }
+   
   }
 
   handleFilterChange(filter: NavModel.Filter): void {
@@ -112,10 +129,23 @@ export class App extends React.Component<App.IProps> {
     }
   }
 
+  getUserInfoFromStorage() {
+    let token = localStorage.getItem(CONFIG.APP.TOKEN_KEY) as any
+    try {
+      token = JSON.parse(token)
+    } catch (error) {
+      throw new Error(error)
+    }
+    this.setState({
+      userinfo: token
+    })
+  }
+
   render() {
+    const { userinfo } = this.state
     return (
       <div className="home">
-        <NavComp onClickFilter={this.handleFilterChange} />
+        <NavComp userinfo={userinfo} onClickFilter={this.handleFilterChange} />
         <div className="main">
           <TopNavComp />
           {this.filterCompoent()}

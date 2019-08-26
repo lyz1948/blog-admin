@@ -1,9 +1,10 @@
 import * as React from 'react'
 
 export const FancyInput = React.forwardRef((props: any, ref: any) => {
+  const { type } = props || 'text'
   return (
     <input
-      type="text"
+      type={type}
       ref={ref}
       className="formInput"
       placeholder={props.tip}

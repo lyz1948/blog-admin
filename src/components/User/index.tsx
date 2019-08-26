@@ -1,56 +1,88 @@
 import * as React from 'react'
 import * as styles from './style.css'
 import classNames from 'classnames'
-import { Form, Button } from 'react-bootstrap'
-import { UserModel } from '@app/store/models'
-import { UserActions } from '@app/store/actions'
-import { LoginInputComp } from '../LoginInput'
 import { Base64 } from 'js-base64'
+import { Form, Button } from 'react-bootstrap'
+import { UserActions } from '@app/store/actions'
+import { INotice } from '@app/interfaces/notication'
+import { FancyInput, Notication } from '../index'
 
 export namespace UserComp {
   export interface IProps {
-    user: UserModel
     onLogin: typeof UserActions.signIn
   }
 
   export interface IState {
-    textType: string
-    pwdType: string
+    show: boolean
+    type: string
+    content: string
   }
 }
 
 export class UserComp extends React.Component<UserComp.IProps, UserComp.IState> {
+  private inputName = React.createRef<HTMLInputElement>()
+  private inputPassword = React.createRef<HTMLInputElement>()
+
   constructor(props: UserComp.IProps, context?: any) {
     super(props, context)
     this.state = {
-      textType: 'text',
-      pwdType: 'password',
+      show: false,
+      type: 'info',
+      content: '',
     }
     this.signIn = this.signIn.bind(this)
   }
 
-  signIn() {
-    let { username, password } = this.props.user
+  async signIn() {
+    const username = this.inputName.current!.value
+    let password = this.inputPassword.current!.value
+
+    if (!username) {
+      this.showNotice({ type: 'warn', content: '用户名不能为空' })
+      return
+    }
+
+    if (!password) {
+      this.showNotice({ type: 'warn', content: '密码不能为空' })
+      return
+    }
+
     password = password ? Base64.encode(password) : password
-    const user = { username, password }
-    this.props.onLogin(user)
+    this.props.onLogin({ username, password })
+  }
+
+  showNotice(obj: INotice) {
+    const { type, content } = obj
+    this.setState({
+      show: true,
+      type,
+      content,
+    })
   }
 
   render() {
-    const { user } = this.props
-
+    const { show, type, content } = this.state
     return (
-      <div className={classNames(styles.userLogin, 'pos-full')}>
-        <div className={classNames(styles.content, 'pos-center')}>
+      <div className={classNames(styles.userLogin, 'posFull')}>
+        <Notication
+          show={show}
+          type={type}
+          content={content}
+          onClose={() => {
+            this.setState({ show: false })
+          }}
+          autohide
+        />
+        <div className={classNames(styles.content, 'posCenter')}>
           <h2>博客后台管理系统</h2>
           <Form className="userForm">
             <Form.Group>
-              <Form.Label>Username</Form.Label>
-              <LoginInputComp text={user.username} type={this.state.textType} />
+              <Form.Label>用户名或手机号</Form.Label>
+              <FancyInput ref={this.inputName} tip="请输入用户名" />
             </Form.Group>
             <Form.Group>
-              <Form.Label>Password</Form.Label>
-              <LoginInputComp text={user.password} type={this.state.pwdType} />
+              <Form.Label>密码</Form.Label>
+              <FancyInput ref={this.inputPassword} tip="请输入密码" type="password" />
             </Form.Group>
             <Button size="lg" variant="primary" block onClick={this.signIn}>
               登录

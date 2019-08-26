@@ -79,22 +79,52 @@ ul {
 }
 
 /* bootstrap */
-:global(.table-dark) {
+:global(.tableDark) {
   color: #fff;
   background-color: #2e4050 !important;
 }
 
 /* login */
-:global(.pos-full) {
+:global(.posFull) {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-:global(.pos-center) {
+:global(.posCenter) {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+:global(.textXLarge) {
+  font-size: 2rem;
+}
+
+:global(.textLarge) {
+  font-size: 1.5rem;
+}
+
+:global(.textMedium) {
+  font-size: 1.125rem;
+}
+
+:global(.textSmall) {
+  font-size: 0.875rem;
+}
+
+:global(.textXSmall) {
+  font-size: 0.75rem;
+}
+
+:global(.colorTextLight){
+  color: #fff;
+}
+:global(.colorTextDard){
+  color: rgb(67, 68, 86);
+}
+:global(.colorTextDard1){
+  color: rgb(128, 145, 171);
 }
