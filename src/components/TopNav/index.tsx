@@ -10,7 +10,7 @@ import {
   faAngleDown,
 } from '@fortawesome/free-solid-svg-icons'
 
-export class TopNavComp extends React.Component {
+export class TopNav extends React.Component {
   render() {
     return (
       <div className={styles.topNav}>

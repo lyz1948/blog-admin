@@ -1,2 +1,2 @@
-export { ArticleComp } from './manage'
-export { ArticleAddComp } from './add'
+export { Article } from './manage'
+export { ArticleAdd } from './add'

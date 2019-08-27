@@ -14,7 +14,7 @@ export namespace Nav {
   }
 }
 
-export class NavComp extends React.Component<Nav.IProps> {
+export class SideBar extends React.Component<Nav.IProps> {
   constructor(props: any, context?: any) {
     super(props, context)
     this.state = {
@@ -36,13 +36,13 @@ export class NavComp extends React.Component<Nav.IProps> {
         </div>
         <div className={styles.siderMenu}>
           {SIDER_MENU.map((menu, idx) => (
-            <div className={styles.navItem} key={idx}>
+            <div className={styles.navItem} key={menu.name}>
               <div
                 className={styles.content}
-                // onClick={e => {
-                //   e.stopPropagation()
-                //   onClickFilter(NavModel.Filter[menu.name])
-                // }}
+                onClick={e => {
+                  e.stopPropagation()
+                  onClickFilter(NavModel.Filter[menu.name])
+                }}
               >
                 <FontAwesomeIcon
                   icon={menu.icon}
@@ -55,10 +55,9 @@ export class NavComp extends React.Component<Nav.IProps> {
               </div>
               {menu.child &&
                 menu.child.map(child => (
-                  <div className={styles.subNav}>
+                  <div className={styles.subNav} key={child.text}>
                     <div
                       className={styles.content}
-                      key={child.text}
                       onClick={e => {
                         e.stopPropagation()
                         onClickFilter(child.name)

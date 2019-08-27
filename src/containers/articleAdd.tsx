@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router'
 import { omit } from '../utils'
 import { RootState } from '../store/reducers'
 import { ArticleModel } from '../store/models'
-import { ArticleAddComp } from '../components'
+import { ArticleAdd } from '../components'
 import { ArticleActions } from '../store/actions'
 
 export namespace Article {
@@ -47,7 +47,7 @@ export class ArticleAddApp extends React.Component<Article.IProps> {
     const { categories, tags, actions } = this.props
     
     return (
-      <ArticleAddComp
+      <ArticleAdd
         tags={tags}
         categories={categories}
         getTag={actions.getTag}

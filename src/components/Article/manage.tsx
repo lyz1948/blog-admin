@@ -20,7 +20,7 @@ export namespace Article {
   }
 }
 
-export class ArticleComp extends React.Component<Article.IProps, Article.IState> {
+export class Article extends React.Component<Article.IProps, Article.IState> {
   constructor(props: Article.IProps, context?: any) {
     super(props, context)
 

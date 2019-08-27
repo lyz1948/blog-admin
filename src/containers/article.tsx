@@ -6,7 +6,7 @@ import { omit } from '../utils'
 import { RootState } from '../store/reducers'
 import { ArticleModel } from '../store/models'
 import { ArticleActions } from '../store/actions'
-import { ArticleComp } from '../components'
+import { Article as ArticleComp } from '../components'
 
 export namespace Article {
   export interface IProps extends RouteComponentProps<void> {

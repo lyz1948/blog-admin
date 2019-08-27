@@ -32,7 +32,7 @@ import {
 // use fusion
 ReactFC.fcRoot(FusionCharts, FusionMaps, World, Widgets, Column2D, FusionTheme)
 
-export class DashboardComp extends React.Component {
+export class Dashboard extends React.Component {
   render() {
     return (
       <Container className={styles.module}>
@@ -40,44 +40,40 @@ export class DashboardComp extends React.Component {
           <Container className="col-lg-3 col-sm-6">
             <GridCardDark className="card">
               <Container className="card-heading">
-                <GridCardParagraph>Total Revenue</GridCardParagraph>
+                <GridCardParagraph>今日访问人数</GridCardParagraph>
               </Container>
               <Container mt="20px">
-                <TextMedium>$</TextMedium>
-                <TextXLarge>10.5</TextXLarge>
+                <TextXLarge>2008</TextXLarge>
               </Container>
             </GridCardDark>
           </Container>
           <Container className="col-lg-3 col-sm-6">
-            <GridCardDark>
+            <GridCardDark className="card">
               <Container className="card-heading">
-                <Container>Total Revenue</Container>
+                <GridCardParagraph>文章数量</GridCardParagraph>
               </Container>
               <Container mt="20px">
-                <TextMedium>$</TextMedium>
-                <TextXLarge>10.5</TextXLarge>
+                <TextXLarge>2008</TextXLarge>
               </Container>
             </GridCardDark>
           </Container>
           <Container className="col-lg-3 col-sm-6">
-            <GridCardDark>
+            <GridCardDark className="card">
               <Container className="card-heading">
-                <Container>Total Revenue</Container>
+                <GridCardParagraph>标签数量</GridCardParagraph>
               </Container>
               <Container mt="20px">
-                <TextMedium>$</TextMedium>
-                <TextXLarge>10.5</TextXLarge>
+                <TextXLarge>2008</TextXLarge>
               </Container>
             </GridCardDark>
           </Container>
           <Container className="col-lg-3 col-sm-6">
-            <GridCardDark>
+          <GridCardDark className="card">
               <Container className="card-heading">
-                <Container>Total Revenue</Container>
+                <GridCardParagraph>评论数量</GridCardParagraph>
               </Container>
               <Container mt="20px">
-                <TextMedium>$</TextMedium>
-                <TextXLarge>10.5</TextXLarge>
+                <TextXLarge>2008</TextXLarge>
               </Container>
             </GridCardDark>
           </Container>

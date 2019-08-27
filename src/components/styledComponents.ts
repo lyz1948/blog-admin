@@ -14,7 +14,6 @@ export const Container = styled.div<ISpacing>`
 
 export const Row = styled.div`
   display: flex;
-  padding: 1em 0;
 `
 
 export const Nav = styled.nav``

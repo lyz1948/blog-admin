@@ -8,16 +8,17 @@ import { RouteComponentProps } from 'react-router'
 import { RootState } from '../store/reducers'
 import { NavModel } from '../store/models'
 
-import { ArticleApp } from './article'
-import { ArticleAddApp } from './articleAdd'
-import { CategoryApp } from './category'
 import { TagApp } from './tag'
+import { ArticleApp } from './article'
+import { CategoryApp } from './category'
+import { ArticleAddApp } from './articleAdd'
+import { SettingsApp } from './settings'
 
 // component
 import {
-  NavComp,
-  TopNavComp,
-  DashboardComp,
+  TopNav,
+  Dashboard,
+  SideBar,
 } from '../components'
 import { ArticleActions, UserActions } from '../store/actions'
 
@@ -91,20 +92,6 @@ export class App extends React.Component<App.IProps, App.IState> {
       this.props.history.push('/login')
       return
     }
-    // let token = localStorage.getItem(CONFIG.APP.TOKEN_KEY) as any
-    // try {
-    //   token = JSON.parse(token)
-    // } catch (error) {
-    //   throw new Error(error)
-    // }
-
-    // // 凭证过期
-    // if (!token || token.expires_in < Date.now()) {
-    //   localStorage.removeItem(CONFIG.APP.TOKEN_KEY)
-    //   this.props.history.push('/login')
-    //   return
-    // }
-   
   }
 
   handleFilterChange(filter: NavModel.Filter): void {
@@ -124,8 +111,10 @@ export class App extends React.Component<App.IProps, App.IState> {
         return <CategoryApp />
       case 'ARTICLE_TAG':
         return <TagApp />
+      case 'SETTINGS':
+        return <SettingsApp />
       default:
-        return <DashboardComp />
+        return <Dashboard />
     }
   }
 
@@ -145,9 +134,9 @@ export class App extends React.Component<App.IProps, App.IState> {
     const { userinfo } = this.state
     return (
       <div className="home">
-        <NavComp userinfo={userinfo} onClickFilter={this.handleFilterChange} />
+        <SideBar userinfo={userinfo} onClickFilter={this.handleFilterChange} />
         <div className="main">
-          <TopNavComp />
+          <TopNav />
           {this.filterCompoent()}
         </div>
       </div>

@@ -55,7 +55,7 @@ export const SIDER_MENU = [
   },
   {
     text: '全局设置',
-    name: NavModel.Filter.GLOBAL_SETTINGS,
+    name: NavModel.Filter.SETTINGS,
     icon: faCogs,
   },
 ]

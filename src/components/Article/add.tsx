@@ -73,7 +73,7 @@ export namespace ArticleAdd {
   }
 }
 
-export class ArticleAddComp extends React.Component<
+export class ArticleAdd extends React.Component<
   ArticleAdd.IProps,
   ArticleAdd.IState,
   ArticleAdd.INotice

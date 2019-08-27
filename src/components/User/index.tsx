@@ -7,7 +7,7 @@ import { UserActions } from '@app/store/actions'
 import { INotice } from '@app/interfaces/notication'
 import { FancyInput, Notication } from '../index'
 
-export namespace UserComp {
+export namespace User {
   export interface IProps {
     onLogin: typeof UserActions.signIn
   }
@@ -19,11 +19,11 @@ export namespace UserComp {
   }
 }
 
-export class UserComp extends React.Component<UserComp.IProps, UserComp.IState> {
+export class User extends React.Component<User.IProps, User.IState> {
   private inputName = React.createRef<HTMLInputElement>()
   private inputPassword = React.createRef<HTMLInputElement>()
 
-  constructor(props: UserComp.IProps, context?: any) {
+  constructor(props: User.IProps, context?: any) {
     super(props, context)
     this.state = {
       show: false,
