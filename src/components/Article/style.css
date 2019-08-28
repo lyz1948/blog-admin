@@ -1,11 +1,6 @@
 .inputWrap {
-  position: relative;
   display: flex;
   flex-wrap: wrap;
-}
-
-.passwordWrap {
-  margin-top: 10px;
 }
 
 .inputWrap .labelBox {
@@ -53,6 +48,7 @@
   margin: 0;
 }
 
+/* radio 样式 */
 .inputWrap .radioBox {
   background-color: #6c757d;
   line-height: 36px;
@@ -83,6 +79,7 @@
   cursor: pointer;
 }
 
+/* 缩略图 */
 .thumbBox {
   position: relative;
   height: 200px;
@@ -105,83 +102,37 @@
   font-size: 50px;
 }
 
-.topBar {
-  padding: 1rem 1.5rem 0;
-}
-
-.topBar .inner {
-  position: relative;
-  height: 4rem;
-  background: #283847;
-}
-
-.topBar .inner button {
-  position: absolute;
-  right: 1.5rem;
-  top: 1rem;
-}
-
-.module {
-  padding: 20px;
-  background-color: #4d5b69;
-  display: flex;
-}
-
-.module .articleMain {
+.articleMain {
   flex: 0 0 70%;
   box-shadow: 0 2px 12px #283847;
 }
 
-.module .articleMain .content {
+.articleMain .content {
   padding-right: 100px;
 }
 
-.module .articleSide {
+.articleSide {
   flex: 0 0 30%;
   padding-left: 20px;
 }
 
-.module .content {
-  padding: 10px;
-  color: #a7b2ae;
-  background-color: #2f4050;
-}
 
-.module .field {
+.sideBox {
   margin-bottom: 20px;
 }
 
-.module .field p {
-  font-size: 14px;
-  color: #f8f8ff;
-  font-weight: 600;
-}
-
-.module .title {
-  padding: 15px 20px;
-  background-color: #283847;
-}
-
-.module .title > h3 {
-  font-size: 18px;
-  color: #79fded;
-  margin-bottom: 0;
-}
-
-.module .sideBox {
-  margin-bottom: 20px;
-}
-
-.module .sideBox .thumb img {
+.sideBox .thumb img {
   width: 100%;
   max-height: 300px;
 }
 
 .markdownWrap {
+  flex: 1;
   background-color: #4d5b69;
 }
 
 .markdownBar {
+  /* flex: 1; */
   padding: 10px;
   border-bottom: 1px solid #9c9c9c;
 }

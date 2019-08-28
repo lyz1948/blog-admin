@@ -276,7 +276,7 @@ export class ArticleAdd extends React.Component<
       return null
     }
     return (
-      <div className={styles.passwordWrap}>
+      <div className="mt10">
         <FancyInput ref={this.inputPassword} tip={'文章访问密码'} />
       </div>
     )
@@ -319,7 +319,7 @@ export class ArticleAdd extends React.Component<
     // const tagType = ['primary', 'secondary', 'success', 'danger', 'warning', 'info']
     const { show, type, content } = this.state
     return (
-      <div className={styles.articleMain}>
+      <div className="flex70">
         <Notication
           show={show}
           type={type}
@@ -330,29 +330,29 @@ export class ArticleAdd extends React.Component<
           autohide
         />
 
-        <div className={styles.title}>
+        <div className="title">
           <h3>记录生活-发布文章</h3>
         </div>
-        <div className={styles.content}>
-          <div className={styles.field}>
-            <p>文章标题</p>
+        <div className="content">
+          <div className="inputWrap">
+            <span className="label">文章标题</span>
             <FancyInput ref={this.inputTitle} tip={'文章标题'} />
           </div>
-          <div className={styles.field}>
-            <p>文章关键字</p>
+          <div className="inputWrap">
+            <span className="label">文章关键字</span>
             <FancyInput ref={this.inputKeyword} tip={'文章关键字'} />
           </div>
-          <div className={styles.field}>
-            <p>文章slug</p>
+          <div className="inputWrap">
+            <span className="label">文章slug</span>
             <FancyInput ref={this.inputSlug} tip={'文章slug'} />
           </div>
-          <div className={styles.field}>
-            <p>文章描述</p>
+          <div className="inputWrap">
+            <span className="label">文章描述</span>
             <FancyTextarea ref={this.inputDescription} tip={'文章描述'} />
           </div>
 
-          <div className={styles.field}>
-            <p>文章编辑</p>
+          <div className="inputWrap">
+            <span className="label">文章编辑</span>
             <div className={styles.markdownWrap}>
               <div className={styles.markdownBar}>
                 <a title="blod">
@@ -398,6 +398,16 @@ export class ArticleAdd extends React.Component<
               </div>
             </div>
           </div>
+          <div className="inputWrap">
+            <span className="label"></span>
+            <Button
+              type="submit"
+              variant="primary"
+              onClick={(e: any) => this.handleSubmit(e)}
+            >
+              创建文章
+            </Button>
+          </div>
         </div>
       </div>
     )
@@ -408,12 +418,12 @@ export class ArticleAdd extends React.Component<
     const { tags } = this.props
 
     return (
-      <div className={styles.articleSide}>
+      <div className="flex30 pdl20">
         <div className={styles.sideBox}>
-          <div className={styles.title}>
+          <div className="title">
             <h3>文章分类</h3>
           </div>
-          <div className={styles.content}>
+          <div className="content">
             <div className={styles.inputWrap}>
               {categories.map((cate: any, index: number) => (
                 <div
@@ -440,10 +450,10 @@ export class ArticleAdd extends React.Component<
         </div>
 
         <div className={styles.sideBox}>
-          <div className={styles.title}>
+          <div className="title">
             <h3>文章标签</h3>
           </div>
-          <div className={styles.content}>
+          <div className="content">
             <div className={styles.inputWrap}>
               {tags.map((tag: any, index: number) => (
                 <div
@@ -482,36 +492,33 @@ export class ArticleAdd extends React.Component<
         </div>
 
         <div className={styles.sideBox}>
-          <div className={styles.title}>
+          <div className="title">
             <h3>文章状态</h3>
           </div>
-          <div className={styles.content}>
-            <div className={styles.field}>
-              <p>访问状态 </p>
-              <div className={styles.inputWrap}>
-                {STATE_VALUE.map((type, idx) => (
-                  <div className={
-                    classNames({
-                      [styles.radioBox]: true, 
-                      [styles.info]: this.state.radioPublic === type.id
-                    })} key={idx}>
-                    <input
-                      type="radio"
-                      id={type.text}
-                      value={type.id}
-                      name="formstate"
-                      checked={this.state.radioPublic === type.id}
-                      onChange={(e: any) => this.changeStateRadio(e)}
-                    />
-                    <label htmlFor={type.text}>{type.text}</label>
-                  </div>
-                ))}
-              </div>
-              {this.renderPassword()}
+          <div className="content">
+            <p>访问状态 </p>
+            <div className={styles.inputWrap}>
+              {STATE_VALUE.map((type, idx) => (
+                <div className={
+                  classNames({
+                    [styles.radioBox]: true, 
+                    [styles.info]: this.state.radioPublic === type.id
+                  })} key={idx}>
+                  <input
+                    type="radio"
+                    id={type.text}
+                    value={type.id}
+                    name="formstate"
+                    checked={this.state.radioPublic === type.id}
+                    onChange={(e: any) => this.changeStateRadio(e)}
+                  />
+                  <label htmlFor={type.text}>{type.text}</label>
+                </div>
+              ))}
             </div>
-            <div className={styles.field}>
-              <p>发布状态</p>
-              <div className={styles.inputWrap}>
+            {this.renderPassword()}
+            <p className="mt10">发布状态</p>
+            <div className={styles.inputWrap}>
                 {PUBLISH_VALUE.map((type, idx) => (
                   <div className={classNames({
                     [styles.radioBox]: true, 
@@ -529,15 +536,14 @@ export class ArticleAdd extends React.Component<
                   </div>
                 ))}
               </div>
-            </div>
           </div>
         </div>
 
         <div className={styles.sideBox}>
-          <div className={styles.title}>
+          <div className="title">
             <h3>文章缩略图</h3>
           </div>
-          <div className={classNames(styles.content, styles.thumbBox)}>
+          <div className={classNames("content", styles.thumbBox)}>
             <input
               type="file"
               id="file"
@@ -553,18 +559,7 @@ export class ArticleAdd extends React.Component<
   render() {
     return (
       <div className={styles.articleAdd}>
-        <div className={styles.topBar}>
-          <div className={styles.inner}>
-            <Button
-              type="submit"
-              variant="primary"
-              onClick={(e: any) => this.handleSubmit(e)}
-            >
-              创建文章
-            </Button>
-          </div>
-        </div>
-        <div className={styles.module}>
+        <div className="module">
           {this.renderMain()}
           {this.renderSide()}
         </div>
