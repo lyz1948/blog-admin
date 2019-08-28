@@ -8,6 +8,7 @@ export const FancyInput = React.forwardRef((props: any, ref: any) => {
       ref={ref}
       className="formInput"
       placeholder={props.tip}
+      onKeyDown={props.onPress}
     />
   )
 })

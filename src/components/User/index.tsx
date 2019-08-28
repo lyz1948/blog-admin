@@ -34,10 +34,10 @@ export class User extends React.Component<User.IProps, User.IState> {
   }
 
   async signIn() {
-    const username = this.inputName.current!.value
+    const name = this.inputName.current!.value
     let password = this.inputPassword.current!.value
 
-    if (!username) {
+    if (!name) {
       this.showNotice({ type: 'warn', content: '用户名不能为空' })
       return
     }
@@ -48,7 +48,7 @@ export class User extends React.Component<User.IProps, User.IState> {
     }
 
     password = password ? Base64.encode(password) : password
-    this.props.onLogin({ username, password })
+    this.props.onLogin({ name, password })
   }
 
   showNotice(obj: INotice) {
@@ -78,11 +78,11 @@ export class User extends React.Component<User.IProps, User.IState> {
           <Form className="userForm">
             <Form.Group>
               <Form.Label>用户名或手机号</Form.Label>
-              <FancyInput ref={this.inputName} tip="请输入用户名" />
+              <FancyInput ref={this.inputName} tip="请输入用户名" onPress={(e: any) => e.which === 13 && this.signIn} />
             </Form.Group>
             <Form.Group>
               <Form.Label>密码</Form.Label>
-              <FancyInput ref={this.inputPassword} tip="请输入密码" type="password" />
+              <FancyInput ref={this.inputPassword} tip="请输入密码" type="password" onPress={(e: any) => e.which === 13 && this.signIn} />
             </Form.Group>
             <Button size="lg" variant="primary" block onClick={this.signIn}>
               登录

@@ -20,7 +20,7 @@ import {
   Dashboard,
   SideBar,
 } from '../components'
-import { ArticleActions, UserActions } from '../store/actions'
+import { ArticleActions } from '../store/actions'
 
 export namespace App {
   export interface IProps extends RouteComponentProps<void> {
@@ -30,7 +30,6 @@ export namespace App {
     categories: RootState.CategoryState
     tags: RootState.TagState
     user: RootState.UserState
-    fetchUser: typeof UserActions.fetchUser
   }
 
   export interface IState {

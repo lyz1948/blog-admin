@@ -3,39 +3,40 @@ import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
 import { RouteComponentProps } from 'react-router'
 import { RootState } from '../store/reducers'
-import { TagActions } from '../store/actions'
-import { TagModel } from '../store/models'
+import { UserActions } from '../store/actions'
+import { UserModel } from '../store/models'
 import { omit } from '../utils'
 import { Settings } from '../components'
 
-export namespace Tag {
+export namespace UserSettings {
   export interface IProps extends RouteComponentProps<void> {
-    tags: RootState.TagState
-    actions: TagActions
-    filter: TagModel.Filter
+    user: RootState.UserState
+    actions: UserActions
+    filter: UserModel.Filter
   }
 }
 
 @connect(
-  (state: RootState, ownProps): Pick<Tag.IProps, 'tags'> => {
-    return { tags: state.tags }
+  (state: RootState, ownProps): Pick<UserSettings.IProps, 'user'> => {
+    return { user: state.user }
   },
-  (dispatch: Dispatch): Pick<Tag.IProps, 'actions'> => ({
-    actions: bindActionCreators(omit(TagActions, 'Type'), dispatch),
+  (dispatch: Dispatch): Pick<UserSettings.IProps, 'actions'> => ({
+    actions: bindActionCreators(omit(UserActions, 'Type'), dispatch),
   }),
 )
-export class SettingsApp extends React.Component<Tag.IProps> {
-  static defaultProps: Partial<Tag.IProps> = {
-    filter: TagModel.Filter.SHOW_ALL,
+export class SettingsApp extends React.Component<UserSettings.IProps> {
+  static defaultProps: Partial<UserSettings.IProps> = {
+    filter: UserModel.Filter.SHOW_USER,
   }
 
-  constructor(props: Tag.IProps, context?: any) {
+  constructor(props: UserSettings.IProps, context?: any) {
     super(props, context)
   }
 
   render() {
+    const { actions } = this.props
     return (
-    <Settings/>
+    <Settings updateUser={actions.updateUser}/>
     )
   }
 }

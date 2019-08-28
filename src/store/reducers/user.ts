@@ -5,7 +5,7 @@ import { UserActions } from '../actions'
 import * as CONFIG from '../../config/app.config'
 
 const initialState: RootState.UserState = {
-  username: 'root',
+  name: 'root',
   password: 'root',
 }
 
@@ -33,6 +33,17 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
       return state
     },
     [UserActions.Type.GET_USER]: (state, action) => {
+      return state
+    },
+    [UserActions.Type.UPDATE_USER]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { result } = (action.payload!)
+        
+        return {
+          data: result,
+          ...state,
+        }
+      }
       return state
     },
   },
