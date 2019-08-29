@@ -3,20 +3,11 @@ export interface UserModel {
   password: string
   slogan?: string
   avatar?: string
-  passwordNew?: string
-  passwordNewConfirm?: string
+  password_new?: string
+  password_new_rep?: string
   access_token?: string
   expires_in?: number
-  data?: any
-}
-
-export interface UserProfileModel {
-  name: string
-  slogan: string
-  avatar: string
-  password: string
-  passwordNew: string
-  passwordNewConfirm: string
+  [propName: string]: any
 }
 
 export namespace UserModel {

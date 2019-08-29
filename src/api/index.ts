@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as CONFIG from '../config/app.config'
 import * as UTILS from '../utils'
 import { IResponseData } from '@app/store/types'
-import { UserModel, UserProfileModel, ArticleModel, TagModel } from '@app/store/models'
+import { UserModel, ArticleModel, TagModel } from '@app/store/models'
 
 const token = UTILS.getToken()
 
@@ -145,6 +145,6 @@ export const getUser = (id: UserModel): Promise<UserModel> => {
   return service.post(`/user/${id}`)
 }
 
-export const updateUser = (userProfiel: UserProfileModel ): Promise<IResponseData> => {
+export const updateUser = (userProfiel: UserModel): Promise<IResponseData> => {
   return service.put(`/user/profile`, userProfiel)
 }

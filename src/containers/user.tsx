@@ -34,7 +34,7 @@ export class UserApp extends React.Component<User.IProps> {
       return null
     }
     return (
-      <UserComp onLogin={actions.signIn} />
+      <UserComp user={user} onLogin={actions.signIn} />
     )
   }
 }

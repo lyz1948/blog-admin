@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as styles from './style.css'
+import { Base64 } from 'js-base64'
 import { Button, Image } from 'react-bootstrap'
 import {
   /* Notication, ConfirmModal, */ FancyInput,
@@ -8,7 +9,6 @@ import {
 import { INotice } from '@app/interfaces/notication'
 import { UserActions } from '@app/store/actions'
 import * as CONFIG from '../../config'
-import { UserModel } from '@app/store/models'
 
 export namespace TagComp {
   export interface IProps {
@@ -86,20 +86,25 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
   handleEdit(tag: any, e: React.MouseEvent<HTMLButtonElement>) {}
 
   updateUser() {
+    const { _id } = this.state.userInfo
     const name = this.inputName.current!.value
     const slogan = this.inputSlogan.current!.value
-    const password = this.inputPassword.current!.value
-    const passwordNew = this.inputPasswordNew.current!.value
-    const passwordNewConfirm = this.inputPasswordConfirm.current!.value
-    const { _id } = this.state.userInfo
+    let password = this.inputPassword.current!.value
+    let passwordNew = this.inputPasswordNew.current!.value
+    let passwordNewConfirm = this.inputPasswordConfirm.current!.value
+
+    password = Base64.encode(password)
+    passwordNew = Base64.encode(passwordNew)
+    passwordNewConfirm = Base64.encode(passwordNewConfirm)
+    
     let userInfo = {
       _id,
       name,
       slogan,
       avatar: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4',
       password,
-      passwordNew,
-      passwordNewConfirm,
+      password_new: passwordNew,
+      password_new_rep: passwordNewConfirm,
     }
     this.props.updateUser(userInfo)
   }

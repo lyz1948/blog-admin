@@ -12,7 +12,6 @@ const initialState: RootState.UserState = {
 export const userReducer = handleActions<RootState.UserState, IResponseData>(
   {
     [UserActions.Type.SIGN_IN]: (state, action) => {
-      
       if (action.payload && action.payload.result) {
         const { result } = (action.payload!)
         // 存储token
@@ -24,7 +23,8 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
           ...state,
         }
       }
-      return state
+      
+      return { ...state, ...{ error: true, message: '用户名密码错误' }}
     },
     [UserActions.Type.SIGN_UP]: (state, action) => {
       return state
@@ -40,8 +40,8 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
         const { result } = (action.payload!)
         
         return {
-          data: result,
           ...state,
+          data: result,
         }
       }
       return state

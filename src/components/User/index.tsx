@@ -6,9 +6,11 @@ import { Form, Button } from 'react-bootstrap'
 import { UserActions } from '@app/store/actions'
 import { INotice } from '@app/interfaces/notication'
 import { FancyInput, Notication } from '../index'
+import { UserModel } from '@app/store/models';
 
 export namespace User {
   export interface IProps {
+    user: UserModel
     onLogin: typeof UserActions.signIn
   }
 
@@ -36,7 +38,8 @@ export class User extends React.Component<User.IProps, User.IState> {
   async signIn() {
     const name = this.inputName.current!.value
     let password = this.inputPassword.current!.value
-
+    const { error, message } = this.props.user
+    
     if (!name) {
       this.showNotice({ type: 'warn', content: '用户名不能为空' })
       return
@@ -49,6 +52,11 @@ export class User extends React.Component<User.IProps, User.IState> {
 
     password = password ? Base64.encode(password) : password
     this.props.onLogin({ name, password })
+    
+    if (error) {
+      this.showNotice({ type: 'warn', content: message })
+      return
+    }
   }
 
   showNotice(obj: INotice) {

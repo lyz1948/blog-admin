@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions'
-// import { UserModel } from '@app/store/models'
 import * as API from '../../api'
 
 export namespace UserActions {
