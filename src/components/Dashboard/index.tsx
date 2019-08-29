@@ -25,7 +25,6 @@ import {
   GridCardDark,
   Row,
   TextXLarge,
-  TextMedium,
   GridCardParagraph,
 } from './styledComponents'
 
@@ -80,15 +79,14 @@ export class Dashboard extends React.Component {
         </Row>
         <Row>
           <Container className="col-md-4 col-lg-3">
-            <GridCard className="card">
+            <GridCardDark className="card">
               <Container className="card-heading">
-                <Container>Total Revenue</Container>
+                <GridCardParagraph>今日访问人数</GridCardParagraph>
               </Container>
-              <Container>
-                <TextMedium>$</TextMedium>
-                <TextXLarge>10.5</TextXLarge>
+              <Container mt="20px">
+                <TextXLarge>2008</TextXLarge>
               </Container>
-            </GridCard>
+            </GridCardDark>
           </Container>
           <Container className="row col-md-8">
             <GridCard className="card">

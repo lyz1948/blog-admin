@@ -34,9 +34,9 @@ export class SettingsApp extends React.Component<UserSettings.IProps> {
   }
 
   render() {
-    const { actions } = this.props
+    const { user, actions } = this.props
     return (
-    <Settings updateUser={actions.updateUser}/>
+    <Settings user={user} updateUser={actions.updateUser}/>
     )
   }
 }

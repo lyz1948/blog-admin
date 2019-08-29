@@ -9,9 +9,11 @@ import {
 import { INotice } from '@app/interfaces/notication'
 import { UserActions } from '@app/store/actions'
 import * as CONFIG from '../../config'
+import { UserModel } from '@app/store/models';
 
 export namespace TagComp {
   export interface IProps {
+    user: UserModel
     updateUser: typeof UserActions.updateUser
   }
 
@@ -68,6 +70,11 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
     }
   }
 
+  componentDidMount() {
+    const { name } = this.state.userInfo
+    this.inputName.current!.value = name
+  }
+
   openModal(id: string) {
     this.setState({
       showModal: true,
@@ -96,6 +103,8 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
     password = Base64.encode(password)
     passwordNew = Base64.encode(passwordNew)
     passwordNewConfirm = Base64.encode(passwordNewConfirm)
+
+    
     
     let userInfo = {
       _id,
@@ -188,7 +197,10 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
           </div>
           <div className={styles.inputWrap}>
             <span className={styles.label}>姓名</span>
-            <FancyInput ref={this.inputName} tip="用户姓名" />
+            <FancyInput 
+            ref={this.inputName} 
+            tip="用户姓名"
+            />
           </div>
           <div className={styles.inputWrap}>
             <span className={styles.label}>口号</span>
@@ -200,15 +212,15 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
           <div className={styles.line}></div>
           <div className={styles.inputWrap}>
             <span className={styles.label}>旧密码</span>
-            <FancyInput ref={this.inputPassword} tip="旧密码" />
+            <FancyInput ref={this.inputPassword} tip="旧密码" type="password" />
           </div>
           <div className={styles.inputWrap}>
             <span className={styles.label}>新密码</span>
-            <FancyInput ref={this.inputPasswordNew} tip="新密码" />
+            <FancyInput ref={this.inputPasswordNew} tip="新密码" type="password" />
           </div>
           <div className={styles.inputWrap}>
             <span className={styles.label}>确认密码</span>
-            <FancyInput ref={this.inputPasswordConfirm} tip="确认新密码" />
+            <FancyInput ref={this.inputPasswordConfirm} tip="确认新密码" type="password" />
           </div>
           <div className={styles.line}></div>
           <div className={styles.inputWrap}>
