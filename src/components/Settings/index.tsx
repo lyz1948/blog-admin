@@ -71,8 +71,18 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
   }
 
   componentDidMount() {
-    const { name } = this.state.userInfo
+    this.getUserInfo()
+  }
+
+  componentWillUpdate() {
+    console.log('update');
+    console.log(this.props.user);
+  }
+  
+  getUserInfo() {
+    const { name, slogan } = this.state.userInfo
     this.inputName.current!.value = name
+    this.inputSlogan.current!.value = slogan
   }
 
   openModal(id: string) {
@@ -92,6 +102,7 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
 
   handleEdit(tag: any, e: React.MouseEvent<HTMLButtonElement>) {}
 
+  // 更新用户信息
   updateUser() {
     const { _id } = this.state.userInfo
     const name = this.inputName.current!.value
@@ -100,11 +111,29 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
     let passwordNew = this.inputPasswordNew.current!.value
     let passwordNewConfirm = this.inputPasswordConfirm.current!.value
 
+    if (!name) {
+      this.showNotice({ type: 'warn', content: '您的江湖称呼是？' })
+      return
+    }
+    if (!slogan) {
+      this.showNotice({ type: 'warn', content: '您的口号是?' })
+      return
+    }
+    if (password && !passwordNew) {
+      this.showNotice({ type: 'warn', content: '新密码是不是该填一下！' })
+      return
+    }
+
+    if (passwordNew && passwordNewConfirm) {
+      if ((passwordNew.length !== passwordNewConfirm.length) || passwordNew.trim() !== passwordNewConfirm.trim()) {
+        this.showNotice({ type: 'warn', content: '手抖了吧，两次密码不一致啊！' })
+        return
+      }
+    }
+
     password = Base64.encode(password)
     passwordNew = Base64.encode(passwordNew)
     passwordNewConfirm = Base64.encode(passwordNewConfirm)
-
-    
     
     let userInfo = {
       _id,
@@ -113,7 +142,6 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
       avatar: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4',
       password,
       password_new: passwordNew,
-      password_new_rep: passwordNewConfirm,
     }
     this.props.updateUser(userInfo)
   }

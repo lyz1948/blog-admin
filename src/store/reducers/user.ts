@@ -44,7 +44,7 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
           data: result,
         }
       }
-      return state
+      return { ...state, ...{ name: '', password: '' } }
     },
   },
   initialState,
