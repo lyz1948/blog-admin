@@ -11,6 +11,8 @@
   padding: 20px;
   color: #fff;
   text-align: center;
+  background: #273747;
+  border-bottom: 1px solid #2e3f50;
 }
 
 .profile .siteTitle {
@@ -25,12 +27,12 @@
 }
 
 .profile .slogan {
-  font-size: 1.2rem;
+  font-size: .88rem;
 }
 
 .siderNav .navItem {
   color: #fff;
-  box-shadow: 0 1px 2px #334c59;
+  border-bottom: 1px solid #2e3f50;
 }
 
 .siderNav .navItem .content{

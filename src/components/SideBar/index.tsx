@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as styles from './style.css'
 import { NavModel, UserModel } from '../../store/models'
 import { Nav } from 'react-bootstrap'
-import { Image } from 'react-bootstrap'
+import { Image, Accordion } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { SIDER_MENU } from '../../config'
@@ -22,41 +22,62 @@ export class SideBar extends React.Component<Nav.IProps> {
     }
   }
 
-  render() {
-    const dropIcon = <FontAwesomeIcon icon={faAngleDown} />
-    const { userinfo, onClickFilter } = this.props
+  renderProfile(): JSX.Element | void {
+    const { userinfo } = this.props
 
     return (
-      <div className={styles.siderNav}>
-        <div className={styles.profile}>
-          <h1 className="textXLarge">YKPINE</h1>
-          <Image className={styles.avatar} src={userinfo.avatar} alt="用户头像" thumbnail />
-          <div className={styles.name}>{userinfo.name}</div>
-          <div className={styles.slogan}>{userinfo.slogan}</div>
-        </div>
-        <div className={styles.siderMenu}>
-          {SIDER_MENU.map((menu, idx) => (
-            <div className={styles.navItem} key={menu.name}>
-              <div
-                className={styles.content}
-                onClick={e => {
-                  e.stopPropagation()
-                  onClickFilter(NavModel.Filter[menu.name])
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={menu.icon}
-                  style={{ marginRight: '5px' }}
-                />
-                <span className={styles.text}>{menu.text}</span>
-                {menu.child && menu.child.length > 0 ? (
-                  <span className={styles.dropIcon}>{dropIcon}</span>
-                ) : null}
-              </div>
-              {menu.child &&
-                menu.child.map(child => (
-                  <div className={styles.subNav} key={child.text}>
+      <div className={styles.profile}>
+        <h1 className="textXLarge">YKPINE</h1>
+        <Image className={styles.avatar} src={userinfo.avatar} alt="用户头像" thumbnail />
+        <div className={styles.name}>{userinfo.name}</div>
+        <div className={styles.slogan}>{userinfo.slogan}</div>
+      </div>
+    )
+  }
+
+  renderMenu(): JSX.Element | void {
+    const dropIcon = <FontAwesomeIcon icon={faAngleDown} />
+    const { onClickFilter } = this.props
+
+    return (
+      <div className={styles.siderMenu}>  
+        <Accordion defaultActiveKey={SIDER_MENU[1].name}>
+          {
+            SIDER_MENU.map(it => (
+              <div className={styles.navItem} key={it.name}>
+                {
+                  it.child ? (
+                    <Accordion.Toggle as="div" eventKey={it.name} className={styles.content}>
+                      <FontAwesomeIcon
+                        icon={it.icon}
+                        style={{ marginRight: '5px' }}
+                      />
+                      <span className={styles.text}>{it.text}</span>
+                      {it.child && it.child.length > 0 ? (
+                        <span className={styles.dropIcon}>{dropIcon}</span>
+                      ) : null}
+                    </Accordion.Toggle>
+                  )
+                  : (
                     <div
+                      className={styles.content}
+                      onClick={e => {
+                        e.stopPropagation()
+                        onClickFilter(NavModel.Filter[it.name])
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={it.icon}
+                        style={{ marginRight: '5px' }}
+                      />
+                      <span className={styles.text}>{it.text}</span>
+                    </div>
+                  )
+                }
+                {
+                  it.child && it.child.map(child => (
+                    <Accordion.Collapse eventKey={it.name} className={styles.subNav}>
+                      <div
                       className={styles.content}
                       onClick={e => {
                         e.stopPropagation()
@@ -69,11 +90,22 @@ export class SideBar extends React.Component<Nav.IProps> {
                       />
                       <span className={styles.text}>{child.text}</span>
                     </div>
-                  </div>
-                ))}
-            </div>
-          ))}
-        </div>
+                    </Accordion.Collapse>
+                  ))
+                }
+              </div>
+            ))
+          }
+        </Accordion>
+      </div>
+    )
+  }
+
+  render() {
+    return (
+      <div className={styles.siderNav}>
+        {this.renderProfile()}
+        {this.renderMenu()}
       </div>
     )
   }
