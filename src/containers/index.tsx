@@ -70,6 +70,7 @@ export class App extends React.Component<App.IProps, App.IState> {
     this.state = {
       userinfo: null
     }
+    this.logout = this.logout.bind(this)
     this.filterCompoent = this.filterCompoent.bind(this)
     this.hasPermission = this.hasPermission.bind(this)
     this.handleFilterChange = this.handleFilterChange.bind(this)
@@ -91,6 +92,11 @@ export class App extends React.Component<App.IProps, App.IState> {
       this.props.history.push('/login')
       return
     }
+  }
+
+  logout() {
+    localStorage.removeItem(CONFIG.APP.TOKEN_KEY)
+    window.location.reload()
   }
 
   handleFilterChange(filter: NavModel.Filter): void {
@@ -135,7 +141,7 @@ export class App extends React.Component<App.IProps, App.IState> {
       <div className="home">
         <SideBar userinfo={userinfo} onClickFilter={this.handleFilterChange} />
         <div className="main">
-          <TopNav />
+          <TopNav logout={this.logout} />
           {this.filterCompoent()}
         </div>
       </div>

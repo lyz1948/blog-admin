@@ -24,15 +24,16 @@ export class SideBar extends React.Component<Nav.IProps> {
 
   renderProfile(): JSX.Element | void {
     const { userinfo } = this.props
-
-    return (
-      <div className={styles.profile}>
-        <h1 className="textXLarge">YKPINE</h1>
-        <Image className={styles.avatar} src={userinfo.avatar} alt="用户头像" thumbnail />
-        <div className={styles.name}>{userinfo.name}</div>
-        <div className={styles.slogan}>{userinfo.slogan}</div>
-      </div>
-    )
+      {
+        return userinfo ? (
+          <div className={styles.profile}>
+            <h1 className="textXLarge">YKPINE</h1>
+            <Image className={styles.avatar} src={userinfo.avatar} alt="用户头像" thumbnail />
+            <div className={styles.name}>{userinfo.name}</div>
+            <div className={styles.slogan}>{userinfo.slogan}</div>
+          </div>
+        ) : (<div></div>)
+      }
   }
 
   renderMenu(): JSX.Element | void {
@@ -76,7 +77,7 @@ export class SideBar extends React.Component<Nav.IProps> {
                 }
                 {
                   it.child && it.child.map(child => (
-                    <Accordion.Collapse eventKey={it.name} className={styles.subNav}>
+                    <Accordion.Collapse eventKey={it.name} className={styles.subNav} key={it.name}>
                       <div
                       className={styles.content}
                       onClick={e => {

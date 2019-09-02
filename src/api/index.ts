@@ -119,7 +119,7 @@ export const deleteTag = (id: string | number) => {
  * @param user 用户名和密码
  */
 export const signIn = (user: UserModel): Promise<UserModel> => {
-  return service.post('/user/login', { ...user })
+  return service.post('/user/signin', { ...user })
 }
 
 /**

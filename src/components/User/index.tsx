@@ -36,26 +36,35 @@ export class User extends React.Component<User.IProps, User.IState> {
   }
 
   async signIn() {
-    const name = this.inputName.current!.value
+    const username = this.inputName.current!.value
     let password = this.inputPassword.current!.value
-    const { error, message } = this.props.user
+    console.log(this.props.user);
     
-    if (!name) {
+    if (!username) {
       this.showNotice({ type: 'warn', content: '用户名不能为空' })
       return
     }
-
+    
     if (!password) {
       this.showNotice({ type: 'warn', content: '密码不能为空' })
       return
     }
-
+    
     password = password ? Base64.encode(password) : password
-    this.props.onLogin({ name, password })
+    const res = this.props.onLogin({ username, password })
+    console.log(res);
+    const { error, message } = this.props.user
+    console.log(error);
     
     if (error) {
       this.showNotice({ type: 'warn', content: message })
       return
+    }
+  }
+
+  handleSignIn(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.which === 13) {
+      this.signIn()
     }
   }
 
@@ -86,11 +95,11 @@ export class User extends React.Component<User.IProps, User.IState> {
           <Form className="userForm">
             <Form.Group>
               <Form.Label>用户名或手机号</Form.Label>
-              <FancyInput ref={this.inputName} tip="请输入用户名" onPress={(e: any) => e.which === 13 && this.signIn} />
+              <FancyInput ref={this.inputName} tip="请输入用户名" onPress={(e: any) => this.handleSignIn(e)} />
             </Form.Group>
             <Form.Group>
               <Form.Label>密码</Form.Label>
-              <FancyInput ref={this.inputPassword} tip="请输入密码" type="password" onPress={(e: any) => e.which === 13 && this.signIn} />
+              <FancyInput ref={this.inputPassword} tip="请输入密码" type="password" onPress={(e: any) => this.handleSignIn(e)} />
             </Form.Group>
             <Button size="lg" variant="primary" block onClick={this.signIn}>
               登录

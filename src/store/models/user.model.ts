@@ -1,5 +1,5 @@
 export interface UserModel {
-  name: string
+  username: string
   password: string
   slogan?: string
   avatar?: string

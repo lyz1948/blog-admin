@@ -80,8 +80,8 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
   }
   
   getUserInfo() {
-    const { name, slogan } = this.state.userInfo
-    this.inputName.current!.value = name
+    const { username, slogan } = this.state.userInfo
+    this.inputName.current!.value = username
     this.inputSlogan.current!.value = slogan
   }
 
@@ -105,13 +105,13 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
   // 更新用户信息
   updateUser() {
     const { _id } = this.state.userInfo
-    const name = this.inputName.current!.value
+    const username = this.inputName.current!.value
     const slogan = this.inputSlogan.current!.value
     let password = this.inputPassword.current!.value
     let passwordNew = this.inputPasswordNew.current!.value
     let passwordNewConfirm = this.inputPasswordConfirm.current!.value
 
-    if (!name) {
+    if (!username) {
       this.showNotice({ type: 'warn', content: '您的江湖称呼是？' })
       return
     }
@@ -137,7 +137,7 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
     
     let userInfo = {
       _id,
-      name,
+      username,
       slogan,
       avatar: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4',
       password,

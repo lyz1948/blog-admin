@@ -5,7 +5,7 @@ import { UserActions } from '../actions'
 import * as CONFIG from '../../config/app.config'
 
 const initialState: RootState.UserState = {
-  name: 'root',
+  username: 'root',
   password: 'root',
 }
 
@@ -43,8 +43,9 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
           ...state,
           data: result,
         }
+      } else {
+        return { ...state, ...{ error: true, message: '用户名或密码错误', username: '', password: '' } }
       }
-      return { ...state, ...{ name: '', password: '' } }
     },
   },
   initialState,
