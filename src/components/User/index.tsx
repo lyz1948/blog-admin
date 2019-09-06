@@ -38,7 +38,7 @@ export class User extends React.Component<User.IProps, User.IState> {
   async signIn() {
     const username = this.inputName.current!.value
     let password = this.inputPassword.current!.value
-    console.log(this.props.user);
+    const { error } = this.props.user
     
     if (!username) {
       this.showNotice({ type: 'warn', content: '用户名不能为空' })
@@ -51,13 +51,13 @@ export class User extends React.Component<User.IProps, User.IState> {
     }
     
     password = password ? Base64.encode(password) : password
-    const res = this.props.onLogin({ username, password })
-    console.log(res);
-    const { error, message } = this.props.user
-    console.log(error);
+
+    const res = await this.props.onLogin({ username, password })
+
+    console.log('res', res);
     
     if (error) {
-      this.showNotice({ type: 'warn', content: message })
+      this.showNotice({ type: 'warn', content: '用户名或密码错误' })
       return
     }
   }

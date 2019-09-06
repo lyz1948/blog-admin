@@ -6,21 +6,20 @@ import { omit } from '../utils'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router'
 import { RootState } from '../store/reducers'
-import { NavModel } from '../store/models'
-
-import { TagApp } from './tag'
-import { ArticleApp } from './article'
-import { CategoryApp } from './category'
-import { ArticleAddApp } from './articleAdd'
-import { SettingsApp } from './settings'
+import { NavModel, ArticleModel } from '../store/models'
+import { ArticleActions } from '../store/actions'
 
 // component
 import {
+  Tag,
   TopNav,
-  Dashboard,
   SideBar,
+  Article,
+  Category,
+  Settings,
+  Dashboard,
+  ArticleAdd,
 } from '../components'
-import { ArticleActions } from '../store/actions'
 
 export namespace App {
   export interface IProps extends RouteComponentProps<void> {
@@ -34,6 +33,7 @@ export namespace App {
 
   export interface IState {
     userinfo?: any
+    editArticle?: any
   }
 }
 
@@ -46,7 +46,8 @@ const FILTER_COMPONMENT = (Object.keys(
     state: RootState,
     ownProps
   ): Pick<App.IProps, 'filter' | 'articles' | 'categories' | 'tags' | 'user'> => {
-    const hash = ownProps.location && ownProps.location.hash.replace('#', '')
+    const hash = ownProps.location && ownProps.location.hash.replace('#', '').split('?')[0]
+    
     const filter =
       FILTER_COMPONMENT.find(value => value === hash) ||
       NavModel.Filter.DASHBOARD
@@ -68,7 +69,8 @@ export class App extends React.Component<App.IProps, App.IState> {
     super(props, context)
 
     this.state = {
-      userinfo: null
+      userinfo: null,
+      editArticle: null
     }
     this.logout = this.logout.bind(this)
     this.filterCompoent = this.filterCompoent.bind(this)
@@ -76,14 +78,29 @@ export class App extends React.Component<App.IProps, App.IState> {
     this.handleFilterChange = this.handleFilterChange.bind(this)
   }
 
+  componentWillMount() {
+    const { categories, tags, articles, actions } = this.props
+    
+    // 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
+    if (articles.length < 2) {
+      actions.getArticleList()
+    }
+    if (tags.length < 2) {
+      actions.getTag()
+    }
+    if (categories.length < 2) {
+      actions.getCategory()
+    }
+    // 用户信息
+    actions.getUser()
+
+    this.getUserInfoFromStorage()
+  }
+
   componentDidMount() {
     this.hasPermission()
   }
   
-  componentWillMount() {
-    this.getUserInfoFromStorage()
-  }
-
   hasPermission() {
     const { userinfo } = this.state
      // 凭证过期
@@ -103,24 +120,19 @@ export class App extends React.Component<App.IProps, App.IState> {
     this.props.history.push(`#${filter}`)
   }
 
-  filterCompoent(): JSX.Element | void {
-    const { filter } = this.props
-    this.hasPermission()
-    switch (filter) {
-      case 'ARTICLE':
-      case 'ARTICLE_LIST':
-        return <ArticleApp />
-      case 'ARTICLE_ADD':
-        return <ArticleAddApp />
-      case 'ARTICLE_CATEGORY':
-        return <CategoryApp />
-      case 'ARTICLE_TAG':
-        return <TagApp />
-      case 'SETTINGS':
-        return <SettingsApp />
-      default:
-        return <Dashboard />
-    }
+  handleNewArticle(article: ArticleModel): any {
+    const { thumb } = this.props.articles[0];
+    article.thumb = thumb
+    this.props.actions.addArticle(article)
+  }
+
+  handleEdit(id: number) {
+    const { articles } = this.props
+    const article = articles.find(it => it.id === id)
+    this.setState({
+      editArticle: article
+    })
+    this.props.history.push(`#${NavModel.Filter.ARTICLE_ADD}?id=${id}`)
   }
 
   getUserInfoFromStorage() {
@@ -135,13 +147,65 @@ export class App extends React.Component<App.IProps, App.IState> {
     })
   }
 
+
+  filterCompoent(): JSX.Element | void {
+    this.hasPermission()
+    
+    const { filter, articles, categories, tags, user, actions } = this.props
+    const { editArticle } = this.state
+        
+    switch (filter) {
+      case 'ARTICLE':
+      case 'ARTICLE_LIST':
+        return <Article
+          tags={tags}
+          articles={articles}
+          getArticleList={actions.getArticleList}
+          deleteArticle={actions.deleteArticle}
+          editArticle={this.handleEdit.bind(this)}
+        />
+      case 'ARTICLE_ADD':
+        return <ArticleAdd
+          tags={tags}
+          article={editArticle}
+          categories={categories}
+          // getTag={actions.getTag}
+          // getCategory={actions.getCategory}
+          // getArticle={actions.getArticle}
+          uploadThumb={actions.uplodThumb}
+          selectTag={actions.selectTag}
+          selectCategory={actions.selectCategory}
+          addArticle={this.handleNewArticle.bind(this)}
+        />
+      case 'ARTICLE_CATEGORY':
+        return <Category
+          categories={categories}
+          addCategory={actions.addCategory}
+          deleteCategory={actions.deleteCategory}
+          editCategory={actions.editCategory}
+        />
+        // return <CategoryApp categories={categories} />
+      case 'ARTICLE_TAG':
+        return <Tag
+          tags={tags} 
+          addTag={actions.addTag}
+          updateTag={actions.updateTag}
+          deleteTag={actions.deleteTag}
+        />
+      case 'SETTINGS':
+        return <Settings user={user} updateUser={actions.updateUser}/>
+      default:
+        return <Dashboard />
+    }
+  }
+
   render() {
-    const { userinfo } = this.state
+    const { user } = this.props
     return (
       <div className="home">
-        <SideBar userinfo={userinfo} onClickFilter={this.handleFilterChange} />
+        <SideBar user={user} onClickFilter={this.handleFilterChange} />
         <div className="main">
-          <TopNav logout={this.logout} />
+          <TopNav user={user} logout={this.logout} />
           {this.filterCompoent()}
         </div>
       </div>

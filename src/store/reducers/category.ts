@@ -33,6 +33,8 @@ export const categoryReducer = handleActions<RootState.CategoryState, CategoryMo
       return state
     },
     [CategoryActions.Type.SELECT_CATEGORY]: (state, action) => {
+      console.log('set category status');
+      
       return state.map(category => {
         if (!category || !action || !action.payload) {
           return category

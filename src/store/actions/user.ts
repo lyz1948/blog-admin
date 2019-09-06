@@ -12,7 +12,7 @@ export namespace UserActions {
 
   export const signIn = createAction(Type.SIGN_IN, API.signIn)
   export const signUp = createAction(Type.SIGN_UP, API.signUp)
-  export const fetchUser = createAction(Type.FETCH_USER, API.fetchUser)
+  export const fetchUser = createAction(Type.FETCH_USER, API.fetchUsers)
   export const getUser = createAction(Type.GET_USER, API.getUser)
   export const updateUser = createAction(Type.UPDATE_USER, API.updateUser)
 }

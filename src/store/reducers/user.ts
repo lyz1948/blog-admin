@@ -33,6 +33,13 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
       return state
     },
     [UserActions.Type.GET_USER]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { result } = action.payload
+        return {
+          ...result,
+          ...state
+        }
+      }
       return state
     },
     [UserActions.Type.UPDATE_USER]: (state, action) => {
@@ -43,9 +50,9 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
           ...state,
           data: result,
         }
-      } else {
-        return { ...state, ...{ error: true, message: '用户名或密码错误', username: '', password: '' } }
       }
+      
+      return { ...state, ...{ error: true, message: '用户名或密码错误' } }
     },
   },
   initialState,

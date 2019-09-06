@@ -9,7 +9,7 @@ import { SIDER_MENU } from '../../config'
 
 export namespace Nav {
   export interface IProps {
-    userinfo: UserModel
+    user: UserModel
     onClickFilter: (filter: NavModel.Filter) => void
   }
 }
@@ -23,14 +23,16 @@ export class SideBar extends React.Component<Nav.IProps> {
   }
 
   renderProfile(): JSX.Element | void {
-    const { userinfo } = this.props
+    const { user } = this.props
+    console.log(user);
+    
       {
-        return userinfo ? (
+        return user ? (
           <div className={styles.profile}>
             <h1 className="textXLarge">YKPINE</h1>
-            <Image className={styles.avatar} src={userinfo.avatar} alt="用户头像" thumbnail />
-            <div className={styles.name}>{userinfo.name}</div>
-            <div className={styles.slogan}>{userinfo.slogan}</div>
+            <Image className={styles.avatar} src={user.avatar} alt="用户头像" thumbnail />
+            <div className={styles.name}>{user.username}</div>
+            <div className={styles.slogan}>{user.slogan}</div>
           </div>
         ) : (<div></div>)
       }
@@ -77,7 +79,7 @@ export class SideBar extends React.Component<Nav.IProps> {
                 }
                 {
                   it.child && it.child.map(child => (
-                    <Accordion.Collapse eventKey={it.name} className={styles.subNav} key={it.name}>
+                    <Accordion.Collapse eventKey={it.name} className={styles.subNav} key={child.name}>
                       <div
                       className={styles.content}
                       onClick={e => {

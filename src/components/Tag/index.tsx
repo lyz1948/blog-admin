@@ -8,7 +8,6 @@ import { Notication, ConfirmModal, FancyInput, FancyTextarea } from '../index'
 export namespace TagComp {
   export interface IProps {
     tags: TagModel[]
-    getTag: typeof TagActions.getTag
     addTag: typeof TagActions.addTag
     updateTag: typeof TagActions.updateTag
     deleteTag: typeof TagActions.deleteTag
@@ -72,10 +71,6 @@ export class Tag extends React.Component<
     }
     this.handleDelete = this.handleDelete.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
-  }
-
-  componentWillMount() {
-    this.props.getTag()
   }
 
   openModal(id: string) {
@@ -189,7 +184,7 @@ export class Tag extends React.Component<
                   <td>
                     <Button
                       size="sm"
-                      variant="primary"
+                      variant="info"
                       style={{ marginRight: '5px' }}
                       onClick={(e: any) => this.handleEdit(it, e)}
                     >

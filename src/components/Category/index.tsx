@@ -8,7 +8,6 @@ import { ConfirmModal, FancyInput, FancyTextarea } from '../index'
 export namespace CategoryManage {
   export interface IProps {
     categories: CategoryModel[]
-    getCategory: typeof CategoryActions.getCategory
     addCategory: typeof CategoryActions.addCategory
     deleteCategory: typeof CategoryActions.deleteCategory
     editCategory: typeof CategoryActions.editCategory
@@ -48,10 +47,6 @@ export class Category extends React.Component<
       content: '添加成功',
       isUpdate: false,
     }
-  }
-
-  componentWillMount() {
-    this.props.getCategory()
   }
 
   openModal(id: string) {

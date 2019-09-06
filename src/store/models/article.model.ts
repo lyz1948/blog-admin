@@ -1,4 +1,5 @@
 export interface ArticleModel {
+  id?: number
   _id?: string
   title: string
   content: string

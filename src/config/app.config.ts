@@ -18,6 +18,7 @@ export const APP = {
   API: 'http://localhost:5381/api/',
   IS_PROD: ENVIROMENT.isProd,
   TOKEN_KEY: 'blogKey',
+  VIEW: 'http://localhost:3000/'
 }
 
 export const SIDER_MENU = [

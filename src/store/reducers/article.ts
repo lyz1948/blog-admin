@@ -25,6 +25,15 @@ const initialState: RootState.ArticleState = [
 
 export const articleReducer = handleActions<RootState.ArticleState, ArticleModel>(
   {
+    [ArticleActions.Type.GET_ARTICLE_LIST]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { data } = (action.payload.result!)
+        return [
+          ...data,
+        ]
+      }
+      return state
+    },
     [ArticleActions.Type.GET_ARTICLE]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { data } = (action.payload.result!)

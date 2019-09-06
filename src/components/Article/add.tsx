@@ -41,10 +41,12 @@ const PUBLISH_VALUE = [
 
 export namespace ArticleAdd {
   export interface IProps {
+    article: ArticleModel
     tags: TagModel[]
     categories: CategoryModel[]
-    getTag: typeof TagActions.getTag
-    getCategory: typeof CategoryActions.getCategory
+    // getTag: typeof TagActions.getTag
+    // getCategory: typeof CategoryActions.getCategory
+    // getArticle: typeof ArticleActions.getArticle
     addArticle: typeof ArticleActions.addArticle
     uploadThumb: typeof ArticleActions.uplodThumb
     selectTag: typeof TagActions.selectTag
@@ -60,7 +62,7 @@ export namespace ArticleAdd {
     radioPublish?: number
     checkedValues?: string[]
     checkedTagValues?: string[]
-    thumburl?: string
+    thumb?: string
     show: boolean
     type: string
     content: string
@@ -94,7 +96,7 @@ export class ArticleAdd extends React.Component<
       radioPublish: 0,
       checkedValues: [], // 选择的分类
       checkedTagValues: [], // 选择的tag
-      thumburl: '',
+      thumb: '',
       show: false,
       type: 'info',
       content: '添加成功',
@@ -109,8 +111,42 @@ export class ArticleAdd extends React.Component<
   }
 
   componentWillMount() {
-    this.props.getTag()
-    this.props.getCategory()
+    // this.props.getTag()
+    // this.props.getCategory()
+  }
+
+  componentDidMount() {
+    this._processArticle()
+  }
+
+  _processArticle() {
+    const { article, categories } = this.props
+
+    if (article) {
+      const { title, keywords, description, content, thumb, state, category } = article
+      this.inputTitle.current!.value = title
+      this.inputKeyword.current!.value = keywords.join(' ')
+      this.inputDescription.current!.value = description
+      this.inputDescription.current!.value = description
+      
+      const list: any[] = []
+      categories.forEach(it => {
+        category.forEach(cat => {
+          if (it._id == cat) {
+            list.push(it)
+            it.isSelected = true
+            this.props.selectCategory({ _id: cat })
+          }
+        })
+      })
+
+      this.setState({
+        postContent: content,
+        thumb,
+        radioPublish: state,
+        checkedValues: list
+      })
+    }
   }
 
   processPost(event: React.FocusEvent<HTMLInputElement>) {
@@ -178,11 +214,11 @@ export class ArticleAdd extends React.Component<
     const fileEl = document.getElementById('file') as HTMLInputElement
 
     if (fileEl.files) {
-      const thumburl = URL.createObjectURL(fileEl.files[0])
+      const thumb = URL.createObjectURL(fileEl.files[0])
 
       fd.append('image', fileEl.files[0])
       this.setState({
-        thumburl,
+        thumb,
         formData: fd,
       })
       this.props.uploadThumb(fd)
@@ -195,7 +231,7 @@ export class ArticleAdd extends React.Component<
     const content = this.state.postContent!
     const description = this.inputDescription.current!.value
     const slug = this.inputSlug.current!.value
-    const { thumburl } = this.state
+    const { thumb } = this.state
     const {
       radioPublic,
       radioPublish,
@@ -219,7 +255,7 @@ export class ArticleAdd extends React.Component<
       this.showNotice({ type: 'warn', content: 'slug不能为空！' })
       return
     }
-    if (!thumburl) {
+    if (!thumb) {
       this.showNotice({ type: 'warn', content: '文章缩略图不能为空！' })
       return
     }
@@ -254,7 +290,7 @@ export class ArticleAdd extends React.Component<
       author: 'admin',
       password,
       extends: [],
-      thumb: thumburl,
+      thumb: thumb,
     }
     // this.props.uploadThumb(this.state.formData)
     this.props.addArticle(article)
@@ -283,10 +319,10 @@ export class ArticleAdd extends React.Component<
   }
 
   renderThumb(): JSX.Element | void {
-    const { thumburl } = this.state
-    return thumburl ? (
+    const { thumb } = this.state
+    return thumb ? (
       <div className={styles.thumb}>
-        <img src={thumburl} alt="缩略图" />
+        <img src={thumb} alt="缩略图" />
       </div>
     ) : (
       <div className={styles.thumb}>

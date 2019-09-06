@@ -4,6 +4,7 @@ export interface NavModel {
 
 export namespace NavModel {
   export enum Filter {
+    HOME = 'HOME',
     DASHBOARD = 'DASHBOARD',
     ARTICLE = 'ARTICLE',
     ARTICLE_ADD = 'ARTICLE_ADD',

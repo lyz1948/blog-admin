@@ -9,9 +9,11 @@ import {
   faBell,
   // faAngleDown,
 } from '@fortawesome/free-solid-svg-icons'
+import { UserModel } from '@app/store/models'
 
 export namespace TopNav {
   export interface IProps {
+    user: UserModel
     logout: () => void
   }
 }
@@ -23,7 +25,7 @@ export class TopNav extends React.Component<TopNav.IProps> {
   }
   
   render() {
-    const { logout } = this.props
+    const { user, logout } = this.props
     return (
       <div className={styles.topNav}>
         <Row>
@@ -51,7 +53,7 @@ export class TopNav extends React.Component<TopNav.IProps> {
               <li className={styles.item}>
                 <Image
                   className={styles.avatar}
-                  src="https://avatars1.githubusercontent.com/u/15190827?s=460&v=4"
+                  src={user.avatar}
                   roundedCircle
                 />
               </li>

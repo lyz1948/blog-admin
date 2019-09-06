@@ -8,7 +8,6 @@ import {
 } from '../index'
 import { INotice } from '@app/interfaces/notication'
 import { UserActions } from '@app/store/actions'
-import * as CONFIG from '../../config'
 import { UserModel } from '@app/store/models';
 
 export namespace TagComp {
@@ -58,31 +57,10 @@ export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
     this.updateUser = this.updateUser.bind(this)
   }
 
-  componentWillMount() {
-    let userInfo = localStorage.getItem(CONFIG.APP.TOKEN_KEY) as any
-    try {
-      userInfo = JSON.parse(userInfo)
-      this.setState({
-        userInfo,
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  componentDidMount() {
-    this.getUserInfo()
-  }
-
-  componentWillUpdate() {
-    console.log('update');
-    console.log(this.props.user);
-  }
-  
   getUserInfo() {
-    const { username, slogan } = this.state.userInfo
+    const { username } = this.props.user
     this.inputName.current!.value = username
-    this.inputSlogan.current!.value = slogan
+    // this.inputSlogan.current!.value = slogan
   }
 
   openModal(id: string) {

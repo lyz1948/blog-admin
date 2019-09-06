@@ -40,6 +40,13 @@ export const fetchArticle = <T>() => {
 }
 
 /**
+ * 获取文章列表
+ */
+export const getArticle = (id: any) => {
+  return service.get(`/article/${id}`)
+}
+
+/**
  * 添加文章
  * @param article 文章对象
  */
@@ -133,7 +140,7 @@ export const signUp = (user: UserModel): Promise<UserModel> => {
 /**
  * 获取用户列表
  */
-export const fetchUser = (): Promise<UserModel> => {
+export const fetchUsers = (): Promise<UserModel> => {
   return service.get('/user')
 }
 
@@ -141,8 +148,8 @@ export const fetchUser = (): Promise<UserModel> => {
  * 获取指定用户
  * @param id 用户id
  */
-export const getUser = (id: UserModel): Promise<UserModel> => {
-  return service.post(`/user/${id}`)
+export const getUser = <T>() => {
+  return service.get<IFatchData<T>>(`/user/admin`)
 }
 
 export const updateUser = (userProfiel: UserModel): Promise<IResponseData> => {
