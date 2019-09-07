@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions'
-import { ArticleModel, CategoryModel } from '@app/store/models'
+import { CategoryModel } from '@app/store/models'
 import * as API from '../../api'
 
 export namespace ArticleActions {
@@ -7,7 +7,6 @@ export namespace ArticleActions {
     GET_ARTICLE_LIST = 'GET_ARTICLE_LIST',
     GET_ARTICLE = 'GET_ARTICLE',
     ADD_ARTICLE = 'ADD_ARTICLE',
-    EDIT_ARTICLE = 'EDIT_ARTICLE',
     UPDATE_ARTICLE = 'UPDATE_ARTICLE',
     DELETE_ARTICLE = 'DELETE_ARTICLE',
     UPLOAD_ARTICLE_THUMB = 'UPLOAD_ARTICLE_THUMB',
@@ -34,7 +33,7 @@ export namespace ArticleActions {
   export const addArticle = createAction(Type.ADD_ARTICLE, API.addArticle)
   export const deleteArticle = createAction(Type.DELETE_ARTICLE, API.deleteArticle)
   export const uplodThumb = createAction(Type.UPLOAD_ARTICLE_THUMB, API.uploadThumb)
-  export const editArticle = createAction<PartialPick<ArticleModel, '_id'>>(Type.EDIT_ARTICLE)
+  export const updateArticle = createAction(Type.UPDATE_ARTICLE, API.updateArticle)
   
   // USER
   export const getUser = createAction(Type.GET_USER, API.getUser)

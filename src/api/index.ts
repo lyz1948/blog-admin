@@ -40,10 +40,19 @@ export const fetchArticle = <T>() => {
 }
 
 /**
- * 获取文章列表
+ * 获取文章列表详情
  */
 export const getArticle = (id: any) => {
   return service.get(`/article/${id}`)
+}
+
+/**
+ * 更新文章
+ */
+export const updateArticle = (id: any, newArticle:  ArticleModel) => {
+  console.log('id2', id);
+  
+  return service.put(`/article/${id}`, newArticle)
 }
 
 /**
@@ -54,6 +63,7 @@ export const addArticle = (article: ArticleModel) => {
   return service.post('/article', { ...article })
 }
 
+// 上传文章缩略图
 export const uploadThumb = (file: any): Promise<IResponseData> => {
   return service.post('/upload/article', file)
 }

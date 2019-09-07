@@ -1,27 +1,24 @@
 import {
-  ArticleModel,
-  TodoModel,
   UserModel,
-  NavModel,
-  CategoryModel,
   TagModel,
+  NavModel,
+  ArticleModel,
+  CategoryModel,
 } from '../models'
 
 export interface RootState {
-  articles: RootState.ArticleState
   categories: RootState.CategoryState
+  articles: RootState.ArticleState
   tags: RootState.TagState
   user: RootState.UserState
-  todos: RootState.TodoState
   nav: RootState.NavState
   router?: any
 }
 
 export namespace RootState {
-  export type ArticleState = ArticleModel[]
   export type CategoryState = CategoryModel[]
+  export type ArticleState = ArticleModel[]
   export type TagState = TagModel[]
-  export type TodoState = TodoModel[]
   export type UserState = UserModel
   export type NavState = NavModel
 }

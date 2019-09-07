@@ -55,7 +55,7 @@ export const articleReducer = handleActions<RootState.ArticleState, ArticleModel
       }
       return state
     },
-    [ArticleActions.Type.EDIT_ARTICLE]: (state, action) => {
+    [ArticleActions.Type.UPDATE_ARTICLE]: (state, action) => {
       return state.map(article => {
         if (!article || !action || !action.payload) {
           return article

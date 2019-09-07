@@ -24,8 +24,6 @@ export class SideBar extends React.Component<Nav.IProps> {
 
   renderProfile(): JSX.Element | void {
     const { user } = this.props
-    console.log(user);
-    
       {
         return user ? (
           <div className={styles.profile}>
@@ -34,7 +32,7 @@ export class SideBar extends React.Component<Nav.IProps> {
             <div className={styles.name}>{user.username}</div>
             <div className={styles.slogan}>{user.slogan}</div>
           </div>
-        ) : (<div></div>)
+        ) : (<div>用户不见了</div>)
       }
   }
 

@@ -16,12 +16,6 @@ const initialState: RootState.CategoryState = [
 
 export const categoryReducer = handleActions<RootState.CategoryState, CategoryModel>(
   {
-    [CategoryActions.Type.ADD_CATEGORY]: (state, action) => {
-      if (action.payload) {
-        return [ action.payload as any, ...state ]
-      }
-      return state
-    },
     [CategoryActions.Type.GET_CATEGORY]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { result } = action.payload!
@@ -32,9 +26,13 @@ export const categoryReducer = handleActions<RootState.CategoryState, CategoryMo
       }
       return state
     },
+    [CategoryActions.Type.ADD_CATEGORY]: (state, action) => {
+      if (action.payload) {
+        return [ action.payload as any, ...state ]
+      }
+      return state
+    },
     [CategoryActions.Type.SELECT_CATEGORY]: (state, action) => {
-      console.log('set category status');
-      
       return state.map(category => {
         if (!category || !action || !action.payload) {
           return category

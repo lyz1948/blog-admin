@@ -1,8 +1,3 @@
-export { Footer } from './Footer'
-export { Header } from './Header'
-export { TodoTextInput } from './TodoTextInput'
-export { TodoList } from './TodoList'
-
 export { Article, ArticleAdd } from './Article'
 export { Tag } from './Tag'
 export { Category } from './Category'

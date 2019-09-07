@@ -44,19 +44,15 @@ export namespace ArticleAdd {
     article: ArticleModel
     tags: TagModel[]
     categories: CategoryModel[]
-    // getTag: typeof TagActions.getTag
-    // getCategory: typeof CategoryActions.getCategory
-    // getArticle: typeof ArticleActions.getArticle
     addArticle: typeof ArticleActions.addArticle
+    updateArticle: typeof ArticleActions.updateArticle
     uploadThumb: typeof ArticleActions.uplodThumb
     selectTag: typeof TagActions.selectTag
     selectCategory: typeof CategoryActions.selectCategory
   }
 
   export interface IState {
-    Public?: string
-    Password?: string
-    Secret?: string
+    isUpdate?: boolean
     postContent?: string
     radioPublic?: number
     radioPublish?: number
@@ -91,6 +87,7 @@ export class ArticleAdd extends React.Component<
   constructor(props: ArticleAdd.IProps, context?: any) {
     super(props, context)
     this.state = {
+      isUpdate: false,
       postContent: '',
       radioPublic: 1,
       radioPublish: 0,
@@ -110,41 +107,40 @@ export class ArticleAdd extends React.Component<
     this.changePublishRadio = this.changePublishRadio.bind(this)
   }
 
-  componentWillMount() {
-    // this.props.getTag()
-    // this.props.getCategory()
-  }
-
   componentDidMount() {
     this._processArticle()
   }
 
   _processArticle() {
-    const { article, categories } = this.props
+    const { article, categories, tags } = this.props
 
     if (article) {
-      const { title, keywords, description, content, thumb, state, category } = article
+      const { title, keywords, description, content, thumb, state, category, tag } = article
       this.inputTitle.current!.value = title
       this.inputKeyword.current!.value = keywords.join(' ')
       this.inputDescription.current!.value = description
       this.inputDescription.current!.value = description
       
-      const list: any[] = []
+      const cateList: any[] = []
+      const tagList: any[] = []
       categories.forEach(it => {
-        category.forEach(cat => {
-          if (it._id == cat) {
-            list.push(it)
-            it.isSelected = true
-            this.props.selectCategory({ _id: cat })
-          }
-        })
+        if (category.includes(it._id)) {
+          cateList.push(it)
+        }
+      })
+      tags.forEach(it => {
+        if (tag.includes(it._id!)) {
+          tagList.push(it)
+        }
       })
 
       this.setState({
-        postContent: content,
         thumb,
+        isUpdate: true,
+        postContent: content,
         radioPublish: state,
-        checkedValues: list
+        checkedValues: cateList,
+        checkedTagValues: tagList
       })
     }
   }
@@ -231,7 +227,7 @@ export class ArticleAdd extends React.Component<
     const content = this.state.postContent!
     const description = this.inputDescription.current!.value
     const slug = this.inputSlug.current!.value
-    const { thumb } = this.state
+    const { thumb, isUpdate } = this.state
     const {
       radioPublic,
       radioPublish,
@@ -288,13 +284,20 @@ export class ArticleAdd extends React.Component<
       origin: Number(radioPublish),
       state: Number(radioPublic),
       author: 'admin',
-      password,
       extends: [],
-      thumb: thumb,
+      password,
+      thumb,
     }
     // this.props.uploadThumb(this.state.formData)
-    this.props.addArticle(article)
-    this.showNotice({ type: 'success', content: '添加成功！' })
+    if (isUpdate) {
+      const { _id } = this.props.article
+      
+      this.props.updateArticle(_id, article)
+      this.showNotice({ type: 'success', content: '更新成功！' })
+    } else {
+      this.props.addArticle(article)
+      this.showNotice({ type: 'success', content: '添加成功！' })
+    }
   }
 
   showNotice(obj: ArticleAdd.INotice) {
@@ -352,8 +355,7 @@ export class ArticleAdd extends React.Component<
   }
 
   renderMain(): JSX.Element | void {
-    // const tagType = ['primary', 'secondary', 'success', 'danger', 'warning', 'info']
-    const { show, type, content } = this.state
+    const { show, type, content, isUpdate } = this.state
     return (
       <div className="flex70">
         <Notication
@@ -441,7 +443,7 @@ export class ArticleAdd extends React.Component<
               variant="primary"
               onClick={(e: any) => this.handleSubmit(e)}
             >
-              创建文章
+              { isUpdate ? '更新文章' : '创建文章' }
             </Button>
           </div>
         </div>

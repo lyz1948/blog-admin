@@ -41,6 +41,8 @@ const FILTER_COMPONMENT = (Object.keys(
   NavModel.Filter
 ) as (keyof typeof NavModel.Filter)[]).map(comp => NavModel.Filter[comp])
 
+const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time))
+
 @connect(
   (
     state: RootState,
@@ -76,6 +78,8 @@ export class App extends React.Component<App.IProps, App.IState> {
     this.filterCompoent = this.filterCompoent.bind(this)
     this.hasPermission = this.hasPermission.bind(this)
     this.handleFilterChange = this.handleFilterChange.bind(this)
+    this.handleNewArticle = this.handleNewArticle.bind(this)
+    this.handleUpdateArticle = this.handleUpdateArticle.bind(this)
   }
 
   componentWillMount() {
@@ -93,11 +97,13 @@ export class App extends React.Component<App.IProps, App.IState> {
     }
     // 用户信息
     actions.getUser()
-
-    this.getUserInfoFromStorage()
+    
+    // 获取签名
+    this.getUserTokenFromStorage()
   }
-
+  
   componentDidMount() {
+    // 是否验证通过
     this.hasPermission()
   }
   
@@ -110,7 +116,8 @@ export class App extends React.Component<App.IProps, App.IState> {
       return
     }
   }
-
+  
+  // 登出
   logout() {
     localStorage.removeItem(CONFIG.APP.TOKEN_KEY)
     window.location.reload()
@@ -126,16 +133,39 @@ export class App extends React.Component<App.IProps, App.IState> {
     this.props.actions.addArticle(article)
   }
 
+  handleUpdateArticle(_id: string, article: ArticleModel): any {
+    const { actions, history } = this.props
+    actions.updateArticle(_id, article)
+    sleep(1000).then(() => {
+      history.push('#ARTICLE_LIST')
+      actions.getArticleList()
+    })
+  }
+
   handleEdit(id: number) {
-    const { articles } = this.props
+    const { articles, categories, tags } = this.props
     const article = articles.find(it => it.id === id)
+    if (article) {
+      // 获取文章所属分类
+      categories.forEach(it => {
+        if (article.category.includes(it._id)) {
+          it.isSelected = true
+        }
+      })
+      // 获取文章的标签
+      tags.forEach(it => {
+        if (article.tag.includes(it._id!)) {
+          it.isSelected = true
+        }
+      })
+    }
     this.setState({
       editArticle: article
     })
     this.props.history.push(`#${NavModel.Filter.ARTICLE_ADD}?id=${id}`)
   }
 
-  getUserInfoFromStorage() {
+  getUserTokenFromStorage() {
     let token = localStorage.getItem(CONFIG.APP.TOKEN_KEY) as any
     try {
       token = JSON.parse(token)
@@ -169,13 +199,11 @@ export class App extends React.Component<App.IProps, App.IState> {
           tags={tags}
           article={editArticle}
           categories={categories}
-          // getTag={actions.getTag}
-          // getCategory={actions.getCategory}
-          // getArticle={actions.getArticle}
           uploadThumb={actions.uplodThumb}
           selectTag={actions.selectTag}
           selectCategory={actions.selectCategory}
-          addArticle={this.handleNewArticle.bind(this)}
+          addArticle={this.handleNewArticle}
+          updateArticle={this.handleUpdateArticle}
         />
       case 'ARTICLE_CATEGORY':
         return <Category
@@ -184,7 +212,6 @@ export class App extends React.Component<App.IProps, App.IState> {
           deleteCategory={actions.deleteCategory}
           editCategory={actions.editCategory}
         />
-        // return <CategoryApp categories={categories} />
       case 'ARTICLE_TAG':
         return <Tag
           tags={tags} 
