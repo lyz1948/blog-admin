@@ -33,14 +33,14 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
       return state
     },
     [TagActions.Type.SELECT_TAG]: (state, action) => {
-      return state.map(category => {
-        if (!category || !action || !action.payload) {
-          return category
+      return state.map(tag => {
+        if (!tag || !action || !action.payload) {
+          return tag
         }
-        if (category._id === action.payload._id) {
-          category.isSelected = !category.isSelected
+        if (tag._id === action.payload._id) {
+          tag.isSelected = !tag.isSelected
         }
-        return category
+        return tag
       })
     },
     [TagActions.Type.DELETE_TAG]: (state, action) => {

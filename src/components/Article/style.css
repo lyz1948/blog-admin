@@ -17,8 +17,9 @@
   cursor: pointer;
 }
 
-.inputWrap .labelBox:hover {
-  background-color: #17a2b8;
+.inputWrap .labelName:hover {
+  cursor: pointer;
+  /* background-color: #17a2b8; */
 }
 
 .inputWrap .labelBox.info {

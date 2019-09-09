@@ -52,7 +52,7 @@ export class User extends React.Component<User.IProps, User.IState> {
     
     password = password ? Base64.encode(password) : password
 
-    const res = await this.props.onLogin({ username, password })
+    this.props.onLogin({ username, password })
 
     if (error) {
       this.showNotice({ type: 'warn', content: '用户名或密码错误' })

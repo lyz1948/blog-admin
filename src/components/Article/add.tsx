@@ -160,41 +160,31 @@ export class ArticleAdd extends React.Component<
 
   changeTag(tag: any, event: React.ChangeEvent<HTMLInputElement>) {
     const { checked } = event.target
-    const { checkedTagValues } = this.state
-
+    let { checkedTagValues } = this.state
     if (
-      checked &&
-      checkedTagValues!.filter((item: any) => item !== tag._id)
+      checked && checkedTagValues!.filter((item: any) => item._id !== tag._id)
     ) {
-      checkedTagValues!.push(tag._id)
+      checkedTagValues!.push(tag)
+    } else {
+      checkedTagValues = checkedTagValues!.filter((item: any) => item._id !== tag._id)
     }
-    this.setState(() => {
-      let temp = checkedTagValues!.filter((item: any) => item !== tag._id)
-      return { checkedTagValues: temp }
-    })
-    this.setState({
-      checkedTagValues,
-    })
+
     this.props.selectTag({ _id: tag._id })
   }
 
   changeCategory(cate: any, event: React.ChangeEvent<HTMLInputElement>) {
     const { checked } = event.target
-    const { checkedValues } = this.state
+    let { checkedValues } = this.state
 
     if (
       checked &&
-      checkedValues!.filter((item: any) => item !== cate._id)
+      checkedValues!.filter((item: any) => item._id !== cate._id)
     ) {
-      checkedValues!.push(cate._id)
+      checkedValues!.push(cate)
+    } else {
+      checkedValues = checkedValues!.filter((item: any) => item._id !== cate._id)
     }
-    this.setState(() => {
-      let temp = checkedValues!.filter((item: any) => item !== cate._id)
-      return { checkedValues: temp }
-    })
-    this.setState({
-      checkedValues,
-    })
+
     this.props.selectCategory({ _id: cate._id })
   }
 
@@ -217,21 +207,26 @@ export class ArticleAdd extends React.Component<
   handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
     const title = this.inputTitle.current!.value
-    const content = this.state.postContent!
     const description = this.inputDescription.current!.value
-    const { thumb, isUpdate } = this.state
+
     const {
+      thumb,
+      isUpdate,
+      postContent,
       radioPublic,
       radioPublish,
       checkedValues,
       checkedTagValues,
     } = this.state
 
+    console.log('checkedValues', checkedValues);
+    console.log('checkedTagValues', checkedTagValues);
+    
     if (!title) {
       this.showNotice({ type: 'warn', content: '标题不能为空！' })
       return
     }
-    if (!content) {
+    if (!postContent) {
       this.showNotice({ type: 'warn', content: '内容不能为空！' })
       return
     }
@@ -258,6 +253,16 @@ export class ArticleAdd extends React.Component<
           password = this.inputPassword.current!.value
         }
       }
+    }
+
+    checkedValues.map((cate: any) => {
+      delete cate.isSelected
+    })
+
+    if(checkedTagValues && checkedTagValues.length > 0) {
+      checkedTagValues.map((tag: any) => {
+        delete tag.isSelected
+      })
     }
 
     const article: ArticleModel = {
