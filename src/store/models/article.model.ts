@@ -4,7 +4,6 @@ export interface ArticleModel {
   title: string
   content: string
   description: string
-  slug: string
   author: string
   tag: string[]
   category: string[]
@@ -25,9 +24,22 @@ export namespace ArticleModel {
     SHOW_PUBLISH = 'PUBLISH',
     SHOW_PUBLIC = 'PUBLIC',
   }
-  export enum State {
-    Password = 0,
-    Public = 1,
-    Secret = -1,
+
+  export enum EStatePublic {
+    Password = 0, // 密码访问
+    Public = 1, // 公开
+    Secret = -1, // 隐藏
+  }
+
+  export enum EStatePublish {
+    Draft = 0, // 草稿
+    Published = 1, // 已发布
+    Recycle = -1, // 发布过已撤回
+  }
+
+  export enum EStateOrigin {
+    Original = 0, // 原创
+    Reprint = 1, // 装载
+    Hybrid = 2, // 混合
   }
 }

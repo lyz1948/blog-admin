@@ -15,13 +15,6 @@ const initialState: RootState.TagState = [
 
 export const tagReducer = handleActions<RootState.TagState, TagModel>(
   {
-    [TagActions.Type.ADD_TAG]: (state, action) => {
-      if (action.payload && action.payload.result) {
-        const { result } = action.payload
-        return [ result, ...state ]
-      }
-      return state
-    },
     [TagActions.Type.GET_TAG]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { data } = action.payload.result!
@@ -29,6 +22,13 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
           it.isSelected = false
         })
         return [ ...data ]
+      }
+      return state
+    },
+    [TagActions.Type.ADD_TAG]: (state, action) => {
+      if (action.payload && action.payload.result) {
+        const { result } = action.payload
+        return [ result, ...state ]
       }
       return state
     },

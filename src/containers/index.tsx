@@ -111,7 +111,7 @@ export class App extends React.Component<App.IProps, App.IState> {
     const { userinfo } = this.state
      // 凭证过期
      if (!userinfo || userinfo.expires_in < Date.now()) {
-      localStorage.removeItem(CONFIG.APP.TOKEN_KEY)
+      localStorage.removeItem(CONFIG.APP.tokenKey)
       this.props.history.push('/login')
       return
     }
@@ -119,7 +119,7 @@ export class App extends React.Component<App.IProps, App.IState> {
   
   // 登出
   logout() {
-    localStorage.removeItem(CONFIG.APP.TOKEN_KEY)
+    localStorage.removeItem(CONFIG.APP.tokenKey)
     window.location.reload()
   }
 
@@ -138,7 +138,6 @@ export class App extends React.Component<App.IProps, App.IState> {
     actions.updateArticle(_id, article)
     sleep(1000).then(() => {
       history.push('#ARTICLE_LIST')
-      actions.getArticleList()
     })
   }
 
@@ -166,7 +165,7 @@ export class App extends React.Component<App.IProps, App.IState> {
   }
 
   getUserTokenFromStorage() {
-    let token = localStorage.getItem(CONFIG.APP.TOKEN_KEY) as any
+    let token = localStorage.getItem(CONFIG.APP.tokenKey) as any
     try {
       token = JSON.parse(token)
     } catch (error) {

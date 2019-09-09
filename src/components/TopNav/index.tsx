@@ -7,6 +7,7 @@ import {
   faBars,
   faEnvelope,
   faBell,
+  faLock,
   // faAngleDown,
 } from '@fortawesome/free-solid-svg-icons'
 import { UserModel } from '@app/store/models'
@@ -58,7 +59,9 @@ export class TopNav extends React.Component<TopNav.IProps> {
                 />
               </li>
               <li className={styles.item}>
-              <span className={styles.author} onClick={logout}>Logout</span>
+              <span className={styles.author} onClick={logout}>
+              <FontAwesomeIcon icon={faLock} />
+              </span>
                 {/* <Dropdown>
                   <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
                     <span className={styles.author}>Hello Man</span>

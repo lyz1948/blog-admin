@@ -18,11 +18,11 @@ export const categoryReducer = handleActions<RootState.CategoryState, CategoryMo
   {
     [CategoryActions.Type.GET_CATEGORY]: (state, action) => {
       if (action.payload && action.payload.result) {
-        const { result } = action.payload!
-        result.map((it: CategoryModel) => {
+        const { data } = action.payload.result!
+        data.map((it: CategoryModel) => {
           it.isSelected = false
         })
-        return [ ...result ]
+        return [ ...data ]
       }
       return state
     },

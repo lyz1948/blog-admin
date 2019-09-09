@@ -4,8 +4,8 @@ import classNames from 'classnames'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
 import { Form, Button } from 'react-bootstrap'
-import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
-import { CategoryModel, TagModel, ArticleModel } from '@app/store/models'
+import { ArticleActions, CategoryActions, TagActions } from '../../store/actions'
+import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBold,
@@ -21,22 +21,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { Notication, FancyInput, FancyTextarea } from '../index'
 
-export enum IStatePublic {
-  Password = 0, // 密码访问
-  Public = 1, // 公开
-  Secret = -1, // 隐藏
-}
-
 const STATE_VALUE = [
-  { text: '公开', id: IStatePublic.Public },
-  { text: '密码访问', id: IStatePublic.Password },
-  { text: '私密', id: IStatePublic.Secret },
+  { text: '公开', id: ArticleModel.EStatePublic.Public },
+  { text: '密码访问', id: ArticleModel.EStatePublic.Password },
+  { text: '私密', id: ArticleModel.EStatePublic.Secret },
 ]
 
 const PUBLISH_VALUE = [
-  { text: '原创', id: 0 },
-  { text: '转载', id: 1 },
-  { text: '混合', id: -1 },
+  { text: '原创', id: ArticleModel.EStateOrigin.Original },
+  { text: '转载', id: ArticleModel.EStateOrigin.Reprint },
+  { text: '混合', id: ArticleModel.EStateOrigin.Hybrid },
 ]
 
 export namespace ArticleAdd {
@@ -78,7 +72,6 @@ export class ArticleAdd extends React.Component<
 > {
   private inputTitle = React.createRef<HTMLInputElement>()
   private inputKeyword = React.createRef<HTMLInputElement>()
-  private inputSlug = React.createRef<HTMLInputElement>()
   private inputPassword = React.createRef<HTMLInputElement>()
   private inputDescription = React.createRef<HTMLInputElement>()
   private inputCategory = React.createRef<HTMLInputElement>()
@@ -171,12 +164,12 @@ export class ArticleAdd extends React.Component<
 
     if (
       checked &&
-      checkedTagValues!.filter((item: any) => item._id !== tag._id)
+      checkedTagValues!.filter((item: any) => item !== tag._id)
     ) {
-      checkedTagValues!.push(tag)
+      checkedTagValues!.push(tag._id)
     }
     this.setState(() => {
-      let temp = checkedTagValues!.filter((item: any) => item._id !== tag._id)
+      let temp = checkedTagValues!.filter((item: any) => item !== tag._id)
       return { checkedTagValues: temp }
     })
     this.setState({
@@ -191,12 +184,12 @@ export class ArticleAdd extends React.Component<
 
     if (
       checked &&
-      checkedValues!.filter((item: any) => item._id !== cate._id)
+      checkedValues!.filter((item: any) => item !== cate._id)
     ) {
-      checkedValues!.push(cate)
+      checkedValues!.push(cate._id)
     }
     this.setState(() => {
-      let temp = checkedValues!.filter((item: any) => item._id !== cate._id)
+      let temp = checkedValues!.filter((item: any) => item !== cate._id)
       return { checkedValues: temp }
     })
     this.setState({
@@ -226,7 +219,6 @@ export class ArticleAdd extends React.Component<
     const title = this.inputTitle.current!.value
     const content = this.state.postContent!
     const description = this.inputDescription.current!.value
-    const slug = this.inputSlug.current!.value
     const { thumb, isUpdate } = this.state
     const {
       radioPublic,
@@ -245,10 +237,6 @@ export class ArticleAdd extends React.Component<
     }
     if (!description) {
       this.showNotice({ type: 'warn', content: '描述不能为空！' })
-      return
-    }
-    if (!slug) {
-      this.showNotice({ type: 'warn', content: 'slug不能为空！' })
       return
     }
     if (!thumb) {
@@ -276,7 +264,6 @@ export class ArticleAdd extends React.Component<
       title: this.inputTitle.current!.value,
       content: this.state.postContent!,
       description: this.inputDescription.current!.value,
-      slug: this.inputSlug.current!.value,
       tag: [...checkedTagValues!],
       category: [...checkedValues!],
       keywords: [...this.inputKeyword.current!.value.split(',')],
@@ -379,10 +366,6 @@ export class ArticleAdd extends React.Component<
           <div className="inputWrap">
             <span className="label">文章关键字</span>
             <FancyInput ref={this.inputKeyword} tip={'文章关键字'} />
-          </div>
-          <div className="inputWrap">
-            <span className="label">文章slug</span>
-            <FancyInput ref={this.inputSlug} tip={'文章slug'} />
           </div>
           <div className="inputWrap">
             <span className="label">文章描述</span>

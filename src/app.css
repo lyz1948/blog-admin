@@ -52,6 +52,10 @@ ul {
   flex: 1;
 }
 
+:global(.flex-center){
+  justify-content: center;
+}
+
 :global(.pdl10){
   padding-left: 10px;
 }
@@ -204,6 +208,30 @@ ul {
 :global(.table-dark) {
   color: #fff;
   background-color: #2e4050 !important;
+}
+
+:global(.table-dark td) {
+  max-width: 200px;
+}
+
+:global(.table-dark td.thumb-box) {
+  width: 120px;
+  height: 100px;
+}
+:global(.page-link) {
+  color: #fff;
+  background-color: #394959;
+  border: 1px solid #454d55;
+}
+:global(.page-link:hover) {
+  color: #fff;
+  border: 1px solid #17a2b8;
+  background-color: #17a2b8;
+}
+
+:global(.page-item.active .page-link) {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
 }
 
 :global(.btn) {

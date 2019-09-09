@@ -12,13 +12,13 @@ import {
 import { NavModel } from '../store/models'
 
 export const APP = {
-  PORT: 3000,
-  ERR_NO: 200,
-  ERR_NO201: 201,
-  API: 'http://localhost:5381/api/',
-  IS_PROD: ENVIROMENT.isProd,
-  TOKEN_KEY: 'blogKey',
-  VIEW: 'http://localhost:3000/'
+  port: 3000,
+  errno: 200,
+  isProd: ENVIROMENT.isProd,
+  tokenKey: 'blogKey',
+  baseUrl: 'http://localhost:5381/',
+  apiUrl: 'http://localhost:5381/api/',
+  viewUrl: 'http://localhost:3000/'
 }
 
 export const SIDER_MENU = [

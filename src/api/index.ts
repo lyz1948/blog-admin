@@ -8,7 +8,7 @@ const token = UTILS.getToken()
 
 const service = axios.create({
   timeout: 5000,
-  baseURL: CONFIG.APP.API,
+  baseURL: CONFIG.APP.apiUrl,
 })
 
 service.interceptors.request.use((config: any) => {

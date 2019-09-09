@@ -54,8 +54,6 @@ export class User extends React.Component<User.IProps, User.IState> {
 
     const res = await this.props.onLogin({ username, password })
 
-    console.log('res', res);
-    
     if (error) {
       this.showNotice({ type: 'warn', content: '用户名或密码错误' })
       return
