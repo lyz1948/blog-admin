@@ -83,7 +83,7 @@ export class App extends React.Component<App.IProps, App.IState> {
   }
 
   componentWillMount() {
-    const { categories, tags, articles, actions } = this.props
+    const { categories, tags, articles, actions, user } = this.props
     
     // 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
     if (articles.length < 2) {
@@ -95,6 +95,8 @@ export class App extends React.Component<App.IProps, App.IState> {
     if (categories.length < 2) {
       actions.getCategory()
     }
+
+    console.log('user', user)
     // 用户信息
     actions.getUser()
     

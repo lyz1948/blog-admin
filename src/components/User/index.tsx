@@ -4,9 +4,9 @@ import classNames from 'classnames'
 import { Base64 } from 'js-base64'
 import { Form, Button } from 'react-bootstrap'
 import { UserActions } from '@app/store/actions'
-import { INotice } from '@app/interfaces/notication'
+import { INotice } from '@app/interfaces/notice'
 import { FancyInput, Notication } from '../index'
-import { UserModel } from '@app/store/models';
+import { UserModel } from '@app/store/models'
 
 export namespace User {
   export interface IProps {

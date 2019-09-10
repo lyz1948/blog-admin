@@ -6,9 +6,9 @@ import {
   /* Notication, ConfirmModal, */ FancyInput,
   FancyTextarea,
 } from '../index'
-import { INotice } from '@app/interfaces/notication'
+import { INotice } from '@app/interfaces/notice'
 import { UserActions } from '@app/store/actions'
-import { UserModel } from '@app/store/models';
+import { UserModel } from '@app/store/models'
 
 export namespace TagComp {
   export interface IProps {

@@ -22,13 +22,14 @@ export const categoryReducer = handleActions<RootState.CategoryState, CategoryMo
         data.map((it: CategoryModel) => {
           it.isSelected = false
         })
-        return [ ...data ]
+        return data
       }
       return state
     },
     [CategoryActions.Type.ADD_CATEGORY]: (state, action) => {
-      if (action.payload) {
-        return [ action.payload as any, ...state ]
+      if (action.payload && action.payload.result) {
+        const { result } = action.payload
+        return [ result, ...state ]
       }
       return state
     },

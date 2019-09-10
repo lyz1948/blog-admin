@@ -3,7 +3,8 @@ import * as styles from './style.css'
 import { CategoryModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
-import { ConfirmModal, FancyInput, FancyTextarea } from '../index'
+import { ConfirmModal, Notication, FancyInput, FancyTextarea } from '../index'
+import { INotice } from '../../interfaces/notice'
 
 export namespace CategoryManage {
   export interface IProps {
@@ -20,11 +21,6 @@ export namespace CategoryManage {
     type: string
     content: string
     isUpdate: boolean
-  }
-
-  export interface INotice {
-    type: string
-    content: string
   }
 }
 
@@ -47,6 +43,8 @@ export class Category extends React.Component<
       content: '添加成功',
       isUpdate: false,
     }
+
+    this._handleResize = this._handleResize.bind(this)
   }
 
   openModal(id: string) {
@@ -88,22 +86,27 @@ export class Category extends React.Component<
     }
 
     const cateObj = {
-      name: name,
-      slug: slug,
-      description: description,
+      name,
+      slug,
+      description,
       extends: [],
     }
 
     if (name && slug && description) {
       this.props.addCategory(cateObj)
       this.showNotice({ type: 'success', content: '添加成功' })
-      name = ''
-      slug = ''
-      description = ''
+      this._handleResize()
     }
   }
 
-  showNotice(obj: CategoryManage.INotice) {
+  // 重置
+  _handleResize() {
+    this.inputName.current!.value = ''
+    this.inputSlug.current!.value = ''
+    this.inputDescription.current!.value = ''
+  }
+
+  showNotice(obj: INotice) {
     const { type, content } = obj
     this.setState({
       show: true,
@@ -190,7 +193,7 @@ export class Category extends React.Component<
             <FancyTextarea ref={this.inputDescription} tip={'分类描述'} />
           </div>
           <div className={styles.field}>
-            <Button variant="primary" onClick={this.handleCreate}>
+            <Button variant="primary" onClick={() => this.handleCreate()}>
               { isUpdate ? '更新分类' : '创建分类' }
             </Button>
           </div>
@@ -200,10 +203,19 @@ export class Category extends React.Component<
   }
 
   render() {
-    const { showModal } = this.state
+    const { showModal, show, type, content } = this.state
 
     return (
       <div className="category">
+        <Notication
+          show={show}
+          type={type}
+          content={content}
+          onClose={() => {
+            this.setState({ show: false })
+          }}
+          autohide
+        />
         <ConfirmModal
           show={showModal}
           onHide={() => this.setState({ showModal: false })}

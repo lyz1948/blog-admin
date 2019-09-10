@@ -5,12 +5,6 @@ import classNames from 'classnames'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
 import { Form, Button } from 'react-bootstrap'
-import {
-  ArticleActions,
-  CategoryActions,
-  TagActions,
-} from '../../store/actions'
-import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBold,
@@ -24,7 +18,14 @@ import {
   faInbox,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons'
+import {
+  ArticleActions,
+  CategoryActions,
+  TagActions,
+} from '../../store/actions'
+import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
 import { Notication, FancyInput, FancyTextarea } from '../index'
+import { INotice } from '../../interfaces/notice'
 
 const STATE_VALUE = [
   { text: '公开', id: ArticleModel.EStatePublic.Public },
@@ -63,17 +64,11 @@ export namespace ArticleAdd {
     content: string
     [propName: string]: any
   }
-
-  export interface INotice {
-    type: string
-    content: string
-  }
 }
 
 export class ArticleAdd extends React.Component<
   ArticleAdd.IProps,
-  ArticleAdd.IState,
-  ArticleAdd.INotice
+  ArticleAdd.IState
 > {
   private inputTitle = React.createRef<HTMLInputElement>()
   private inputKeyword = React.createRef<HTMLInputElement>()
@@ -313,7 +308,7 @@ export class ArticleAdd extends React.Component<
     }
   }
 
-  showNotice(obj: ArticleAdd.INotice) {
+  showNotice(obj: INotice) {
     const { type, content } = obj
     this.setState({
       show: true,

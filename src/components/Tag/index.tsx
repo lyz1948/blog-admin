@@ -4,6 +4,7 @@ import { TagModel } from '@app/store/models'
 import { TagActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
 import { Notication, ConfirmModal, FancyInput, FancyTextarea } from '../index'
+import { INotice } from '../../interfaces/notice'
 
 export namespace TagComp {
   export interface IProps {
@@ -21,38 +22,11 @@ export namespace TagComp {
     type: string
     content: string
   }
-
-  export interface INotice {
-    type: string
-    content: string
-  }
 }
-
-// const FancyInput = React.forwardRef((props: any, ref: any) => {
-//   return (
-//     <input
-//       type="text"
-//       ref={ref}
-//       className="formInput"
-//       placeholder={props.tip}
-//     />
-//   )
-// })
-
-// const FancyTextarea = React.forwardRef((props: any, ref: any) => {
-//   return (
-//     <textarea
-//       ref={ref}
-//       className="formTextarea"
-//       placeholder={props.tip}
-//     />
-//   )
-// })
 
 export class Tag extends React.Component<
   TagComp.IProps,
-  TagComp.IState,
-  TagComp.INotice
+  TagComp.IState
 > {
   private inputName = React.createRef<HTMLInputElement>()
   private inputSlug = React.createRef<HTMLInputElement>()
@@ -80,7 +54,7 @@ export class Tag extends React.Component<
     })
   }
 
-  showNotice(obj: TagComp.INotice) {
+  showNotice(obj: INotice) {
     const { type, content } = obj
     this.setState({
       show: true,
@@ -150,6 +124,7 @@ export class Tag extends React.Component<
     }
     this.handleResize()
   }
+
   // 重置
   handleResize() {
     this.inputName.current!.value = ''
@@ -230,7 +205,7 @@ export class Tag extends React.Component<
           <div className={styles.field}>
             <Button
               variant="primary"
-              onClick={this.handleCreate.bind(this)}
+              onClick={() => this.handleCreate()}
             >
               { isUpdate ? '更新标签' : '创建标签' }
             </Button>
