@@ -64,7 +64,7 @@ export const addArticle = (article: ArticleModel) => {
 }
 
 // 上传文章缩略图
-export const uploadThumb = (file: any): Promise<IResponseData> => {
+export const uploadThumb = (file: any): any => {
   return service.post('/upload/article', file)
 }
 

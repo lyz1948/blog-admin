@@ -1,10 +1,15 @@
 import * as React from 'react'
 import * as styles from './style.css'
+import * as CONFIG from '../../config'
 import classNames from 'classnames'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
 import { Form, Button } from 'react-bootstrap'
-import { ArticleActions, CategoryActions, TagActions } from '../../store/actions'
+import {
+  ArticleActions,
+  CategoryActions,
+  TagActions,
+} from '../../store/actions'
 import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -108,12 +113,21 @@ export class ArticleAdd extends React.Component<
     const { article, categories, tags } = this.props
 
     if (article) {
-      const { title, keywords, description, content, thumb, state, category, tag } = article
+      const {
+        title,
+        keywords,
+        description,
+        content,
+        thumb,
+        state,
+        category,
+        tag,
+      } = article
       this.inputTitle.current!.value = title
       this.inputKeyword.current!.value = keywords.join(' ')
       this.inputDescription.current!.value = description
       this.inputDescription.current!.value = description
-      
+
       const cateList: any[] = []
       const tagList: any[] = []
       categories.forEach(it => {
@@ -133,7 +147,7 @@ export class ArticleAdd extends React.Component<
         postContent: content,
         radioPublish: state,
         checkedValues: cateList,
-        checkedTagValues: tagList
+        checkedTagValues: tagList,
       })
     }
   }
@@ -162,11 +176,14 @@ export class ArticleAdd extends React.Component<
     const { checked } = event.target
     let { checkedTagValues } = this.state
     if (
-      checked && checkedTagValues!.filter((item: any) => item._id !== tag._id)
+      checked &&
+      checkedTagValues!.filter((item: any) => item._id !== tag._id)
     ) {
       checkedTagValues!.push(tag)
     } else {
-      checkedTagValues = checkedTagValues!.filter((item: any) => item._id !== tag._id)
+      checkedTagValues = checkedTagValues!.filter(
+        (item: any) => item._id !== tag._id,
+      )
     }
 
     this.props.selectTag({ _id: tag._id })
@@ -182,7 +199,9 @@ export class ArticleAdd extends React.Component<
     ) {
       checkedValues!.push(cate)
     } else {
-      checkedValues = checkedValues!.filter((item: any) => item._id !== cate._id)
+      checkedValues = checkedValues!.filter(
+        (item: any) => item._id !== cate._id,
+      )
     }
 
     this.props.selectCategory({ _id: cate._id })
@@ -200,11 +219,11 @@ export class ArticleAdd extends React.Component<
         thumb,
         formData: fd,
       })
-      this.props.uploadThumb(fd)
+      // const res = await this.props.uploadThumb(fd)
     }
   }
 
-  handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
+  async handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
     const title = this.inputTitle.current!.value
     const description = this.inputDescription.current!.value
@@ -219,9 +238,6 @@ export class ArticleAdd extends React.Component<
       checkedTagValues,
     } = this.state
 
-    console.log('checkedValues', checkedValues);
-    console.log('checkedTagValues', checkedTagValues);
-    
     if (!title) {
       this.showNotice({ type: 'warn', content: '标题不能为空！' })
       return
@@ -259,7 +275,7 @@ export class ArticleAdd extends React.Component<
       delete cate.isSelected
     })
 
-    if(checkedTagValues && checkedTagValues.length > 0) {
+    if (checkedTagValues && checkedTagValues.length > 0) {
       checkedTagValues.map((tag: any) => {
         delete tag.isSelected
       })
@@ -280,15 +296,20 @@ export class ArticleAdd extends React.Component<
       password,
       thumb,
     }
-    // this.props.uploadThumb(this.state.formData)
     if (isUpdate) {
+      // 更新
       const { _id } = this.props.article
-      
       this.props.updateArticle(_id, article)
       this.showNotice({ type: 'success', content: '更新成功！' })
     } else {
-      this.props.addArticle(article)
-      this.showNotice({ type: 'success', content: '添加成功！' })
+      // 先上传缩略图
+      const res = await this.props.uploadThumb(this.state.formData)
+      if (res && res.payload && res.payload.result) {
+        article.thumb = res.payload.result
+        // 添加
+        this.props.addArticle(article)
+        this.showNotice({ type: 'success', content: '添加成功！' })
+      }
     }
   }
 
@@ -317,7 +338,7 @@ export class ArticleAdd extends React.Component<
     const { thumb } = this.state
     return thumb ? (
       <div className={styles.thumb}>
-        <img src={thumb} alt="缩略图" />
+        <img src={CONFIG.APP.baseUrl + thumb} alt="缩略图" />
       </div>
     ) : (
       <div className={styles.thumb}>
@@ -431,7 +452,7 @@ export class ArticleAdd extends React.Component<
               variant="primary"
               onClick={(e: any) => this.handleSubmit(e)}
             >
-              { isUpdate ? '更新文章' : '创建文章' }
+              {isUpdate ? '更新文章' : '创建文章'}
             </Button>
           </div>
         </div>
@@ -504,14 +525,10 @@ export class ArticleAdd extends React.Component<
             </div>
             <div className={styles.inputWrap}>
               <div className={styles.labelBox}>
-              <input
-                  type="checkbox"
-                  id="newTag"
-                  name="newtag"
-                  />
-                  <label className={styles.labelName} htmlFor="newTag">
-                    <FontAwesomeIcon icon={faPlus} />
-                  </label>
+                <input type="checkbox" id="newTag" name="newtag" />
+                <label className={styles.labelName} htmlFor="newTag">
+                  <FontAwesomeIcon icon={faPlus} />
+                </label>
               </div>
             </div>
           </div>
@@ -525,11 +542,13 @@ export class ArticleAdd extends React.Component<
             <p>访问状态 </p>
             <div className={styles.inputWrap}>
               {STATE_VALUE.map((type, idx) => (
-                <div className={
-                  classNames({
-                    [styles.radioBox]: true, 
-                    [styles.info]: this.state.radioPublic === type.id
-                  })} key={idx}>
+                <div
+                  className={classNames({
+                    [styles.radioBox]: true,
+                    [styles.info]: this.state.radioPublic === type.id,
+                  })}
+                  key={idx}
+                >
                   <input
                     type="radio"
                     id={type.text}
@@ -545,23 +564,26 @@ export class ArticleAdd extends React.Component<
             {this.renderPassword()}
             <p className="mt10">发布状态</p>
             <div className={styles.inputWrap}>
-                {PUBLISH_VALUE.map((type, idx) => (
-                  <div className={classNames({
-                    [styles.radioBox]: true, 
-                    [styles.info]: this.state.radioPublish === type.id
-                  })} key={idx}>
-                    <input
-                      type="radio"
-                      id={type.text}
-                      value={type.id}
-                      name="formpublish"
-                      checked={this.state.radioPublish === type.id}
-                      onChange={(e: any) => this.changePublishRadio(e)}
-                    />
-                    <label htmlFor={type.text}>{type.text}</label>
-                  </div>
-                ))}
-              </div>
+              {PUBLISH_VALUE.map((type, idx) => (
+                <div
+                  className={classNames({
+                    [styles.radioBox]: true,
+                    [styles.info]: this.state.radioPublish === type.id,
+                  })}
+                  key={idx}
+                >
+                  <input
+                    type="radio"
+                    id={type.text}
+                    value={type.id}
+                    name="formpublish"
+                    checked={this.state.radioPublish === type.id}
+                    onChange={(e: any) => this.changePublishRadio(e)}
+                  />
+                  <label htmlFor={type.text}>{type.text}</label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -569,7 +591,7 @@ export class ArticleAdd extends React.Component<
           <div className="title">
             <h3>文章缩略图</h3>
           </div>
-          <div className={classNames("content", styles.thumbBox)}>
+          <div className={classNames('content', styles.thumbBox)}>
             <input
               type="file"
               id="file"

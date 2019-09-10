@@ -86,7 +86,7 @@ export class App extends React.Component<App.IProps, App.IState> {
     const { categories, tags, articles, actions } = this.props
     
     // 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
-    if (articles.length <= 2) {
+    if (articles.length < 2) {
       actions.getArticleList()
     }
     if (tags.length < 2) {
@@ -132,14 +132,16 @@ export class App extends React.Component<App.IProps, App.IState> {
     const { actions, history } = this.props
     article.thumb = thumb
     actions.addArticle(article)
+    actions.getArticleList()
     sleep(1000).then(() => {
       history.push('#ARTICLE_LIST')
     })
   }
-
+  
   handleUpdateArticle(_id: string, article: ArticleModel): any {
     const { actions, history } = this.props
     actions.updateArticle(_id, article)
+    actions.getArticleList()
     sleep(1000).then(() => {
       history.push('#ARTICLE_LIST')
     })

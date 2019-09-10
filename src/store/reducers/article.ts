@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions'
 import { RootState } from './state'
 import { ArticleModel } from '../models'
 import { ArticleActions } from '../actions'
+
 const initialState: RootState.ArticleState = [
   {
     _id: '',
