@@ -10,5 +10,7 @@ compiled
 .awcache
 .rpt2_cache
 docs
+dist
+build
 # pm2 config
 ecosystem.config.js
