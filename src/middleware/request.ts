@@ -1,5 +1,5 @@
 import { Middleware } from 'redux'
-import { IResponseData } from '@app/store/types'
+import { IResponseData } from '../interfaces/data'
 
 export const request: Middleware = (store) => (next) => (action) => {
   const { payload, type, ...rest } = action

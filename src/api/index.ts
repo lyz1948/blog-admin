@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as CONFIG from '../config/app.config'
 import * as UTILS from '../utils'
-import { IResponseData } from '@app/store/types'
+import { IResponseData } from '../interfaces/data'
 import { UserModel, ArticleModel, TagModel } from '@app/store/models'
 
 const token = UTILS.getToken()

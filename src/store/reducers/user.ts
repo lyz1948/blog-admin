@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 import { RootState } from './state'
-import { IResponseData } from '../types'
+import { IResponseData } from '../../interfaces/data'
 import { UserActions } from '../actions'
 import * as CONFIG from '../../config/app.config'
 
