@@ -14,3 +14,4 @@ dist
 build
 # pm2 config
 ecosystem.config.js
+ecosystem.json
