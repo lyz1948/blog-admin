@@ -6,7 +6,7 @@ export const GridCard = styled.div`
   flex-grow: 1;
   flex-direction: column;
   padding: 1.5em;
-  margin: 1.5em;
+  margin: 0 1.5em;
   border-radius: 3px;
   box-sizing: border-box;
 `

@@ -35,7 +35,7 @@ export class Dashboard extends React.Component {
   render() {
     return (
       <Container className={styles.module}>
-        <Row>
+        <Row className="pdt20">
           <Container className="col-lg-3 col-sm-6">
             <GridCardDark className="card">
               <Container className="card-heading">
@@ -77,14 +77,16 @@ export class Dashboard extends React.Component {
             </GridCardDark>
           </Container>
         </Row>
-        <Row>
+        <Row className="pdt20">
           <Container className="col-md-4 col-lg-3">
-            <Container className="card-heading">
-              <GridCardParagraph>评论数量</GridCardParagraph>
-            </Container>
-            <Container mt="20px">
-              <TextXLarge>2008</TextXLarge>
-            </Container>
+            <GridCardDark className="card">
+              <Container className="card-heading">
+                <GridCardParagraph>今日访问人数</GridCardParagraph>
+              </Container>
+              <Container mt="20px">
+                <TextXLarge>2008</TextXLarge>
+              </Container>
+            </GridCardDark>
           </Container>
           <Container className="row col-md-8">
             <ReactFC {...doughuntConfigs} />
