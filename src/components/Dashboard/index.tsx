@@ -42,7 +42,7 @@ export class Dashboard extends React.Component {
                 <GridCardParagraph>今日访问人数</GridCardParagraph>
               </Container>
               <Container mt="20px">
-                <TextXLarge>2008</TextXLarge>
+                <TextXLarge>20081</TextXLarge>
               </Container>
             </GridCardDark>
           </Container>
