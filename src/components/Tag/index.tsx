@@ -5,6 +5,7 @@ import { TagActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
 import { Notication, ConfirmModal, FancyInput, FancyTextarea } from '../index'
 import { INotice } from '../../interfaces/notice'
+import { formatDate } from '../../utils'
 
 export namespace TagComp {
   export interface IProps {
@@ -155,7 +156,7 @@ export class Tag extends React.Component<
                   <td>{it.name}</td>
                   <td>{it.description}</td>
                   <td>{it.slug}</td>
-                  <td>{it.update_at}</td>
+                  <td>{formatDate(it.update_at)}</td>
                   <td>
                     <Button
                       size="sm"

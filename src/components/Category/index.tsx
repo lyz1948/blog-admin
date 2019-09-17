@@ -5,6 +5,7 @@ import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
 import { ConfirmModal, Notication, FancyInput, FancyTextarea } from '../index'
 import { INotice } from '../../interfaces/notice'
+import { formatDate } from '../../utils'
 
 export namespace CategoryManage {
   export interface IProps {
@@ -145,7 +146,7 @@ export class Category extends React.Component<
                   <td>{it.name}</td>
                   <td>{it.description}</td>
                   <td>{it.slug}</td>
-                  <td>{it.update_at}</td>
+                  <td>{formatDate(it.update_at)}</td>
                   <td>
                     <Button
                       size="sm"

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import * as CONFIG from '../../config'
 import classNames from 'classnames'
 import ReactMarkdown from 'react-markdown'
 import ContentEditable from 'react-contenteditable'
@@ -127,12 +126,12 @@ export class ArticleAdd extends React.Component<
       const tagList: any[] = []
       categories.forEach(it => {
         if (category.includes(it._id)) {
-          cateList.push(it)
+          cateList.push(it._id)
         }
       })
       tags.forEach(it => {
         if (tag.includes(it._id!)) {
-          tagList.push(it)
+          tagList.push(it._id)
         }
       })
 
@@ -174,7 +173,7 @@ export class ArticleAdd extends React.Component<
       checked &&
       checkedTagValues!.filter((item: any) => item._id !== tag._id)
     ) {
-      checkedTagValues!.push(tag)
+      checkedTagValues!.push(tag._id)
     } else {
       checkedTagValues = checkedTagValues!.filter(
         (item: any) => item._id !== tag._id,
@@ -192,7 +191,7 @@ export class ArticleAdd extends React.Component<
       checked &&
       checkedValues!.filter((item: any) => item._id !== cate._id)
     ) {
-      checkedValues!.push(cate)
+      checkedValues!.push(cate._id)
     } else {
       checkedValues = checkedValues!.filter(
         (item: any) => item._id !== cate._id,
@@ -266,16 +265,6 @@ export class ArticleAdd extends React.Component<
       }
     }
 
-    checkedValues.map((cate: any) => {
-      delete cate.isSelected
-    })
-
-    if (checkedTagValues && checkedTagValues.length > 0) {
-      checkedTagValues.map((tag: any) => {
-        delete tag.isSelected
-      })
-    }
-
     const article: ArticleModel = {
       title: this.inputTitle.current!.value,
       content: this.state.postContent!,
@@ -333,7 +322,7 @@ export class ArticleAdd extends React.Component<
     const { thumb } = this.state
     return thumb ? (
       <div className={styles.thumb}>
-        <img src={CONFIG.APP.baseUrl + thumb} alt="缩略图" />
+        <img src={thumb} alt="缩略图" />
       </div>
     ) : (
       <div className={styles.thumb}>
@@ -487,6 +476,14 @@ export class ArticleAdd extends React.Component<
                   </label>
                 </div>
               ))}
+            </div>
+            <div className={styles.inputWrap}>
+              <div className={styles.labelBox}>
+                <input type="checkbox" id="newCategory" name="newCategory" />
+                <label className={styles.labelName} htmlFor="newCategory">
+                  <FontAwesomeIcon icon={faPlus} />
+                </label>
+              </div>
             </div>
           </div>
         </div>
