@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as styles from './style.css'
 import { TagModel } from '@app/store/models'
 import { TagActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
@@ -137,11 +136,11 @@ export class Tag extends React.Component<
     const { tags } = this.props
     const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
     return (
-      <div className={styles.tagList}>
-        <div className={styles.title}>
-          <h3>添加标签</h3>
+      <div className="module flex1 pdl0">
+        <div className="title">
+          <h3>标签列表</h3>
         </div>
-        <div className={styles.content}>
+        <div className="content tac">
           <Table striped bordered hover variant="dark">
             <thead>
               <tr>
@@ -157,11 +156,10 @@ export class Tag extends React.Component<
                   <td>{it.description}</td>
                   <td>{it.slug}</td>
                   <td>{formatDate(it.update_at)}</td>
-                  <td>
+                  <td className="ctrl">
                     <Button
                       size="sm"
                       variant="info"
-                      style={{ marginRight: '5px' }}
                       onClick={(e: any) => this.handleEdit(it, e)}
                     >
                       编辑
@@ -186,24 +184,25 @@ export class Tag extends React.Component<
   renderCreated(): JSX.Element | void {
     const { isUpdate } = this.state
     return (
-      <div className={styles.tagNew}>
-        <div className={styles.title}>
+      <div className="module flex50">
+        <div className="title">
           <h3>添加标签</h3>
         </div>
-        <div className={styles.content}>
-          <div className={styles.field}>
-            <p>标签名</p>
+        <div className="content">
+          <div className="inputWrap">
+            <span className="label">标签名</span>
             <FancyInput ref={this.inputName} tip={'标签标题'} />
           </div>
-          <div className={styles.field}>
-            <p>slug</p>
+          <div className="inputWrap">
+            <span className="label">slug</span>
             <FancyInput ref={this.inputSlug} tip={'标签slug'} />
           </div>
-          <div className={styles.field}>
-            <p>描述</p>
+          <div className="inputWrap">
+            <span className="label">描述</span>
             <FancyTextarea ref={this.inputDescription} tip={'标签描述'} />
           </div>
-          <div className={styles.field}>
+          <div className="inputWrap">
+            <span className="label"></span>
             <Button
               variant="primary"
               onClick={() => this.handleCreate()}
@@ -219,7 +218,7 @@ export class Tag extends React.Component<
   render() {
     const { showModal, show, type, content } = this.state
     return (
-      <div className={styles.tag}>
+      <div className="tag">
         <Notication
           show={show}
           type={type}
@@ -237,7 +236,7 @@ export class Tag extends React.Component<
             this.setState({ showModal: false })
           }}
         />
-        <div className={styles.module}>
+        <div className="flex">
           {this.renderCreated()}
           {this.renderList()}
         </div>

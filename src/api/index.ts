@@ -40,7 +40,7 @@ export const fetchArticle = <T>() => {
 }
 
 /**
- * 获取文章列表详情
+ * 获取文章详情
  */
 export const getArticle = (id: any) => {
   return service.get(`/article/${id}`)
@@ -50,8 +50,6 @@ export const getArticle = (id: any) => {
  * 更新文章
  */
 export const updateArticle = (id: any, newArticle:  ArticleModel) => {
-  console.log('id2', id);
-  
   return service.put(`/article/${id}`, newArticle)
 }
 

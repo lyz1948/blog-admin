@@ -43,6 +43,7 @@ export namespace ArticleAdd {
     article: ArticleModel
     tags: TagModel[]
     categories: CategoryModel[]
+    getArticle: typeof ArticleActions.getArticle
     addArticle: typeof ArticleActions.addArticle
     updateArticle: typeof ArticleActions.updateArticle
     uploadThumb: typeof ArticleActions.uplodThumb
@@ -100,7 +101,12 @@ export class ArticleAdd extends React.Component<
   }
 
   componentDidMount() {
-    this._processArticle()
+    const hash = window.location.hash
+    const id = hash.split('?')[1]
+
+    if (id) {
+      this._processArticle()
+    }
   }
 
   _processArticle() {
@@ -125,14 +131,20 @@ export class ArticleAdd extends React.Component<
       const cateList: any[] = []
       const tagList: any[] = []
       categories.forEach(it => {
-        if (category.includes(it._id)) {
-          cateList.push(it._id)
-        }
+        category.forEach((cate: any) => {
+          if (cate._id === it._id) {
+            cateList.push(it._id)
+            this.props.selectCategory({ _id: it._id })
+          }
+        })
       })
       tags.forEach(it => {
-        if (tag.includes(it._id!)) {
-          tagList.push(it._id)
-        }
+        tag.forEach((t: any) => {
+          if (t._id === it._id) {
+            tagList.push(it._id)
+            this.props.selectTag({ _id: t._id })
+          }
+        })
       })
 
       this.setState({
@@ -173,7 +185,7 @@ export class ArticleAdd extends React.Component<
       checked &&
       checkedTagValues!.filter((item: any) => item._id !== tag._id)
     ) {
-      checkedTagValues!.push(tag._id)
+      checkedTagValues!.push(tag)
     } else {
       checkedTagValues = checkedTagValues!.filter(
         (item: any) => item._id !== tag._id,
@@ -187,17 +199,11 @@ export class ArticleAdd extends React.Component<
     const { checked } = event.target
     let { checkedValues } = this.state
 
-    if (
-      checked &&
-      checkedValues!.filter((item: any) => item._id !== cate._id)
-    ) {
+    if (checked && checkedValues!.filter((item: any) => item !== cate._id)) {
       checkedValues!.push(cate._id)
     } else {
-      checkedValues = checkedValues!.filter(
-        (item: any) => item._id !== cate._id,
-      )
+      checkedValues = checkedValues!.filter((item: any) => item !== cate._id)
     }
-
     this.props.selectCategory({ _id: cate._id })
   }
 
@@ -354,7 +360,7 @@ export class ArticleAdd extends React.Component<
   renderMain(): JSX.Element | void {
     const { show, type, content, isUpdate } = this.state
     return (
-      <div className="flex70">
+      <div className="module flex70">
         <Notication
           show={show}
           type={type}
@@ -449,7 +455,7 @@ export class ArticleAdd extends React.Component<
     const { tags } = this.props
 
     return (
-      <div className="flex30 pdl20">
+      <div className="module flex1 pdl0">
         <div className={styles.sideBox}>
           <div className="title">
             <h3>文章分类</h3>
@@ -476,8 +482,7 @@ export class ArticleAdd extends React.Component<
                   </label>
                 </div>
               ))}
-            </div>
-            <div className={styles.inputWrap}>
+
               <div className={styles.labelBox}>
                 <input type="checkbox" id="newCategory" name="newCategory" />
                 <label className={styles.labelName} htmlFor="newCategory">
@@ -514,8 +519,7 @@ export class ArticleAdd extends React.Component<
                   </label>
                 </div>
               ))}
-            </div>
-            <div className={styles.inputWrap}>
+
               <div className={styles.labelBox}>
                 <input type="checkbox" id="newTag" name="newtag" />
                 <label className={styles.labelName} htmlFor="newTag">
@@ -599,7 +603,7 @@ export class ArticleAdd extends React.Component<
   render() {
     return (
       <div className={styles.articleAdd}>
-        <div className="module">
+        <div className="flex">
           {this.renderMain()}
           {this.renderSide()}
         </div>

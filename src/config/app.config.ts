@@ -1,5 +1,5 @@
 // import { argv } from 'yargs'
-import * as ENVIROMENT from '../environment'
+import { isProd } from '../environment'
 import {
   faToolbox,
   faTachometerAlt,
@@ -14,11 +14,11 @@ import { NavModel } from '../store/models'
 export const APP = {
   port: 3000,
   errno: 200,
-  isProd: ENVIROMENT.isProd,
+  isProd,
   tokenKey: 'blogKey',
   baseUrl: 'http://localhost:5381/',
-  apiUrl: 'http://localhost:5381/api/',
-  viewUrl: 'http://localhost:3000/'
+  apiUrl: 'http://localhost:5381/api',
+  viewUrl: isProd ? 'https://ykpine.com' : 'http://localhost:3000'
 }
 
 export const SIDER_MENU = [

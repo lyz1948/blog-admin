@@ -1,6 +1,11 @@
 export * from './token'
 import * as CONFIG from '../config/app.config'
 
+const toDouble = (s: number) => {
+  const str = s + ''
+  return ('00' + str).substring(str.length)
+}
+
 export const getStatus = (response: any) => !!response.status && response.data && Object.is(response.status, CONFIG.APP.errno)
 
 export const formatDate = (d: Date) => {
@@ -9,8 +14,10 @@ export const formatDate = (d: Date) => {
   const month = myDate.getUTCMonth()
   const date = myDate.getUTCDate()
   const h = myDate.getUTCHours()
+  const min = myDate.getUTCMinutes()
+  const sec = myDate.getUTCSeconds()
 
-  return `${year}-${month + 1}-${date} ${h > 12 ? '下午' : '上午'}`
+  return `${year}-${month + 1}-${date} ${h > 12 ? '下午' : '上午'} ${toDouble(h)}:${toDouble(min)}:${toDouble(sec)}`
 }
 
 export function omit<T extends object, K extends keyof T>(target: T, ...names: K[]): Omit<T, K> {

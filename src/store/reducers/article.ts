@@ -33,13 +33,12 @@ export const articleReducer = handleActions<
         const { data } = action.payload.result!
         return [...data]
       }
-      
       return state
     },
     [ArticleActions.Type.GET_ARTICLE]: (state, action) => {
       if (action.payload && action.payload.result) {
-        const { data } = action.payload.result!
-        return [...data]
+        const { result } = action.payload
+        return [result]
       }
       return state
     },

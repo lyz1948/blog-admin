@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as styles from './style.css'
 import { CategoryModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
@@ -127,11 +126,11 @@ export class Category extends React.Component<
     const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
 
     return (
-      <div className={styles.categoryList}>
-        <div className={styles.title}>
-          <h3>添加分类</h3>
+      <div className="module flex1 pdl0">
+        <div className="title">
+          <h3>分类列表</h3>
         </div>
-        <div className={styles.content}>
+        <div className="content tac">
           <Table striped bordered hover variant="dark">
             <thead>
               <tr>
@@ -147,11 +146,10 @@ export class Category extends React.Component<
                   <td>{it.description}</td>
                   <td>{it.slug}</td>
                   <td>{formatDate(it.update_at)}</td>
-                  <td>
+                  <td className="ctrl">
                     <Button
                       size="sm"
                       variant="info"
-                      style={{ marginRight: '5px' }}
                       onClick={() => this.handleEditor(it)}
                     >
                       修改
@@ -176,24 +174,25 @@ export class Category extends React.Component<
   renderCreate(): JSX.Element | void {
     const { isUpdate } = this.state
     return (
-      <div className={styles.categoryNew}>
-        <div className={styles.title}>
+      <div className="module flex50">
+        <div className="title">
           <h3>添加分类</h3>
         </div>
-        <div className={styles.content}>
-          <div className={styles.field}>
-            <p>分类标题</p>
+        <div className="content">
+          <div className="inputWrap">
+            <span className="label">分类标题</span>
             <FancyInput ref={this.inputName} tip={'分类标题'} />
           </div>
-          <div className={styles.field}>
-            <p>分类slug</p>
+          <div className="inputWrap">
+            <span className="label">分类slug</span>
             <FancyInput ref={this.inputSlug} tip={'分类slug'} />
           </div>
-          <div className={styles.field}>
-            <p>分类描述</p>
+          <div className="inputWrap">
+            <span className="label">分类描述</span>
             <FancyTextarea ref={this.inputDescription} tip={'分类描述'} />
           </div>
-          <div className={styles.field}>
+          <div className="inputWrap">
+            <span className="label"></span>
             <Button variant="primary" onClick={() => this.handleCreate()}>
               { isUpdate ? '更新分类' : '创建分类' }
             </Button>
@@ -225,7 +224,7 @@ export class Category extends React.Component<
             this.setState({ showModal: false })
           }}
         />
-        <div className={styles.module}>
+        <div className="flex">
           {this.renderCreate()}
           {this.renderList()}
         </div>

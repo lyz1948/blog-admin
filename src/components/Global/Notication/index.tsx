@@ -20,9 +20,6 @@ enum IType {
   ERROR = 'error',
 }
 
-// type InfoProp = IType.SUCCESS | IType.INFO | IType.WARN | IType.ERROR
-
-// type Pos = IPosition.LEFT | IPosition.RIGHT | IPosition.CENTER
 
 interface IProps {
   type?: string
@@ -33,14 +30,6 @@ interface IProps {
   onClose?: () => void
   [propName: string]: any
 }
-
-// const PropState = {
-//   type: 'info',
-//   position: 'center',
-//   content: '操作成功！',
-//   show: false,
-//   autohide: false,
-// }
 
 function ToastIcon(props: any) {
   switch(props.type) {
