@@ -26,7 +26,8 @@ const initialState: RootState.ArticleState = [
 
 export const articleReducer = handleActions<
   RootState.ArticleState,
-  ArticleModel>(
+  ArticleModel
+>(
   {
     [ArticleActions.Type.GET_ARTICLE_LIST]: (state, action) => {
       if (action.payload && action.payload.result) {

@@ -39,17 +39,17 @@ export class User extends React.Component<User.IProps, User.IState> {
     const username = this.inputName.current!.value
     let password = this.inputPassword.current!.value
     const { error } = this.props.user
-    
+
     if (!username) {
       this.showNotice({ type: 'warn', content: '用户名不能为空' })
       return
     }
-    
+
     if (!password) {
       this.showNotice({ type: 'warn', content: '密码不能为空' })
       return
     }
-    
+
     password = password ? Base64.encode(password) : password
 
     this.props.onLogin({ username, password })
@@ -93,11 +93,20 @@ export class User extends React.Component<User.IProps, User.IState> {
           <Form className="userForm">
             <Form.Group>
               <Form.Label>用户名或手机号</Form.Label>
-              <FancyInput ref={this.inputName} tip="请输入用户名" onPress={(e: any) => this.handleSignIn(e)} />
+              <FancyInput
+                ref={this.inputName}
+                tip="请输入用户名"
+                onPress={(e: any) => this.handleSignIn(e)}
+              />
             </Form.Group>
             <Form.Group>
               <Form.Label>密码</Form.Label>
-              <FancyInput ref={this.inputPassword} tip="请输入密码" type="password" onPress={(e: any) => this.handleSignIn(e)} />
+              <FancyInput
+                ref={this.inputPassword}
+                tip="请输入密码"
+                type="password"
+                onPress={(e: any) => this.handleSignIn(e)}
+              />
             </Form.Group>
             <Button size="lg" variant="primary" block onClick={this.signIn}>
               登录

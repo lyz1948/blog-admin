@@ -6,10 +6,13 @@ const toDouble = (s: number) => {
   return ('00' + str).substring(str.length)
 }
 
-export const getStatus = (response: any) => !!response.status && response.data && Object.is(response.status, CONFIG.APP.errno)
+export const getStatus = (response: any) =>
+  !!response.status &&
+  response.data &&
+  Object.is(response.status, CONFIG.APP.errno)
 
 export const formatDate = (d: Date) => {
-  const myDate = new Date(d);
+  const myDate = new Date(d)
   const year = myDate.getUTCFullYear()
   const month = myDate.getUTCMonth()
   const date = myDate.getUTCDate()
@@ -17,10 +20,15 @@ export const formatDate = (d: Date) => {
   const min = myDate.getUTCMinutes()
   const sec = myDate.getUTCSeconds()
 
-  return `${year}-${month + 1}-${date} ${h > 12 ? '下午' : '上午'} ${toDouble(h)}:${toDouble(min)}:${toDouble(sec)}`
+  return `${year}-${month + 1}-${date} ${h > 12 ? '下午' : '上午'} ${toDouble(
+    h,
+  )}:${toDouble(min)}:${toDouble(sec)}`
 }
 
-export function omit<T extends object, K extends keyof T>(target: T, ...names: K[]): Omit<T, K> {
+export function omit<T extends object, K extends keyof T>(
+  target: T,
+  ...names: K[]
+): Omit<T, K> {
   return (Object.keys(target) as K[]).reduce(
     (res, key) => {
       if (!names.includes(key)) {
@@ -28,6 +36,6 @@ export function omit<T extends object, K extends keyof T>(target: T, ...names: K
       }
       return res
     },
-    {} as any
+    {} as any,
   )
 }

@@ -18,7 +18,7 @@ export const APP = {
   tokenKey: 'blogKey',
   baseUrl: 'http://localhost:5381/',
   apiUrl: 'http://localhost:5381/api',
-  viewUrl: isProd ? 'https://ykpine.com' : 'http://localhost:3000'
+  viewUrl: isProd ? 'https://ykpine.com' : 'http://localhost:3000',
 }
 
 export const SIDER_MENU = [
@@ -47,11 +47,7 @@ export const SIDER_MENU = [
         text: '文章分类',
         icon: faToolbox,
       },
-      { name: 
-        NavModel.Filter.ARTICLE_TAG, 
-        text: '文章标签', 
-        icon: faWrench,
-      },
+      { name: NavModel.Filter.ARTICLE_TAG, text: '文章标签', icon: faWrench },
     ],
   },
   {

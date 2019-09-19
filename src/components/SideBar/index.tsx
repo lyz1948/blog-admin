@@ -24,16 +24,24 @@ export class SideBar extends React.Component<Nav.IProps> {
 
   renderProfile(): JSX.Element | void {
     const { user } = this.props
-      {
-        return user ? (
-          <div className={styles.profile}>
-            <h1 className="textXLarge">YKPINE</h1>
-            <Image className={styles.avatar} src={user.avatar} alt="用户头像" thumbnail />
-            <div className={styles.name}>{user.username}</div>
-            <div className={styles.slogan}>{user.slogan}</div>
-          </div>
-        ) : (<div>用户不见了</div>)
-      }
+    {
+      return user ? (
+        <div className={styles.profile}>
+          <h1 className="textXLarge">YKPINE</h1>
+          <Image
+            className={styles.avatar}
+            src={user.avatar}
+            alt="用户头像"
+            roundedCircle
+            style={{ width: '120px', height: '120px' }}
+          />
+          <div className={styles.name}>{user.username}</div>
+          <div className={styles.slogan}>{user.slogan}</div>
+        </div>
+      ) : (
+        <div>用户不见了</div>
+      )
+    }
   }
 
   renderMenu(): JSX.Element | void {
@@ -41,44 +49,48 @@ export class SideBar extends React.Component<Nav.IProps> {
     const { onClickFilter } = this.props
 
     return (
-      <div className={styles.siderMenu}>  
+      <div className={styles.siderMenu}>
         <Accordion defaultActiveKey={SIDER_MENU[1].name}>
-          {
-            SIDER_MENU.map(it => (
-              <div className={styles.navItem} key={it.name}>
-                {
-                  it.child ? (
-                    <Accordion.Toggle as="div" eventKey={it.name} className={styles.content}>
-                      <FontAwesomeIcon
-                        icon={it.icon}
-                        style={{ marginRight: '5px' }}
-                      />
-                      <span className={styles.text}>{it.text}</span>
-                      {it.child && it.child.length > 0 ? (
-                        <span className={styles.dropIcon}>{dropIcon}</span>
-                      ) : null}
-                    </Accordion.Toggle>
-                  )
-                  : (
+          {SIDER_MENU.map(it => (
+            <div className={styles.navItem} key={it.name}>
+              {it.child ? (
+                <Accordion.Toggle
+                  as="div"
+                  eventKey={it.name}
+                  className={styles.content}
+                >
+                  <FontAwesomeIcon
+                    icon={it.icon}
+                    style={{ marginRight: '5px' }}
+                  />
+                  <span className={styles.text}>{it.text}</span>
+                  {it.child && it.child.length > 0 ? (
+                    <span className={styles.dropIcon}>{dropIcon}</span>
+                  ) : null}
+                </Accordion.Toggle>
+              ) : (
+                <div
+                  className={styles.content}
+                  onClick={e => {
+                    e.stopPropagation()
+                    onClickFilter(NavModel.Filter[it.name])
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={it.icon}
+                    style={{ marginRight: '5px' }}
+                  />
+                  <span className={styles.text}>{it.text}</span>
+                </div>
+              )}
+              {it.child &&
+                it.child.map(child => (
+                  <Accordion.Collapse
+                    eventKey={it.name}
+                    className={styles.subNav}
+                    key={child.name}
+                  >
                     <div
-                      className={styles.content}
-                      onClick={e => {
-                        e.stopPropagation()
-                        onClickFilter(NavModel.Filter[it.name])
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        icon={it.icon}
-                        style={{ marginRight: '5px' }}
-                      />
-                      <span className={styles.text}>{it.text}</span>
-                    </div>
-                  )
-                }
-                {
-                  it.child && it.child.map(child => (
-                    <Accordion.Collapse eventKey={it.name} className={styles.subNav} key={child.name}>
-                      <div
                       className={styles.content}
                       onClick={e => {
                         e.stopPropagation()
@@ -91,12 +103,10 @@ export class SideBar extends React.Component<Nav.IProps> {
                       />
                       <span className={styles.text}>{child.text}</span>
                     </div>
-                    </Accordion.Collapse>
-                  ))
-                }
-              </div>
-            ))
-          }
+                  </Accordion.Collapse>
+                ))}
+            </div>
+          ))}
         </Accordion>
       </div>
     )

@@ -21,7 +21,6 @@ export namespace User {
     actions: bindActionCreators(omit(UserActions, 'Type'), dispatch),
   }),
 )
-
 export class UserApp extends React.Component<User.IProps> {
   constructor(props: User.IProps, context?: any) {
     super(props, context)
@@ -29,12 +28,10 @@ export class UserApp extends React.Component<User.IProps> {
 
   render() {
     const { user, actions } = this.props
-    if (user && user.data) {
+    if (user && user.access_token) {
       this.props.history.push('/#DASHBOARD')
       return null
     }
-    return (
-      <UserComp user={user} onLogin={actions.signIn} />
-    )
+    return <UserComp user={user} onLogin={actions.signIn} />
   }
 }

@@ -1,4 +1,3 @@
-
 export const gaugeConfigs = {
   type: 'angulargauge', // The gauge type
   height: '250', // Height of the gauge

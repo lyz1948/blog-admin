@@ -13,7 +13,7 @@ const service = axios.create({
 
 service.interceptors.request.use((config: any) => {
   config.headers = Object.assign(config.headers || {}, {
-    Authorization: 'Bearer ' + token
+    Authorization: 'Bearer ' + token,
   })
   return config
 })
@@ -49,7 +49,7 @@ export const getArticle = (id: any) => {
 /**
  * 更新文章
  */
-export const updateArticle = (id: any, newArticle:  ArticleModel) => {
+export const updateArticle = (id: any, newArticle: ArticleModel) => {
   return service.put(`/article/${id}`, newArticle)
 }
 
@@ -115,7 +115,8 @@ export const addTag = (tag: any) => {
 /**
  * 更新标签
  * @param id 标签id
- */ 
+ */
+
 export const updateTag = (newTag: TagModel) => {
   const { _id } = newTag
   return service.put(`/tag/${_id}`, newTag)
@@ -160,6 +161,6 @@ export const getUser = <T>() => {
   return service.get<IFatchData<T>>(`/user/admin`)
 }
 
-export const updateUser = (userProfiel: UserModel): Promise<IResponseData> => {
-  return service.put(`/user/profile`, userProfiel)
+export const updateUser = (user: UserModel): Promise<IResponseData> => {
+  return service.put(`/user/profile`, user)
 }

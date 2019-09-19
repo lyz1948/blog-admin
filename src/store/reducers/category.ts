@@ -10,11 +10,14 @@ const initialState: RootState.CategoryState = [
     slug: 'test slug',
     pid: {},
     extends: [],
-    isSelected: false
-  }
+    isSelected: false,
+  },
 ]
 
-export const categoryReducer = handleActions<RootState.CategoryState, CategoryModel>(
+export const categoryReducer = handleActions<
+  RootState.CategoryState,
+  CategoryModel
+>(
   {
     [CategoryActions.Type.GET_CATEGORY]: (state, action) => {
       if (action.payload && action.payload.result) {
@@ -29,7 +32,7 @@ export const categoryReducer = handleActions<RootState.CategoryState, CategoryMo
     [CategoryActions.Type.ADD_CATEGORY]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { result } = action.payload
-        return [ result, ...state ]
+        return [result, ...state]
       }
       return state
     },

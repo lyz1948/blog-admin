@@ -27,7 +27,7 @@
 }
 
 .profile .slogan {
-  font-size: .88rem;
+  font-size: 0.88rem;
 }
 
 .siderNav .navItem {
@@ -35,13 +35,13 @@
   border-bottom: 1px solid #2e3f50;
 }
 
-.siderNav .navItem .content{
+.siderNav .navItem .content {
   position: relative;
   padding: 0 20px;
   line-height: 45px;
 }
 
-.siderNav .navItem .content:hover{
+.siderNav .navItem .content:hover {
   background-color: #425668;
 }
 
@@ -52,12 +52,12 @@
   background-color: #2e4050;
 }
 
-.siderNav .subNav .content{
+.siderNav .subNav .content {
   padding-left: 36px;
   line-height: 35px;
 }
 
-.siderNav .navItem .dropIcon{
+.siderNav .navItem .dropIcon {
   position: absolute;
   right: 10px;
 }

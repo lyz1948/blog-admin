@@ -12,6 +12,6 @@ export interface UserModel {
 
 export namespace UserModel {
   export enum Filter {
-    SHOW_USER = 'USER'
+    SHOW_USER = 'USER',
   }
 }

@@ -10,7 +10,7 @@ const initialState: RootState.TagState = [
     description: 'tag description',
     extends: [],
     isSelected: false,
-  }
+  },
 ]
 
 export const tagReducer = handleActions<RootState.TagState, TagModel>(
@@ -21,14 +21,14 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
         data.map((it: TagModel) => {
           it.isSelected = false
         })
-        return [ ...data ]
+        return [...data]
       }
       return state
     },
     [TagActions.Type.ADD_TAG]: (state, action) => {
       if (action.payload && action.payload.result) {
         const { result } = action.payload
-        return [ result, ...state ]
+        return [result, ...state]
       }
       return state
     },

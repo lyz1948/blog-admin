@@ -8,7 +8,13 @@ export { Settings } from './Settings'
 export { Dashboard } from './Dashboard'
 
 // global
-export { ConfirmModal, Notication, FancyInput, FancyTextarea, Empty } from './Global'
+export {
+  ConfirmModal,
+  Notication,
+  FancyInput,
+  FancyTextarea,
+  Empty,
+} from './Global'
 
 // Style components
 export * from './styledComponents'

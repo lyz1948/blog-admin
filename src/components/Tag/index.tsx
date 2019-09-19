@@ -24,10 +24,7 @@ export namespace TagComp {
   }
 }
 
-export class Tag extends React.Component<
-  TagComp.IProps,
-  TagComp.IState
-> {
+export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
   private inputName = React.createRef<HTMLInputElement>()
   private inputSlug = React.createRef<HTMLInputElement>()
   private inputDescription = React.createRef<HTMLInputElement>()
@@ -70,7 +67,7 @@ export class Tag extends React.Component<
     this.inputDescription.current!.value = description
     this.setState({
       tagId: _id!,
-      isUpdate: true
+      isUpdate: true,
     })
   }
 
@@ -86,17 +83,17 @@ export class Tag extends React.Component<
     let slug = this.inputSlug.current!.value
     let description = this.inputDescription.current!.value
 
-    if(!name) {
+    if (!name) {
       this.showNotice({ type: 'warn', content: '标题不能为空！' })
       return
     }
 
-    if(!slug) {
+    if (!slug) {
       this.showNotice({ type: 'warn', content: 'slug不能为空！' })
       return
     }
 
-    if(!description) {
+    if (!description) {
       this.showNotice({ type: 'warn', content: '描述不能为空！' })
       return
     }
@@ -106,17 +103,17 @@ export class Tag extends React.Component<
       name,
       slug,
       description,
-      extends: []
+      extends: [],
     }
     if (isUpdate) {
       tagObj = Object.assign(tagObj, { _id: tagId })
       this.props.updateTag(tagObj as TagModel)
-      
+
       this.showNotice({ type: 'success', content: '更新成功！' })
-      
+
       this.setState({
         tagId: '',
-        isUpdate: false
+        isUpdate: false,
       })
     } else {
       this.props.addTag(tagObj)
@@ -203,11 +200,8 @@ export class Tag extends React.Component<
           </div>
           <div className="inputWrap">
             <span className="label"></span>
-            <Button
-              variant="primary"
-              onClick={() => this.handleCreate()}
-            >
-              { isUpdate ? '更新标签' : '创建标签' }
+            <Button variant="primary" onClick={() => this.handleCreate()}>
+              {isUpdate ? '更新标签' : '创建标签'}
             </Button>
           </div>
         </div>

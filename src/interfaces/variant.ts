@@ -6,5 +6,5 @@ export enum EVariant {
   'danger',
   'info',
   'light',
-  'dark'
+  'dark',
 }

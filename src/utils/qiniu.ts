@@ -53,7 +53,7 @@ export class Upload {
 
     this.putPolicy = new qiniu.rs.PutPolicy({
       scope: scope,
-      expires: this.expires
+      expires: this.expires,
     })
 
     this.config = new qiniu.conf.Config()
@@ -64,7 +64,8 @@ export class Upload {
     const now = Date.now()
 
     if (
-      !this.tokenValidPeriod || now + this.expires * 1000 < this.tokenValidPeriod
+      !this.tokenValidPeriod ||
+      now + this.expires * 1000 < this.tokenValidPeriod
     ) {
       this.token = this.putPolicy.uploadToken(this.mac)
     }
@@ -78,7 +79,7 @@ export class Upload {
     progressCb,
     resCb,
     id,
-    size
+    size,
   }: UploadFile) {
     const uploadToken = this.getUploadToken()
     id = id || localPath
@@ -91,7 +92,7 @@ export class Upload {
       null!,
       (uploadSize: any) => {
         progressCb(id, Math.floor((uploadSize / size!) * 100))
-      }
+      },
     )
 
     if (this.inUpload <= this.MAX_UPLOAD_COUNT) {
@@ -116,14 +117,14 @@ export class Upload {
           } else {
             resCb(id, null, body, respInfo.code)
           }
-        }
+        },
       )
     } else {
       this.uploadQueue.push({
         localPath,
         fileName,
         progressCb,
-        resCb
+        resCb,
       })
     }
   }

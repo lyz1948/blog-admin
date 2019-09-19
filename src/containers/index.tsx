@@ -122,7 +122,7 @@ export class App extends React.Component<App.IProps, App.IState> {
         if (id == article._id) {
           console.log('article', article)
           this.setState({
-            editArticle: article
+            editArticle: article,
           })
         }
       })

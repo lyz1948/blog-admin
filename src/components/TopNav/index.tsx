@@ -20,11 +20,10 @@ export namespace TopNav {
 }
 
 export class TopNav extends React.Component<TopNav.IProps> {
-  
   constructor(props: TopNav.IProps, context: any) {
     super(props, context)
   }
-  
+
   render() {
     const { user, logout } = this.props
     return (
@@ -59,9 +58,9 @@ export class TopNav extends React.Component<TopNav.IProps> {
                 />
               </li>
               <li className={styles.item}>
-              <span className={styles.author} onClick={logout}>
-              <FontAwesomeIcon icon={faLock} />
-              </span>
+                <span className={styles.author} onClick={logout}>
+                  <FontAwesomeIcon icon={faLock} />
+                </span>
                 {/* <Dropdown>
                   <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
                     <span className={styles.author}>Hello Man</span>

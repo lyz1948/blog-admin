@@ -60,9 +60,9 @@ export class Category extends React.Component<
     this.inputName.current!.value = name
     this.inputSlug.current!.value = slug
     this.inputDescription.current!.value = description
-    
+
     this.setState({
-      isUpdate: true
+      isUpdate: true,
     })
   }
 
@@ -194,7 +194,7 @@ export class Category extends React.Component<
           <div className="inputWrap">
             <span className="label"></span>
             <Button variant="primary" onClick={() => this.handleCreate()}>
-              { isUpdate ? '更新分类' : '创建分类' }
+              {isUpdate ? '更新分类' : '创建分类'}
             </Button>
           </div>
         </div>

@@ -4,13 +4,16 @@ import Toast from 'react-bootstrap/Toast'
 import * as styles from './style.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCheck, faInfo, faExclamationTriangle, faExclamation
+  faCheck,
+  faInfo,
+  faExclamationTriangle,
+  faExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 
 enum IPosition {
   LEFT = 'left',
   RIGHT = 'right',
-  CENTER = 'center'
+  CENTER = 'center',
 }
 
 enum IType {
@@ -19,7 +22,6 @@ enum IType {
   WARN = 'warn',
   ERROR = 'error',
 }
-
 
 interface IProps {
   type?: string
@@ -32,15 +34,35 @@ interface IProps {
 }
 
 function ToastIcon(props: any) {
-  switch(props.type) {
+  switch (props.type) {
     case 'success':
-      return <FontAwesomeIcon icon={faCheck} style={{ marginRight: '10px', color: '#fff' }}/>
+      return (
+        <FontAwesomeIcon
+          icon={faCheck}
+          style={{ marginRight: '10px', color: '#fff' }}
+        />
+      )
     case 'warn':
-      return <FontAwesomeIcon icon={faExclamation} style={{ marginRight: '10px', color: '#fff' }}/>
+      return (
+        <FontAwesomeIcon
+          icon={faExclamation}
+          style={{ marginRight: '10px', color: '#fff' }}
+        />
+      )
     case 'error':
-      return <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: '10px', color: '#fff' }}/>
+      return (
+        <FontAwesomeIcon
+          icon={faExclamationTriangle}
+          style={{ marginRight: '10px', color: '#fff' }}
+        />
+      )
     default:
-      return <FontAwesomeIcon icon={faInfo} style={{ marginRight: '10px', color: '#fff' }}/>
+      return (
+        <FontAwesomeIcon
+          icon={faInfo}
+          style={{ marginRight: '10px', color: '#fff' }}
+        />
+      )
   }
 }
 

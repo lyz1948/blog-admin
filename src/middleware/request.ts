@@ -1,7 +1,7 @@
 import { Middleware } from 'redux'
 import { IResponseData } from '../interfaces/data'
 
-export const request: Middleware = (store) => (next) => (action) => {
+export const request: Middleware = store => next => action => {
   const { payload, type, ...rest } = action
 
   if (!payload) {
@@ -11,9 +11,10 @@ export const request: Middleware = (store) => (next) => (action) => {
   return payload.then(
     (res: IResponseData) => {
       console.log('request', res)
-      next({...rest, ...res, type: 'SUCCESS' })
+      next({ ...rest, ...res, type: 'SUCCESS' })
     },
     (error: any) => {
-      next({ ...rest, error, type: 'FAILED'})
-    })
+      next({ ...rest, error, type: 'FAILED' })
+    },
+  )
 }
