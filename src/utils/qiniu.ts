@@ -28,104 +28,104 @@ const MAX_UPLOAD_COUNT = 5
 const TOKEN_EXPIRES = 3600
 
 export interface UploadFile {
-  localPath: string
-  fileName: string
-  progressCb: (id: any, progress: any) => void
-  resCb: (id: any, err: any, body?: any, code?: number) => void
-  id?: number | string
-  size?: number
+	localPath: string
+	fileName: string
+	progressCb: (id: any, progress: any) => void
+	resCb: (id: any, err: any, body?: any, code?: number) => void
+	id?: number | string
+	size?: number
 }
 
 export class Upload {
-  private putPolicy: any
-  private mac: any
-  private config: any
-  private token: string = ''
-  private tokenValidPeriod: any
-  private expires: number = TOKEN_EXPIRES
+	private putPolicy: any
+	private mac: any
+	private config: any
+	private token: string = ''
+	private tokenValidPeriod: any
+	private expires: number = TOKEN_EXPIRES
 
-  private MAX_UPLOAD_COUNT = MAX_UPLOAD_COUNT
-  private uploadQueue: UploadFile[] = []
-  private inUpload = 0
+	private MAX_UPLOAD_COUNT = MAX_UPLOAD_COUNT
+	private uploadQueue: UploadFile[] = []
+	private inUpload = 0
 
-  constructor({ ak = '', sk = '', scope = '' }) {
-    this.mac = new qiniu.auth.digest.Mac(ak, sk)
+	constructor({ ak = '', sk = '', scope = '' }) {
+		this.mac = new qiniu.auth.digest.Mac(ak, sk)
 
-    this.putPolicy = new qiniu.rs.PutPolicy({
-      scope: scope,
-      expires: this.expires,
-    })
+		this.putPolicy = new qiniu.rs.PutPolicy({
+			scope: scope,
+			expires: this.expires,
+		})
 
-    this.config = new qiniu.conf.Config()
-    this.config.zone = qiniu.zone.Zone_z2
-  }
+		this.config = new qiniu.conf.Config()
+		this.config.zone = qiniu.zone.Zone_z2
+	}
 
-  private getUploadToken() {
-    const now = Date.now()
+	private getUploadToken() {
+		const now = Date.now()
 
-    if (
-      !this.tokenValidPeriod ||
-      now + this.expires * 1000 < this.tokenValidPeriod
-    ) {
-      this.token = this.putPolicy.uploadToken(this.mac)
-    }
+		if (
+			!this.tokenValidPeriod ||
+			now + this.expires * 1000 < this.tokenValidPeriod
+		) {
+			this.token = this.putPolicy.uploadToken(this.mac)
+		}
 
-    return this.token
-  }
+		return this.token
+	}
 
-  public uploadFile({
-    localPath,
-    fileName,
-    progressCb,
-    resCb,
-    id,
-    size,
-  }: UploadFile) {
-    const uploadToken = this.getUploadToken()
-    id = id || localPath
+	public uploadFile({
+		localPath,
+		fileName,
+		progressCb,
+		resCb,
+		id,
+		size,
+	}: UploadFile) {
+		const uploadToken = this.getUploadToken()
+		id = id || localPath
 
-    const resumeUploader = new qiniu.resume_up.ResumeUploader(this.config)
-    const putExtra = new qiniu.resume_up.PutExtra(
-      null!,
-      {},
-      null!,
-      null!,
-      (uploadSize: any) => {
-        progressCb(id, Math.floor((uploadSize / size!) * 100))
-      },
-    )
+		const resumeUploader = new qiniu.resume_up.ResumeUploader(this.config)
+		const putExtra = new qiniu.resume_up.PutExtra(
+			null!,
+			{},
+			null!,
+			null!,
+			(uploadSize: any) => {
+				progressCb(id, Math.floor((uploadSize / size!) * 100))
+			},
+		)
 
-    if (this.inUpload <= this.MAX_UPLOAD_COUNT) {
-      this.inUpload++
+		if (this.inUpload <= this.MAX_UPLOAD_COUNT) {
+			this.inUpload++
 
-      resumeUploader.putFile(
-        uploadToken,
-        fileName,
-        localPath,
-        putExtra,
-        (err, body, respInfo) => {
-          this.inUpload--
-          if (this.uploadQueue.length !== 0) {
-            this.uploadFile(this.uploadQueue.pop()!)
-          }
+			resumeUploader.putFile(
+				uploadToken,
+				fileName,
+				localPath,
+				putExtra,
+				(err, body, respInfo) => {
+					this.inUpload--
+					if (this.uploadQueue.length !== 0) {
+						this.uploadFile(this.uploadQueue.pop()!)
+					}
 
-          if (err) {
-            resCb(id, err)
-          }
-          if (respInfo.statusCode === 200) {
-            resCb(id, null, body)
-          } else {
-            resCb(id, null, body, respInfo.code)
-          }
-        },
-      )
-    } else {
-      this.uploadQueue.push({
-        localPath,
-        fileName,
-        progressCb,
-        resCb,
-      })
-    }
-  }
+					if (err) {
+						resCb(id, err)
+					}
+					if (respInfo.statusCode === 200) {
+						resCb(id, null, body)
+					} else {
+						resCb(id, null, body, respInfo.code)
+					}
+				},
+			)
+		} else {
+			this.uploadQueue.push({
+				localPath,
+				fileName,
+				progressCb,
+				resCb,
+			})
+		}
+	}
 }

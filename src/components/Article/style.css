@@ -1,184 +1,184 @@
 .inputWrap {
-  display: flex;
-  flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .inputWrap .labelBox {
-  margin-right: 10px;
-  margin-bottom: 10px;
-  min-width: 60px;
-  text-align: center;
-  color: #fff;
-  background-color: #6c757d;
-  line-height: 30px;
-  border-radius: 3px;
-  font-weight: bold;
-  padding: 0 10px;
-  cursor: pointer;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	min-width: 60px;
+	text-align: center;
+	color: #fff;
+	background-color: #6c757d;
+	line-height: 30px;
+	border-radius: 3px;
+	font-weight: bold;
+	padding: 0 10px;
+	cursor: pointer;
 }
 
 .inputWrap .labelName:hover {
-  cursor: pointer;
-  /* background-color: #17a2b8; */
+	cursor: pointer;
+	/* background-color: #17a2b8; */
 }
 
 .inputWrap .labelBox.info {
-  background-color: #17a2b8;
-  border-color: #17a2b8;
+	background-color: #17a2b8;
+	border-color: #17a2b8;
 }
 .inputWrap .labelBox.primary {
-  background: #007bff;
-  border-color: #007bff;
+	background: #007bff;
+	border-color: #007bff;
 }
 
 .inputWrap .labelBox.success {
-  background-color: #28a745;
-  border-color: #28a745;
+	background-color: #28a745;
+	border-color: #28a745;
 }
 
 .inputWrap .labelBox.danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
+	background-color: #dc3545;
+	border-color: #dc3545;
 }
 
 .inputWrap .labelBox input {
-  display: none;
+	display: none;
 }
 
 .inputWrap .labelBox .labelName {
-  margin: 0;
+	margin: 0;
 }
 
 /* radio 样式 */
 .inputWrap .radioBox {
-  background-color: #6c757d;
-  line-height: 36px;
-  padding-right: 12px;
+	background-color: #6c757d;
+	line-height: 36px;
+	padding-right: 12px;
 }
 
 .inputWrap .radioBox.info {
-  background-color: #17a2b8;
-  border-color: #17a2b8;
+	background-color: #17a2b8;
+	border-color: #17a2b8;
 }
 
 .inputWrap .radioBox:first-child {
-  border-radius: 3px 0 0 3px;
+	border-radius: 3px 0 0 3px;
 }
 
 .inputWrap .radioBox:last-child {
-  border-radius: 0 3px 3px 0;
+	border-radius: 0 3px 3px 0;
 }
 
 .inputWrap .radioBox input[type='radio'] {
-  opacity: 0;
+	opacity: 0;
 }
 
 .inputWrap .radioBox label {
-  margin: 0;
-  font-weight: 500;
-  color: #f9f9f9;
-  cursor: pointer;
+	margin: 0;
+	font-weight: 500;
+	color: #f9f9f9;
+	cursor: pointer;
 }
 
 /* 缩略图 */
 .thumbBox {
-  position: relative;
-  height: 200px;
+	position: relative;
+	height: 200px;
 }
 
 .thumbBox input[type='file'] {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  z-index: 1;
-  cursor: pointer;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	z-index: 1;
+	cursor: pointer;
 }
 
 .thumbBox .thumb {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 50px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 50px;
 }
 
 .articleMain {
-  flex: 0 0 70%;
-  box-shadow: 0 2px 12px #283847;
+	flex: 0 0 70%;
+	box-shadow: 0 2px 12px #283847;
 }
 
 .articleMain .content {
-  padding-right: 100px;
+	padding-right: 100px;
 }
 
 .articleSide {
-  flex: 0 0 30%;
-  padding-left: 20px;
+	flex: 0 0 30%;
+	padding-left: 20px;
 }
 
 .sideBox {
-  margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .sideBox .thumb img {
-  width: 100%;
-  max-height: 300px;
+	width: 100%;
+	max-height: 300px;
 }
 
 .markdownWrap {
-  flex: 1;
-  background-color: #4d5b69;
+	flex: 1;
+	background-color: #4d5b69;
 }
 
 .markdownBar {
-  /* flex: 1; */
-  padding: 10px;
-  border-bottom: 1px solid #9c9c9c;
+	/* flex: 1; */
+	padding: 10px;
+	border-bottom: 1px solid #9c9c9c;
 }
 .markdownBar a {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  font-size: 16px;
-  text-align: center;
-  border: 1px solid transparent;
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 16px;
+	text-align: center;
+	border: 1px solid transparent;
 }
 .markdownBar a:hover {
-  border: 1px solid #bbb;
-  border-radius: 4px;
+	border: 1px solid #bbb;
+	border-radius: 4px;
 }
 
 .markdownBar i.separator {
-  display: inline-block;
-  width: 0;
-  border-left: 1px solid #d9d9d9;
-  border-right: 1px solid #2f4050;
-  color: transparent;
-  text-indent: -10px;
-  margin: 0 6px;
+	display: inline-block;
+	width: 0;
+	border-left: 1px solid #d9d9d9;
+	border-right: 1px solid #2f4050;
+	color: transparent;
+	text-indent: -10px;
+	margin: 0 6px;
 }
 
 .markdownBox {
-  display: flex;
+	display: flex;
 }
 
 .markdownBox .markdowInput {
-  flex: 1;
+	flex: 1;
 }
 
 .markdownBox .markdowInput .formTextarea {
-  background-color: #4d5b69 !important;
-  color: #d3e5f7 !important;
-  font-size: 1.2rem;
-  border-radius: 0;
+	background-color: #4d5b69 !important;
+	color: #d3e5f7 !important;
+	font-size: 1.2rem;
+	border-radius: 0;
 }
 
 .markdownBox .markdownPreview {
-  flex: 0 0 50%;
-  padding: 10px;
-  box-sizing: border-box;
-  background: #4d5b69;
-  border-radius: 4px;
+	flex: 0 0 50%;
+	padding: 10px;
+	box-sizing: border-box;
+	background: #4d5b69;
+	border-radius: 4px;
 }

@@ -20,7 +20,7 @@
       }
     ],
     "trailing-comma": [
-      false,
+      true,
       {
         "multiline": "always",
         "singleline": "never"

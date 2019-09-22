@@ -6,23 +6,23 @@ import promiseMiddleware from 'redux-promise'
 // import promise from 'redux-promise-middleware'
 
 export function configureStore(initialState?: RootState): Store<RootState> {
-  let middleware = applyMiddleware(logger, promiseMiddleware)
+	let middleware = applyMiddleware(logger, promiseMiddleware)
 
-  if (process.env.NODE_ENV !== 'production') {
-    middleware = composeWithDevTools(middleware)
-  }
+	if (process.env.NODE_ENV !== 'production') {
+		middleware = composeWithDevTools(middleware)
+	}
 
-  const store = createStore(
-    rootReducer as any,
-    initialState as any,
-    middleware,
-  ) as Store<RootState>
+	const store = createStore(
+		rootReducer as any,
+		initialState as any,
+		middleware,
+	) as Store<RootState>
 
-  if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      const nextReducer = require('./reducers')
-      store.replaceReducer(nextReducer)
-    })
-  }
-  return store
+	if (module.hot) {
+		module.hot.accept('./reducers', () => {
+			const nextReducer = require('./reducers')
+			store.replaceReducer(nextReducer)
+		})
+	}
+	return store
 }

@@ -1,28 +1,48 @@
-.inputWrap {
-  display: flex;
-  padding: 15px 0;
+.avatar {
+	position: relative;
+	width: 120px;
+	height: 120px;
+	border-radius: 4px;
+	border: 1px solid transparent;
+	background: linear-gradient(#2e4050, #2e4050) padding-box,
+		repeating-linear-gradient(-45deg, black 0, black 25%, white 0, white 50%) 0 /
+			0.6em 0.6em;
+	animation: ants 12s linear infinite;
+	text-align: center;
 }
-.inputWrap .label {
-  width: 100px;
-  line-height: 38px;
-  font-size: 15px;
-  font-weight: 500;
+@keyframes ants {
+	100% {
+		background-position: 100%;
+	}
 }
-.inputWrap .avatar {
-  width: 120px;
-  width: 120px;
+.avatar input[type='file'],
+.avatar .thumbIcon {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+
+.avatar .thumbIcon {
+	padding-top: 30px;
+}
+
+.avatar input[type='file'] {
+	opacity: 0;
 }
 
 .line {
-  position: relative;
-  padding: 10px 0;
+	position: relative;
+	padding: 10px 0;
 }
 .line:before,
 .line:after {
-  content: '';
-  position: absolute;
-  height: 1px;
-  width: 100%;
-  top: 50%;
-  background: #394654;
+	content: '';
+	position: absolute;
+	height: 1px;
+	width: 100%;
+	top: 50%;
+	background: #394654;
 }

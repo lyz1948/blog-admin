@@ -1,275 +1,325 @@
 import * as React from 'react'
+import * as styles from './style.css'
 import { Base64 } from 'js-base64'
 import { Button, Image } from 'react-bootstrap'
-import { Notication, FancyInput, FancyTextarea } from '../index'
+import { Notication, FancyInput, FancyTextarea, TextInput } from '../index'
 import { INotice } from '@app/interfaces/notice'
-import { UserActions } from '@app/store/actions'
+import { UserActions, ArticleActions } from '@app/store/actions'
 import { UserModel } from '@app/store/models'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
 
-export namespace TagComp {
-  export interface IProps {
-    user: UserModel
-    updateUser: typeof UserActions.updateUser
-  }
+export namespace SettingComp {
+	export interface IProps {
+		user: UserModel
+		updateUser: typeof UserActions.updateUser
+		uploadThumb: typeof ArticleActions.uplodThumb
+		inputChange: typeof ArticleActions.inputChange
+	}
 
-  export interface IState {
-    userInfo?: any
-    showModal: boolean
-    showNotice: boolean
-    type: string
-    content: string
-  }
+	export interface IState {
+		userinfo?: any
+		name?: string
+		avatar?: string
+		slogan?: string
+		formData?: any
+		showModal: boolean
+		showNotice: boolean
+		type: string
+		content: string
+	}
 }
 
-export class Settings extends React.Component<TagComp.IProps, TagComp.IState> {
-  private inputTitle = React.createRef<HTMLInputElement>()
-  private inputSubTitle = React.createRef<HTMLInputElement>()
-  private inputSEO = React.createRef<HTMLInputElement>()
-  private inputSiteName = React.createRef<HTMLInputElement>()
-  private inputEmail = React.createRef<HTMLInputElement>()
-  private inputICP = React.createRef<HTMLInputElement>()
-  private inputDescription = React.createRef<HTMLInputElement>()
-  private inputBlackListIp = React.createRef<HTMLInputElement>()
-  private inputBlackListEmail = React.createRef<HTMLInputElement>()
+export class Settings extends React.Component<SettingComp.IProps, SettingComp.IState> {
+	private inputTitle = React.createRef<HTMLInputElement>()
+	private inputSubTitle = React.createRef<HTMLInputElement>()
+	private inputSEO = React.createRef<HTMLInputElement>()
+	private inputSiteName = React.createRef<HTMLInputElement>()
+	private inputEmail = React.createRef<HTMLInputElement>()
+	private inputICP = React.createRef<HTMLInputElement>()
+	private inputDescription = React.createRef<HTMLInputElement>()
+	private inputBlackListIp = React.createRef<HTMLInputElement>()
+	private inputBlackListEmail = React.createRef<HTMLInputElement>()
 
-  private inputName = React.createRef<HTMLInputElement>()
-  private inputSlogan = React.createRef<HTMLInputElement>()
-  private inputPassword = React.createRef<HTMLInputElement>()
-  private inputPasswordNew = React.createRef<HTMLInputElement>()
-  private inputPasswordConfirm = React.createRef<HTMLInputElement>()
+	private inputName = React.createRef<HTMLInputElement>()
+	private inputSlogan = React.createRef<HTMLInputElement>()
+	private inputPassword = React.createRef<HTMLInputElement>()
+	private inputPasswordNew = React.createRef<HTMLInputElement>()
+	private inputPasswordConfirm = React.createRef<HTMLInputElement>()
 
-  constructor(props: TagComp.IProps, context?: any) {
-    super(props, context)
+	constructor(props: SettingComp.IProps, context?: any) {
+		super(props, context)
 
-    this.state = {
-      userInfo: null,
-      showNotice: false,
-      showModal: false,
-      type: 'info',
-      content: '添加成功',
-    }
-    this.handleDelete = this.handleDelete.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    // this.handleUpdate = this.handleUpdate.bind(this)
-  }
+		this.state = {
+			userinfo: this.props.user || null,
+			name: 'aa',
+			avatar: '',
+			slogan: 'bb',
+			formData: null,
+			showNotice: false,
+			showModal: false,
+			type: 'info',
+			content: '添加成功',
+		}
+	}
 
-  componentDidMount() {
-    this.getUserInfo()
-  }
+	// 选择上传头像
+	async chooseImage(event: React.ChangeEvent<HTMLInputElement>) {
+		const formData = new FormData()
+		const fileEl = document.getElementById('file') as HTMLInputElement
 
-  getUserInfo() {
-    const { user } = this.props
-    const { username, slogan } = user
-    this.inputName.current!.value = username
-    if (slogan) {
-      this.inputSlogan.current!.value = slogan
-    }
-  }
+		if (fileEl.files) {
+			const avatar = URL.createObjectURL(fileEl.files[0])
 
-  openModal(id: string) {
-    this.setState({
-      showModal: true,
-    })
-  }
+			formData.append('image', fileEl.files[0])
+			this.setState({
+				avatar,
+				formData,
+			})
+		}
+	}
 
-  showNotice(obj: INotice) {
-    const { type, content } = obj
-    this.setState({
-      showNotice: true,
-      type,
-      content,
-    })
-  }
+	inputNameChange(text: string) {
+		// const name = event.target.value
+	}
 
-  handleEdit(tag: any, e: React.MouseEvent<HTMLButtonElement>) {}
+	inputSloganChange(event: React.ChangeEvent<HTMLInputElement>) {
+		const slogan = event.target.value
+		this.setState({
+			slogan,
+		})
+	}
 
-  // 更新用户信息
-  handleUpdate() {
-    const username = this.inputName.current!.value
-    const slogan = this.inputSlogan.current!.value
-    let password = this.inputPassword.current!.value
-    let passwordNew = this.inputPasswordNew.current!.value
-    let passwordNewConfirm = this.inputPasswordConfirm.current!.value
+	// 更新用户信息
+	async handleUpdate() {
+		const username = this.inputName.current!.value
+		const slogan = this.inputSlogan.current!.value
+		let password = this.inputPassword.current!.value
+		let passwordNew = this.inputPasswordNew.current!.value
+		let passwordNewConfirm = this.inputPasswordConfirm.current!.value
 
-    if (!username) {
-      this.showNotice({ type: 'warn', content: '您的江湖称呼是？' })
-      return
-    }
-    if (!slogan) {
-      this.showNotice({ type: 'warn', content: '您的口号是?' })
-      return
-    }
-    if (password && !passwordNew) {
-      this.showNotice({ type: 'warn', content: '新密码未输入！' })
-      return
-    }
+		if (!username) {
+			this.notice({ type: 'warn', content: '您的江湖称呼是？' })
+			return
+		}
+		if (!slogan) {
+			this.notice({ type: 'warn', content: '您的口号是?' })
+			return
+		}
+		if (password && !passwordNew) {
+			this.notice({ type: 'warn', content: '新密码未输入！' })
+			return
+		}
 
-    if (passwordNew && !passwordNewConfirm) {
-      this.showNotice({ type: 'warn', content: '确认密码不能为空！' })
-      return
-    }
-    if (
-      passwordNew.length !== passwordNewConfirm.length ||
-      passwordNew.trim() !== passwordNewConfirm.trim()
-    ) {
-      this.showNotice({
-        type: 'warn',
-        content: '手抖了吧，两次密码不一致啊！',
-      })
-      return
-    }
+		if (passwordNew && !passwordNewConfirm) {
+			this.notice({ type: 'warn', content: '确认密码不能为空！' })
+			return
+		}
+		if (
+			passwordNew.length !== passwordNewConfirm.length ||
+			passwordNew.trim() !== passwordNewConfirm.trim()
+		) {
+			this.notice({
+				type: 'warn',
+				content: '手抖了吧，两次密码不一致啊！',
+			})
+			return
+		}
 
-    password = Base64.encode(password)
-    passwordNew = Base64.encode(passwordNew)
-    passwordNewConfirm = Base64.encode(passwordNewConfirm)
+		password = Base64.encode(password)
+		passwordNew = Base64.encode(passwordNew)
+		passwordNewConfirm = Base64.encode(passwordNewConfirm)
+		const { avatar } = this.state
+		let userInfo = {
+			username,
+			slogan,
+			password,
+			avatar,
+			password_new: passwordNew,
+		}
+		// 先上传缩略图
+		const res = await this.props.uploadThumb(this.state.formData)
+		if (res && res.payload && res.payload.result) {
+			userInfo.avatar = res.payload.result
+		}
+		this.props.updateUser(userInfo)
 
-    let userInfo = {
-      username,
-      slogan,
-      avatar: 'https://avatars1.githubusercontent.com/u/15190827?s=460&v=4',
-      password,
-      password_new: passwordNew,
-    }
-    this.props.updateUser(userInfo)
-  }
+		const { error, message } = this.props.user
 
-  handleDelete() {
-    this.setState({
-      showModal: !this.state.showModal,
-    })
-  }
+		let type = 'success'
+		if (error) {
+			type = 'error'
+		}
 
-  renderSiteSetting(): JSX.Element | void {
-    return (
-      <div className="module flex60">
-        <div className="title">
-          <h3>全局设置</h3>
-        </div>
-        <div className="content">
-          <div className="inputWrap">
-            <span className="label">网站标题</span>
-            <FancyInput ref={this.inputTitle} tip="网站的标题" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">网站副标题</span>
-            <FancyInput ref={this.inputSubTitle} tip="网站副标题" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">网站关键字</span>
-            <FancyInput ref={this.inputSEO} tip="网站关键字" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">网站域名</span>
-            <FancyInput ref={this.inputSiteName} tip="网站域名" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">网站电子邮件</span>
-            <FancyInput ref={this.inputEmail} tip="admin@ykpine.com" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">网站备案号</span>
-            <FancyInput ref={this.inputICP} tip="网站ICP备案号" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">网站描述</span>
-            <FancyTextarea ref={this.inputDescription} tip="网站简介描述" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">黑名单 - IP</span>
-            <FancyTextarea ref={this.inputBlackListIp} tip="网站IP黑名单列表" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">黑名单 - 邮箱</span>
-            <FancyTextarea
-              ref={this.inputBlackListEmail}
-              tip="网站邮箱黑名单列表"
-            />
-          </div>
-          <div className="inputWrap">
-            <span className="label"></span>
-            <Button variant="info">保存修改</Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+		this.notice({
+			type,
+			content: message,
+		})
+	}
 
-  renderUserSetting(): JSX.Element | void {
-    const { user } = this.props
+	openModal(id: string) {
+		this.setState({
+			showModal: true,
+		})
+	}
 
-    return (
-      <div className="module flex1 pdl0">
-        <div className="title">
-          <h3>用户设置</h3>
-        </div>
-        <div className="content">
-          <div className="inputWrap">
-            <span className="label">头像</span>
-            <div style={{ width: '120px', height: '120px' }}>
-              {user ? (
-                <Image src={user.avatar} thumbnail />
-              ) : (
-                <div>获取头像失败</div>
-              )}
-            </div>
-          </div>
-          <div className="inputWrap">
-            <span className="label">姓名</span>
-            <FancyInput ref={this.inputName} tip="用户姓名" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">口号</span>
-            <FancyInput ref={this.inputSlogan} tip="用户个人签名" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">旧密码</span>
-            <FancyInput ref={this.inputPassword} tip="旧密码" type="password" />
-          </div>
-          <div className="inputWrap">
-            <span className="label">新密码</span>
-            <FancyInput
-              ref={this.inputPasswordNew}
-              tip="新密码"
-              type="password"
-            />
-          </div>
-          <div className="inputWrap">
-            <span className="label">确认密码</span>
-            <FancyInput
-              ref={this.inputPasswordConfirm}
-              tip="确认新密码"
-              type="password"
-            />
-          </div>
-          <div className="inputWrap">
-            <span className="label"></span>
-            <Button variant="info" onClick={() => this.handleUpdate()}>
-              保存修改
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+	notice(obj: INotice) {
+		const { type, content } = obj
+		this.setState({
+			showNotice: true,
+			type,
+			content,
+		})
+	}
 
-  render() {
-    const { showNotice, type, content } = this.state
-    return (
-      <div>
-        <Notication
-          show={showNotice}
-          type={type}
-          content={content}
-          onClose={() => {
-            this.setState({ showNotice: false })
-          }}
-          autohide
-        />
-        <div className="flex">
-          {this.renderSiteSetting()}
-          {this.renderUserSetting()}
-        </div>
-      </div>
-    )
-  }
+	renderSiteSetting(): JSX.Element | void {
+		return (
+			<div className="module flex60">
+				<div className="title">
+					<h3>全局设置</h3>
+				</div>
+				<div className="content">
+					<div className="inputWrap">
+						<span className="label">网站标题</span>
+						<FancyInput ref={this.inputTitle} tip="网站的标题" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">网站副标题</span>
+						<FancyInput ref={this.inputSubTitle} tip="网站副标题" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">网站关键字</span>
+						<FancyInput ref={this.inputSEO} tip="网站关键字" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">网站域名</span>
+						<FancyInput ref={this.inputSiteName} tip="网站域名" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">网站电子邮件</span>
+						<FancyInput ref={this.inputEmail} tip="admin@ykpine.com" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">网站备案号</span>
+						<FancyInput ref={this.inputICP} tip="网站ICP备案号" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">网站描述</span>
+						<FancyTextarea ref={this.inputDescription} tip="网站简介描述" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">黑名单 - IP</span>
+						<FancyTextarea ref={this.inputBlackListIp} tip="网站IP黑名单列表" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">黑名单 - 邮箱</span>
+						<FancyTextarea
+							ref={this.inputBlackListEmail}
+							tip="网站邮箱黑名单列表"
+						/>
+					</div>
+					<div className="inputWrap">
+						<span className="label"></span>
+						<Button variant="info">保存修改</Button>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	renderUserSetting(): JSX.Element | void {
+		const { user } = this.props
+
+		return (
+			<div className="module flex1 pdl0">
+				<div className="title">
+					<h3>用户设置</h3>
+				</div>
+				<div className="content">
+					<div className="inputWrap">
+						<span className="label">头像</span>
+						<div className={styles.avatar}>
+							<input
+								type="file"
+								id="file"
+								onChange={(e: any) => this.chooseImage(e)}
+							/>
+							{user.avatar ? (
+								<Image src={user.avatar} thumbnail />
+							) : (
+								<div className={styles.thumbIcon}>
+									<FontAwesomeIcon icon={faCloudUploadAlt} size="4x" />
+								</div>
+							)}
+						</div>
+					</div>
+					<div className="inputWrap">
+						<span className="label">姓名</span>
+						{
+							user ? <TextInput 
+							text={user.username}
+							onSave={(text: string) => this.inputNameChange(text)}/>
+							: <div>no user</div>
+						}
+						
+						{/* <FancyInput ref={this.inputName} value={userinfo && userinfo.username} tip="用户姓名" onChange={(e: any) => this.inputNameChange(e) }/> */}
+					</div>
+					<div className="inputWrap">
+						<span className="label">口号</span>
+						<FancyInput
+							ref={this.inputSlogan}
+							tip="用户个人签名"
+						/>
+					</div>
+					<div className="inputWrap">
+						<span className="label">旧密码</span>
+						<FancyInput ref={this.inputPassword} tip="旧密码" type="password" />
+					</div>
+					<div className="inputWrap">
+						<span className="label">新密码</span>
+						<FancyInput
+							ref={this.inputPasswordNew}
+							tip="新密码"
+							type="password"
+						/>
+					</div>
+					<div className="inputWrap">
+						<span className="label">确认密码</span>
+						<FancyInput
+							ref={this.inputPasswordConfirm}
+							tip="确认新密码"
+							type="password"
+						/>
+					</div>
+					<div className="inputWrap">
+						<span className="label"></span>
+						<Button variant="info" onClick={() => this.handleUpdate()}>
+							保存修改
+						</Button>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	render() {
+		const { showNotice, type, content } = this.state
+		return (
+			<div>
+				<Notication
+					show={showNotice}
+					type={type}
+					content={content}
+					onClose={() => {
+						this.setState({ showNotice: false })
+					}}
+					autohide
+				/>
+				<div className="flex">
+					{this.renderSiteSetting()}
+					{this.renderUserSetting()}
+				</div>
+			</div>
+		)
+	}
 }
