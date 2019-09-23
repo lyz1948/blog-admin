@@ -1,5 +1,6 @@
 export const gaugeConfigs = {
 	type: 'angulargauge', // The gauge type
+	width: '100%',
 	height: '250', // Height of the gauge
 	dataFormat: 'json', // Data type
 	dataSource: {
@@ -10,7 +11,7 @@ export const gaugeConfigs = {
 			upperLimit: '100',
 			showValue: '1',
 			numberSuffix: '%',
-			theme: 'fusion',
+			theme: 'candy',
 			showToolTip: '0',
 		},
 		// Chart Data
@@ -56,7 +57,7 @@ export const chartConfigs = {
 			xAxisName: 'Country',
 			yAxisName: 'Reserves (MMbbl)',
 			numberSuffix: 'K',
-			theme: 'fusion',
+			theme: 'candy',
 		},
 		// Chart Data
 		data: [
@@ -110,7 +111,7 @@ export const mapConfigs = {
 			includevalueinlabels: '1',
 			labelsepchar: ': ',
 			entityFillHoverColor: '#FFF9C4',
-			theme: 'fusion',
+			theme: 'candy',
 		},
 		// Aesthetics; ranges synced with the slider
 		colorrange: {
@@ -183,7 +184,7 @@ export const doughuntConfigs = {
 			showPercentValues: '1',
 			useDataPlotColorForLabels: '1',
 			enableMultiSlicing: '0',
-			theme: 'fusion',
+			theme: 'candy',
 		},
 		data: [
 			{

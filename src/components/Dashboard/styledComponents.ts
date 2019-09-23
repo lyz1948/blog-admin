@@ -12,14 +12,14 @@ export const GridCard = styled.div`
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
-	padding: 1.5em;
-	margin: 0 1.5em;
+	justify-content: space-around;
+	padding: 1rem 20px;
 	border-radius: 3px;
 	box-sizing: border-box;
 `
 
 export const GridCardDark = styled(GridCard)`
-	background: #202a3b;
+	background: rgb(38, 42, 51);
 `
 
 export const GridCardParagraph = styled.p`

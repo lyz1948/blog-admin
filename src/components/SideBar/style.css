@@ -49,7 +49,8 @@
 .siderNav .subNav {
 	padding: 8px 0;
 	color: #79fded;
-	background-color: #2e4050;
+	background-color: #2b3b4c;
+	/* background-color: #2e4050; */
 }
 
 .siderNav .subNav .content {
@@ -63,7 +64,6 @@
 }
 
 .siderNav .text {
-	/* color: #fff; */
 	color: #79fded;
 	font-size: 14px;
 	font-weight: 500;

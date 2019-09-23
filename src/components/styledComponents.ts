@@ -9,7 +9,6 @@ interface ISpacing {
 export const Container = styled.div<ISpacing>`
 	margin-top: ${(props: any) => props.mt || '0'};
 	margin-bottom: ${(props: any) => props.mb! || '0'};
-	padding: ${(props: any) => props.pd! || '0'};
 `
 
 export const Row = styled.div`
