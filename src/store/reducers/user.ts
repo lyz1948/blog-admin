@@ -4,7 +4,7 @@ import { IResponseData } from '../../interfaces/data'
 import { UserActions } from '../actions'
 
 const initialState: RootState.UserState = {
-	username: '',
+	name: '',
 	message: '',
 	avatar: '',
 	error: true,

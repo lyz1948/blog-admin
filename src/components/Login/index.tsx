@@ -36,10 +36,10 @@ export class Login extends React.Component<User.IProps, User.IState> {
 	}
 
 	async signIn() {
-		const username = this.inputName.current!.value
+		const name = this.inputName.current!.value
 		let password = this.inputPassword.current!.value
 
-		if (!username) {
+		if (!name) {
 			this.showNotice({ type: 'warn', content: '用户名不能为空' })
 			return
 		}
@@ -51,7 +51,7 @@ export class Login extends React.Component<User.IProps, User.IState> {
 
 		password = password ? Base64.encode(password) : password
 		// 提交登录
-		const res = await this.props.onLogin({ username, password })
+		const res = await this.props.onLogin({ name, password })
 		
 		const { access_token } = this.props.token
 

@@ -15,7 +15,6 @@ export namespace Login {
 }
 @connect(
 	(state: RootState, ownProps): Pick<Login.IProps, 'login'> => {
-		console.log('state', state.login)
 		return { login: state.login }
 	},
 	(dispatch: Dispatch): Pick<Login.IProps, 'actions'> => ({

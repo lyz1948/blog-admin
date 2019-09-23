@@ -11,6 +11,9 @@ export namespace ArticleActions {
 		DELETE_ARTICLE = 'DELETE_ARTICLE',
 		UPLOAD_ARTICLE_THUMB = 'UPLOAD_ARTICLE_THUMB',
 
+		GET_SITE_INFO = 'GET_SITE_INFO',
+		UPDATE_SITE_INFO = 'UPDATE_SITE_INFO',
+
 		GET_USER = 'GET_USER',
 		UPDATE_USER = 'UPDATE_USER',
 		UPLOAD_AVATAR = 'UPLOAD_AVATAR',
@@ -48,6 +51,10 @@ export namespace ArticleActions {
 		Type.UPDATE_ARTICLE,
 		API.updateArticle,
 	)
+
+	// SITE
+	export const getSiteInfo = createAction(Type.GET_SITE_INFO, API.fetchSiteInfo)
+	export const updateSiteInfo = createAction(Type.UPDATE_SITE_INFO, API.updateSiteInfo)
 
 	// USER
 	export const getUser = createAction(Type.GET_USER, API.getUser)

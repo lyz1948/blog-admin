@@ -1,5 +1,6 @@
 import {
 	LoginModel,
+	SiteModel,
 	UserModel,
 	TagModel,
 	NavModel,
@@ -14,6 +15,7 @@ export interface RootState {
 	user: RootState.UserState
 	nav: RootState.NavState
 	login: RootState.UserState
+	site: RootState.SiteState
 	router?: any
 }
 
@@ -23,5 +25,6 @@ export namespace RootState {
 	export type TagState = TagModel[]
 	export type UserState = UserModel
 	export type LoginState = LoginModel
+	export type SiteState = SiteModel
 	export type NavState = NavModel
 }

@@ -1,63 +1,58 @@
 import * as React from 'react'
 
 export namespace TextInput {
-	export interface Props {
+	export interface IProps {
+		name?: string
 		text?: string
+		type?: string
 		placeholder?: string
 		newTodo?: boolean
 		editing?: boolean
-		onSave: (text: string) => void
+		valueChange: (name: string, e: React.ChangeEvent) => void
 	}
 
-	export interface State {
+	export interface IState {
+		name: string
 		text: string
+		type: string
 	}
 }
 
 export class TextInput extends React.Component<
-	TextInput.Props,
-	TextInput.State
+	TextInput.IProps,
+	TextInput.IState
 > {
-	constructor(props: TextInput.Props, context?: any) {
+	constructor(props: TextInput.IProps, context?: any) {
 		super(props, context)
-		this.state = { text: this.props.text || '' }
-		this.handleBlur = this.handleBlur.bind(this)
-		this.handleSubmit = this.handleSubmit.bind(this)
-		this.handleChange = this.handleChange.bind(this)
-	}
-
-	handleSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
-		const text = event.currentTarget.value.trim()
-		if (event.which === 13) {
-			this.props.onSave(text)
-			if (this.props.newTodo) {
-				this.setState({ text: '' })
-			}
+		this.state = { 
+			text: this.props.text || '', 
+			name: this.props.name || '',
+			type: this.props.type || 'text',
 		}
+		this.handleBlur = this.handleBlur.bind(this)
 	}
 
 	handleChange(event: React.ChangeEvent<HTMLInputElement>) {
 		this.setState({ text: event.target.value })
+		this.props.valueChange(this.props.name!, event)
 	}
 
 	handleBlur(event: React.FocusEvent<HTMLInputElement>) {
-		const text = event.target.value.trim()
-		if (!this.props.newTodo) {
-			this.props.onSave(text)
-		}
+		// const text = event.target.value.trim()
+		
 	}
 
 	render() {
 		return (
 			<input
 				className="formInput"
-				type="text"
+				type={this.state.type}
 				autoFocus
 				placeholder={this.props.placeholder}
+				name={this.props.name}
 				value={this.state.text}
 				onBlur={this.handleBlur}
-				onChange={this.handleChange}
-				onKeyDown={this.handleSubmit}
+				onChange={(e: any) => this.handleChange(e)}
 			/>
 		)
 	}

@@ -94,8 +94,12 @@ export class App extends React.Component<App.IProps, App.IState> {
 		// 获取签名
 		this.getUserTokenFromStorage()
 
+		// if (!this.hasPermission()) { return }
 		// 用户信息
 		actions.getUser()
+		
+		// 站点信息
+		actions.getSiteInfo()
 
 		// 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
 		if (!articles[0]._id) {
@@ -110,6 +114,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 	}
 
 	componentDidMount() {
+		console.log('mounted')
 		const { articles, actions } = this.props
 		const id = window.location.hash.split('=')[1]
 
@@ -191,8 +196,9 @@ export class App extends React.Component<App.IProps, App.IState> {
 		if (!token || token.expires_in < Date.now()) {
 			localStorage.removeItem(CONFIG.APP.tokenKey)
 			this.props.history.push('/login')
-			return
+			return false
 		}
+		return true
 	}
 
 	// 获取Storage 中的 token
@@ -269,6 +275,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 				return (
 					<Settings
 						user={user}
+						updateSite={actions.updateSiteInfo}
 						updateUser={actions.updateUser}
 						uploadAvatar={actions.uploadAvatar}
 					/>

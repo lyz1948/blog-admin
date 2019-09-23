@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as CONFIG from '../config/app.config'
 import { getToken, getStatus } from '../utils'
 import { IFatchData, IResponseData } from '@app/interfaces/data'
-import { UserModel, ArticleModel, TagModel } from '@app/store/models'
+import { UserModel, ArticleModel, TagModel, SiteModel } from '@app/store/models'
 const token = getToken()
 
 const service = axios.create({
@@ -34,6 +34,16 @@ service.interceptors.response.use(
 		return new Promise((resolve) => resolve({ message: '错误了', status: 'fail', }))
 	}
 )
+
+// 获取网站信息
+export const fetchSiteInfo = <T>() => {
+	return service.get<IFatchData<T>>('/site')
+}
+
+// 更新网站信息
+export const updateSiteInfo = (option: SiteModel) => {
+	return service.put('/site', option)
+}
 
 /**
  * 获取文章列表
