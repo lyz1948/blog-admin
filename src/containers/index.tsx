@@ -1,16 +1,17 @@
 import * as React from 'react'
-import * as CONFIG from '../config/app.config'
-
 import { connect } from 'react-redux'
-import { omit } from '../utils'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router'
-import { RootState } from '../store/reducers'
-import { NavModel, ArticleModel } from '../store/models'
-import { ArticleActions } from '../store/actions'
+import { RootState } from '@app/store/reducers'
+import { NavModel, ArticleModel } from '@app/store/models'
+import { ArticleActions } from '@app/store/actions'
+
+import { omit } from '../utils'
+import * as CONFIG from '../config/app.config'
 
 // component
 import {
+	LoadingRandCircle as Loading,
 	Tag,
 	TopNav,
 	SideBar,
@@ -32,6 +33,7 @@ export namespace App {
 	}
 
 	export interface IState {
+		loading: boolean
 		token?: any
 		editArticle?: any
 	}
@@ -75,6 +77,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 		super(props, context)
 
 		this.state = {
+			loading: true,
 			token: null,
 			editArticle: null,
 		}
@@ -88,29 +91,26 @@ export class App extends React.Component<App.IProps, App.IState> {
 
 	componentWillMount() {
 		const { categories, tags, articles, actions } = this.props
+		// 获取签名
+		this.getUserTokenFromStorage()
+
 		// 用户信息
 		actions.getUser()
 
 		// 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
-		if (articles.length < 2) {
+		if (!articles[0]._id) {
 			actions.getArticleList()
 		}
-		if (tags.length < 2) {
+		if (!tags[0]._id) {
 			actions.getTag()
 		}
-		if (categories.length < 2) {
+		if (!categories[0]._id) {
 			actions.getCategory()
 		}
-
-		// 获取签名
-		this.getUserTokenFromStorage()
 	}
 
 	componentDidMount() {
 		const { articles, actions } = this.props
-
-		// 是否验证通过
-		this.hasPermission()
 		const id = window.location.hash.split('=')[1]
 
 		// 修改文章，刷新页面处理
@@ -124,12 +124,16 @@ export class App extends React.Component<App.IProps, App.IState> {
 				}
 			})
 		}
+		sleep(10).then(() => {
+			this.setState({ loading: false })
+		})
 	}
 
 	// 过滤组件
 	handleFilterChange(filter: NavModel.Filter): void {
 		this.props.history.push(`#${filter}`)
 	}
+
 	// 添加文章
 	handleNewArticle(article: ArticleModel): any {
 		const { thumb } = this.props.articles[0]
@@ -143,6 +147,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 			history.push('#ARTICLE_LIST')
 		})
 	}
+
 	// 更新文章
 	handleUpdateArticle(_id: string, article: ArticleModel): any {
 		const { actions, history } = this.props
@@ -154,6 +159,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 			history.push('#ARTICLE_LIST')
 		})
 	}
+
 	// 获取修改的文章
 	handleEdit(_id: string) {
 		const { articles, categories, tags } = this.props
@@ -177,6 +183,8 @@ export class App extends React.Component<App.IProps, App.IState> {
 		})
 		this.props.history.push(`#${NavModel.Filter.ARTICLE_ADD}?id=${_id}`)
 	}
+
+	// 校验token
 	hasPermission() {
 		const { token } = this.state
 		// 凭证过期
@@ -186,6 +194,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 			return
 		}
 	}
+
 	// 获取Storage 中的 token
 	getUserTokenFromStorage() {
 		let token = localStorage.getItem(CONFIG.APP.tokenKey) as any
@@ -260,9 +269,8 @@ export class App extends React.Component<App.IProps, App.IState> {
 				return (
 					<Settings
 						user={user}
-						inputChange={actions.inputChange}
 						updateUser={actions.updateUser}
-						uploadThumb={actions.uplodThumb}
+						uploadAvatar={actions.uploadAvatar}
 					/>
 				)
 			default:
@@ -272,7 +280,8 @@ export class App extends React.Component<App.IProps, App.IState> {
 
 	render() {
 		const { user } = this.props
-		return (
+		const { loading } = this.state
+		return loading ? (<Loading />) : (
 			<div className="home">
 				<SideBar user={user} onClickFilter={this.handleFilterChange} />
 				<div className="main">

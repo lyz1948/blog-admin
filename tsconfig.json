@@ -1,26 +1,28 @@
 {
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "target": "es5",
-    "jsx": "react",
-    "module": "es6",
-    "moduleResolution": "node",
-    "types" : ["node"],
-    "experimentalDecorators": true,
-    "declaration": false,
-    "removeComments": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "strict": true,
-    "outDir": "build",
-    "lib": ["es6", "es7", "dom"],
-    "typeRoots" : ["./types"],
-    "baseUrl": ".",
-    "paths": {
-      "@app/*": ["./src/*"]
-    },
-  },
-  "exclude": ["build", "node_modules"]
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"sourceMap": true,
+		"target": "es6",
+		"jsx": "react",
+		"module": "es6",
+		"moduleResolution": "node",
+		"types": ["node"],
+		"experimentalDecorators": true,
+		"declaration": false,
+		"removeComments": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"strict": true,
+		"lib": ["dom", "es2015", "es2016", "es2017"],
+		// "typeRoots": ["./types"],
+		"outDir": "./build",
+		"baseUrl": "./src",
+		"paths": {
+			"@app": ["./"],
+			"@app/*": ["./*"]
+		}
+	},
+	"exclude": ["build", "node_modules"],
+	"typeRoots": ["node_modules/@types"]
 }

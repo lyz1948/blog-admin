@@ -13,7 +13,7 @@ export namespace ArticleActions {
 
 		GET_USER = 'GET_USER',
 		UPDATE_USER = 'UPDATE_USER',
-		INPUT_CHANGE = 'INPUT_CHANGE',
+		UPLOAD_AVATAR = 'UPLOAD_AVATAR',
 
 		GET_TAG = 'GET_TAG',
 		ADD_TAG = 'ADD_TAG',
@@ -52,7 +52,7 @@ export namespace ArticleActions {
 	// USER
 	export const getUser = createAction(Type.GET_USER, API.getUser)
 	export const updateUser = createAction(Type.UPDATE_USER, API.updateUser)
-	export const inputChange = createAction(Type.INPUT_CHANGE, API.updateUser)
+	export const uploadAvatar = createAction(Type.UPLOAD_AVATAR, API.uploadAvatar)
 
 	// TAG
 	export const getTag = createAction(Type.GET_TAG, API.fetchTag)

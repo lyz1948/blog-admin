@@ -50,12 +50,12 @@ export class Login extends React.Component<User.IProps, User.IState> {
 		}
 
 		password = password ? Base64.encode(password) : password
-		
 		// 提交登录
-		this.props.onLogin({ username, password })
-		const { access_token, success } = this.props.token
+		const res = await this.props.onLogin({ username, password })
+		
+		const { access_token } = this.props.token
 
-		if (!access_token) {
+		if (!access_token || !res) {
 			this.showNotice({ type: 'error', content: '用户名或密码错误' })
 			return
 		}

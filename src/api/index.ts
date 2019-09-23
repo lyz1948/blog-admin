@@ -3,7 +3,6 @@ import * as CONFIG from '../config/app.config'
 import { getToken, getStatus } from '../utils'
 import { IFatchData, IResponseData } from '@app/interfaces/data'
 import { UserModel, ArticleModel, TagModel } from '@app/store/models'
-
 const token = getToken()
 
 const service = axios.create({
@@ -18,13 +17,23 @@ service.interceptors.request.use((config: any) => {
 	return config
 })
 
-service.interceptors.response.use((response: any) => {
-	if (getStatus(response)) {
-		return Promise.resolve(response.data)
-	} else {
-		return Promise.reject(response)
+service.interceptors.response.use(
+	(response: any) => {
+		if (getStatus(response)) {
+			return Promise.resolve(response.data)
+		} else {
+			return Promise.reject(response)
+		}
+	},
+	error => {
+		const errMsg = error.toString()
+		const code = errMsg.substr(errMsg.indexOf('code') + 5)
+		if (code === '500') {
+			console.log('500 错误了')
+		}
+		return new Promise((resolve) => resolve({ message: '错误了', status: 'fail', }))
 	}
-})
+)
 
 /**
  * 获取文章列表
@@ -58,6 +67,11 @@ export const addArticle = (article: ArticleModel) => {
 // 上传文章缩略图
 export const uploadThumb = (file: any): any => {
 	return service.post('/upload/article', file)
+}
+
+// 上传文章缩略图
+export const uploadAvatar = (file: any): any => {
+	return service.post('/upload/avatar', file)
 }
 
 /**
@@ -128,8 +142,8 @@ export const deleteTag = (id: string | number) => {
  * 用户登录
  * @param user 用户名和密码
  */
-export const signIn = (user: UserModel): Promise<any> => {
-	return service.post('/user/signin', { ...user }).catch(error => Promise.reject(error));
+export const signIn = (user: UserModel) => {
+	return service.post('/user/signin', { ...user })
 }
 
 /**

@@ -8,13 +8,13 @@ import { UserActions, ArticleActions } from '@app/store/actions'
 import { UserModel } from '@app/store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
+import { prefixUrl } from '../../utils'
 
 export namespace SettingComp {
 	export interface IProps {
 		user: UserModel
 		updateUser: typeof UserActions.updateUser
-		uploadThumb: typeof ArticleActions.uplodThumb
-		inputChange: typeof ArticleActions.inputChange
+		uploadAvatar: typeof ArticleActions.uploadAvatar
 	}
 
 	export interface IState {
@@ -30,7 +30,10 @@ export namespace SettingComp {
 	}
 }
 
-export class Settings extends React.Component<SettingComp.IProps, SettingComp.IState> {
+export class Settings extends React.Component<
+	SettingComp.IProps,
+	SettingComp.IState
+> {
 	private inputTitle = React.createRef<HTMLInputElement>()
 	private inputSubTitle = React.createRef<HTMLInputElement>()
 	private inputSEO = React.createRef<HTMLInputElement>()
@@ -41,8 +44,8 @@ export class Settings extends React.Component<SettingComp.IProps, SettingComp.IS
 	private inputBlackListIp = React.createRef<HTMLInputElement>()
 	private inputBlackListEmail = React.createRef<HTMLInputElement>()
 
-	private inputName = React.createRef<HTMLInputElement>()
-	private inputSlogan = React.createRef<HTMLInputElement>()
+	// private inputName = React.createRef<HTMLInputElement>()
+	// private inputSlogan = React.createRef<HTMLInputElement>()
 	private inputPassword = React.createRef<HTMLInputElement>()
 	private inputPasswordNew = React.createRef<HTMLInputElement>()
 	private inputPasswordConfirm = React.createRef<HTMLInputElement>()
@@ -72,6 +75,8 @@ export class Settings extends React.Component<SettingComp.IProps, SettingComp.IS
 			const avatar = URL.createObjectURL(fileEl.files[0])
 
 			formData.append('image', fileEl.files[0])
+			const res = await this.props.uploadAvatar(formData)
+			console.log('upload avatar', res)
 			this.setState({
 				avatar,
 				formData,
@@ -80,25 +85,27 @@ export class Settings extends React.Component<SettingComp.IProps, SettingComp.IS
 	}
 
 	inputNameChange(text: string) {
-		// const name = event.target.value
+		this.setState({
+			name: text,
+		})
 	}
 
-	inputSloganChange(event: React.ChangeEvent<HTMLInputElement>) {
-		const slogan = event.target.value
+	inputSloganChange(text: string) {
 		this.setState({
-			slogan,
+			slogan: text,
 		})
 	}
 
 	// 更新用户信息
 	async handleUpdate() {
-		const username = this.inputName.current!.value
-		const slogan = this.inputSlogan.current!.value
+		// const username = this.inputName.current!.value
+		// const slogan = this.inputSlogan.current!.value
+		const { name, slogan, avatar, formData } = this.state
 		let password = this.inputPassword.current!.value
 		let passwordNew = this.inputPasswordNew.current!.value
 		let passwordNewConfirm = this.inputPasswordConfirm.current!.value
 
-		if (!username) {
+		if (!name) {
 			this.notice({ type: 'warn', content: '您的江湖称呼是？' })
 			return
 		}
@@ -129,18 +136,19 @@ export class Settings extends React.Component<SettingComp.IProps, SettingComp.IS
 		password = Base64.encode(password)
 		passwordNew = Base64.encode(passwordNew)
 		passwordNewConfirm = Base64.encode(passwordNewConfirm)
-		const { avatar } = this.state
 		let userInfo = {
-			username,
+			username: name,
 			slogan,
 			password,
 			avatar,
 			password_new: passwordNew,
 		}
 		// 先上传缩略图
-		const res = await this.props.uploadThumb(this.state.formData)
-		if (res && res.payload && res.payload.result) {
-			userInfo.avatar = res.payload.result
+		if (formData) {
+			const res = await this.props.uploadAvatar(formData)
+			if (res && res.payload && res.payload.result) {
+				userInfo.avatar = res.payload.result
+			}
 		}
 		this.props.updateUser(userInfo)
 
@@ -229,6 +237,7 @@ export class Settings extends React.Component<SettingComp.IProps, SettingComp.IS
 
 	renderUserSetting(): JSX.Element | void {
 		const { user } = this.props
+		const avatar = user.avatar || this.state.avatar
 
 		return (
 			<div className="module flex1 pdl0">
@@ -244,8 +253,8 @@ export class Settings extends React.Component<SettingComp.IProps, SettingComp.IS
 								id="file"
 								onChange={(e: any) => this.chooseImage(e)}
 							/>
-							{user.avatar ? (
-								<Image src={user.avatar} thumbnail />
+							{avatar ? (
+								<Image src={prefixUrl(avatar)} thumbnail />
 							) : (
 								<div className={styles.thumbIcon}>
 									<FontAwesomeIcon icon={faCloudUploadAlt} size="4x" />
@@ -255,21 +264,31 @@ export class Settings extends React.Component<SettingComp.IProps, SettingComp.IS
 					</div>
 					<div className="inputWrap">
 						<span className="label">姓名</span>
-						{
-							user ? <TextInput 
-							text={user.username}
-							onSave={(text: string) => this.inputNameChange(text)}/>
-							: <div>no user</div>
-						}
-						
+						{user.username ? (
+							<TextInput
+								text={user.username}
+								onSave={(text: string) => this.inputNameChange(text)}
+							/>
+						) : (
+							<div>no user</div>
+						)}
+
 						{/* <FancyInput ref={this.inputName} value={userinfo && userinfo.username} tip="用户姓名" onChange={(e: any) => this.inputNameChange(e) }/> */}
 					</div>
 					<div className="inputWrap">
 						<span className="label">口号</span>
-						<FancyInput
+						{user.slogan ? (
+							<TextInput
+								text={user.slogan}
+								onSave={(text: string) => this.inputSloganChange(text)}
+							/>
+						) : (
+							<div>no slogan</div>
+						)}
+						{/* <FancyInput
 							ref={this.inputSlogan}
 							tip="用户个人签名"
-						/>
+						/> */}
 					</div>
 					<div className="inputWrap">
 						<span className="label">旧密码</span>

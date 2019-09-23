@@ -1,5 +1,4 @@
 import * as React from 'react'
-// import * as classNames from 'classnames'
 import * as styles from './style.css'
 import { Row, Col, Image, Badge } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,9 +7,9 @@ import {
 	faEnvelope,
 	faBell,
 	faLock,
-	// faAngleDown,
 } from '@fortawesome/free-solid-svg-icons'
 import { UserModel } from '@app/store/models'
+import { prefixUrl } from '../../utils'
 
 export namespace TopNav {
 	export interface IProps {
@@ -53,7 +52,7 @@ export class TopNav extends React.Component<TopNav.IProps> {
 							<li className={styles.item}>
 								<Image
 									className={styles.avatar}
-									src={user.avatar}
+									src={prefixUrl(user.avatar!)}
 									roundedCircle
 								/>
 							</li>

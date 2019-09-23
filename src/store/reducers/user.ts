@@ -27,13 +27,17 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
 			}
 			return state
 		},
-		[UserActions.Type.INPUT_CHANGE]: (state, action) => {
+		[UserActions.Type.UPLOAD_AVATAR]: (state, action) => {
 			console.log('action', action);
-			// if (action.type === 'name') {
-			// 	return {
-			// 		...state,
-			// 	}
-			// }
+			console.log('state', state);
+			
+			if (action.payload && action.payload.result) {
+				const { result } = action.payload
+				return {
+					...state,
+					avatar: result
+				}
+			}
 			return state
 		},
 		[UserActions.Type.UPDATE_USER]: (state, action) => {

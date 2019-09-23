@@ -6,6 +6,7 @@ import { Image, Accordion } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { SIDER_MENU } from '../../config'
+import { prefixUrl } from '../../utils'
 
 export namespace Nav {
 	export interface IProps {
@@ -30,7 +31,7 @@ export class SideBar extends React.Component<Nav.IProps> {
 					<h1 className="textXLarge">YKPINE</h1>
 					<Image
 						className={styles.avatar}
-						src={user.avatar}
+						src={prefixUrl(user.avatar!)}
 						alt="用户头像"
 						roundedCircle
 						style={{ width: '120px', height: '120px' }}

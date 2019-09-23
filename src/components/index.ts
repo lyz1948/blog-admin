@@ -8,6 +8,7 @@ export { Settings } from './Settings'
 export { Dashboard } from './Dashboard'
 
 // global
+export * from './Base/Loading'
 export * from './Base/Modal'
 export * from './Base/Notication'
 export * from './Base/Input'

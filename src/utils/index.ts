@@ -6,6 +6,10 @@ const toDouble = (s: number) => {
 	return ('00' + str).substring(str.length)
 }
 
+export const prefixUrl = (url: string) => {
+	return url && ~url.indexOf('http') ? url : CONFIG.APP.baseUrl + url
+}
+
 export const getStatus = (response: any) =>
 	!!response.status &&
 	response.data &&

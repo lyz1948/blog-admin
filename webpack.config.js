@@ -3,17 +3,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const { resolve } = require('path')
+const { resolve, join } = require('path')
 const package = require('./package.json')
 
 const r = path => resolve(__dirname, path)
 const isProdMode =
   process.argv.indexOf('-p') >= 0 || process.env.NODE_ENV === 'production'
-const sourcePath = r('.')
-const outPath = r('./build')
+
+var sourcePath = join(__dirname, './src');
+var outPath = join(__dirname, './build');
 
 module.exports = {
-  context: sourcePath + '/src',
+  context: sourcePath,
   entry: {
     app: './main.tsx',
   },
@@ -27,7 +28,7 @@ module.exports = {
     extensions: ['.js', '.ts', '.tsx'],
     mainFields: ['module', 'browser', 'main'],
     alias: {
-      '@app': r('/src'),
+      '@app': sourcePath,
     },
   },
   module: {
@@ -114,6 +115,7 @@ module.exports = {
     runtimeChunk: true,
   },
   plugins: [
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
       DEBUG: false,

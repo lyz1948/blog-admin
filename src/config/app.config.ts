@@ -16,7 +16,7 @@ export const APP = {
 	errno: 200,
 	isProd,
 	tokenKey: 'blogKey',
-	baseUrl: 'http://localhost:5381/',
+	baseUrl: isProd ? 'https://ykpine.com' : 'http://localhost:5381/',
 	apiUrl: 'http://localhost:5381/api',
 	viewUrl: isProd ? 'https://ykpine.com' : 'http://localhost:3000',
 }

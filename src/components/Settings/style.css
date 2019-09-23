@@ -31,6 +31,7 @@
 
 .avatar input[type='file'] {
 	opacity: 0;
+	z-index: 2;
 }
 
 .line {

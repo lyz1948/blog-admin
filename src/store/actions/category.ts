@@ -13,7 +13,6 @@ export namespace CategoryActions {
 		SELECT_CATEGORY = 'SELECT_CATEGORY',
 	}
 
-	// export const addCategory = createAction<CategoryModel>(Type.ADD_CATEGORY)
 	export const deleteCategory = createAction(
 		Type.DELETE_CATEGORY,
 		API.deleteCategory,
