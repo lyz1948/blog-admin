@@ -213,7 +213,6 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 							))}
 						</tbody>
 					</Table>
-					{/* <Pagination className="flex-center">{items}</Pagination>       */}
 				</div>
 			</div>
 		)
