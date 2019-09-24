@@ -19,18 +19,14 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
 			if (action.payload && action.payload.result) {
 				const { result, message } = action.payload
 				return {
-					...state,
 					...result,
 					message,
 					error: false,
 				}
 			}
-			return state
+			// return state
 		},
 		[UserActions.Type.UPLOAD_AVATAR]: (state, action) => {
-			console.log('action', action);
-			console.log('state', state);
-			
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				return {

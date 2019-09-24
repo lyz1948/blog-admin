@@ -323,7 +323,8 @@ export class ArticleAdd extends React.Component<
 			</div>
 		)
 	}
-
+	
+	// 缩略图
 	renderThumb(): JSX.Element | void {
 		const { thumb } = this.state
 		return thumb ? (
@@ -336,20 +337,21 @@ export class ArticleAdd extends React.Component<
 			</div>
 		)
 	}
-
+	// MD编辑框
 	renderMdEditor(): JSX.Element | void {
 		return (
 			<ContentEditable
-				innerRef={React.createRef()}
-				html={this.state.postContent!}
-				disabled={false}
-				onChange={this.handleChange}
-				tagName="article"
+			innerRef={React.createRef()}
+			html={this.state.postContent!}
+			disabled={false}
+			onChange={this.handleChange}
+			tagName="article"
 			/>
-		)
-	}
-
-	renderMdView(): JSX.Element | void {
+			)
+		}
+		
+	// MD预览
+		renderMdView(): JSX.Element | void {
 		return (
 			<div className={styles.markdownPreview}>
 				<ReactMarkdown source={this.state.postContent} />
@@ -431,7 +433,7 @@ export class ArticleAdd extends React.Component<
 										onChange={(e: any) => this.processPost(e)}
 									/>
 								</div>
-								{/* {this.renderMdView()} */}
+								{this.renderMdView()}
 							</div>
 						</div>
 					</div>
@@ -597,11 +599,9 @@ export class ArticleAdd extends React.Component<
 
 	render() {
 		return (
-			<div className={styles.articleAdd}>
-				<div className="flex">
-					{this.renderMain()}
-					{this.renderSide()}
-				</div>
+			<div className="flex">
+				{this.renderMain()}
+				{this.renderSide()}
 			</div>
 		)
 	}

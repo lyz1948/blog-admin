@@ -2,10 +2,10 @@ import * as React from 'react'
 import * as styles from './style.css'
 import { Base64 } from 'js-base64'
 import { Button, Image } from 'react-bootstrap'
-import { Notication, FancyInput, FancyTextarea, TextInput } from '../index'
+import { Notication, TextInput } from '../index'
 import { INotice } from '@app/interfaces/notice'
 import { UserActions, ArticleActions } from '@app/store/actions'
-import { UserModel } from '@app/store/models'
+import { UserModel, SiteModel } from '@app/store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
 import { prefixUrl } from '../../utils'
@@ -13,15 +13,15 @@ import { prefixUrl } from '../../utils'
 export namespace SettingComp {
 	export interface IProps {
 		user: UserModel
+		site: SiteModel
 		updateSite: typeof ArticleActions.updateSiteInfo
 		updateUser: typeof UserActions.updateUser
 		uploadAvatar: typeof ArticleActions.uploadAvatar
 	}
 
 	export interface IState {
-		// name?: string
-		// slogan?: string
-		userinfo?: any
+		userInfo?: any
+		siteInfo?: any
 		avatar?: string
 		formData?: any
 		showModal: boolean
@@ -35,40 +35,28 @@ export class Settings extends React.Component<
 	SettingComp.IProps,
 	SettingComp.IState
 > {
-	private inputTitle = React.createRef<HTMLInputElement>()
-	private inputSubTitle = React.createRef<HTMLInputElement>()
-	private inputSEO = React.createRef<HTMLInputElement>()
-	private inputSiteName = React.createRef<HTMLInputElement>()
-	private inputEmail = React.createRef<HTMLInputElement>()
-	private inputICP = React.createRef<HTMLInputElement>()
-	private inputDescription = React.createRef<HTMLInputElement>()
-	private inputBlackListIp = React.createRef<HTMLInputElement>()
-	private inputBlackListEmail = React.createRef<HTMLInputElement>()
-
-	// private inputName = React.createRef<HTMLInputElement>()
-	// private inputSlogan = React.createRef<HTMLInputElement>()
-	// private inputPassword = React.createRef<HTMLInputElement>()
-	// private inputPasswordNew = React.createRef<HTMLInputElement>()
-	// private inputPasswordConfirm = React.createRef<HTMLInputElement>()
-
 	constructor(props: SettingComp.IProps, context?: any) {
 		super(props, context)
 
 		this.state = {
-			userinfo: this.props.user || null,
-			avatar: '',
+			userInfo: this.props.user || null,
+			siteInfo: this.props.site || null,
+			// avatar: '',
 			formData: null,
 			showNotice: false,
 			showModal: false,
 			type: 'info',
 			content: '添加成功',
 		}
-
-		this.userInfoChange = this.userInfoChange.bind(this)
 	}
 
 	componentDidMount() {
-		console.log(this.props.user)
+		const { site, user } = this.props
+		this.setState({
+			userInfo: user,
+			siteInfo: site,
+			avatar: user.avatar,
+		})
 	}
 
 	// 选择上传头像
@@ -77,36 +65,54 @@ export class Settings extends React.Component<
 		const fileEl = document.getElementById('file') as HTMLInputElement
 
 		if (fileEl.files) {
-			const avatar = URL.createObjectURL(fileEl.files[0])
+			const { userInfo } = this.state
+			userInfo['avatar'] = URL.createObjectURL(fileEl.files[0])
 
 			formData.append('image', fileEl.files[0])
-			const res = await this.props.uploadAvatar(formData)
-			console.log('upload avatar', res)
+
 			this.setState({
-				avatar,
+				userInfo,
 				formData,
 			})
 		}
 	}
 
-	inputNameChange(text: string) {
-		// this.setState({
-		// 	name: text,
-		// })
-	}
-
+	// 用户信息修改
 	userInfoChange(name: string, event: React.ChangeEvent<HTMLInputElement>) {
 		const value = event.target.value
-		const userinfo = this.state.userinfo
+		const { userInfo } = this.state
 
-		userinfo[event.target.name] = value
-		this.setState(userinfo)
+		userInfo[name] = value
+		this.setState(userInfo)
+	}
+
+	// 网站信息修改
+	siteInfoChange(name: string, event: React.ChangeEvent<HTMLInputElement>) {
+		const value = event.target.value
+		const { siteInfo } = this.state
+		
+		// 切割成数组
+		if (name === 'keywords') {
+			siteInfo[name] = value.split(' ')
+		} else if (name === 'mails' || name === 'ips') {
+			siteInfo['blacklist'][name] = value.split(' ')
+		} else {
+			siteInfo[name] = value
+		}
+		this.setState(siteInfo)
 	}
 
 	// 更新用户信息
 	async handleUpdate() {
-		const { userinfo, formData } = this.state
-		let { name, slogan, avatar, password, passwordNew, passwordNewConfirm } = userinfo
+		const { userInfo, formData } = this.state
+		let {
+			name,
+			slogan,
+			avatar,
+			password,
+			passwordNew,
+			passwordNewConfirm,
+		} = userInfo
 
 		if (!name) {
 			this.notice({ type: 'warn', content: '您的江湖称呼是？' })
@@ -126,8 +132,10 @@ export class Settings extends React.Component<
 			return
 		}
 		if (
-			passwordNew.length !== passwordNewConfirm.length ||
-			passwordNew.trim() !== passwordNewConfirm.trim()
+			passwordNew &&
+			passwordNewConfirm &&
+			(passwordNew.length !== passwordNewConfirm.length ||
+				passwordNew.trim() !== passwordNewConfirm.trim())
 		) {
 			this.notice({
 				type: 'warn',
@@ -136,61 +144,66 @@ export class Settings extends React.Component<
 			return
 		}
 
-		password = Base64.encode(password)
-		passwordNew = Base64.encode(passwordNew)
-		passwordNewConfirm = Base64.encode(passwordNewConfirm)
+		password = password ? Base64.encode(password) : password
+		passwordNew = passwordNew ? Base64.encode(passwordNew) : passwordNew
+		passwordNewConfirm = passwordNewConfirm
+			? Base64.encode(passwordNewConfirm)
+			: passwordNewConfirm
 
-		let userInfo = {
+		let userOpts = {
 			name,
 			slogan,
 			password,
 			avatar,
 			password_new: passwordNew,
 		}
-		console.log('userinfo', userInfo)
+
 		// 先上传缩略图
 		if (formData) {
 			const res = await this.props.uploadAvatar(formData)
 			if (res && res.payload && res.payload.result) {
-				userInfo.avatar = res.payload.result
+				userOpts.avatar = res.payload.result
 			}
 		}
-		// this.props.updateUser(userInfo)
+		this.props.updateUser(userOpts)
 
 		const { error, message } = this.props.user
 
 		let type = 'success'
+		let msg = '更新成功'
 		if (error) {
 			type = 'error'
+			msg = message
 		}
 
 		this.notice({
 			type,
-			content: message,
+			content: msg,
 		})
 	}
 
 	// 更新站点
-	updateSiteInfo() {
-		const title = this.inputTitle.current!.value
-		const subTitle = this.inputSubTitle.current!.value
-		const keyword = this.inputSEO.current!.value
-		const domain = this.inputSiteName.current!.value
-		const email = this.inputEmail.current!.value
-		const icp = this.inputICP.current!.value
-		const description = this.inputDescription.current!.value
-		const ipStr = this.inputBlackListIp.current!.value
-		const emailStr = this.inputBlackListEmail.current!.value
-
-		const ips = ipStr ? ipStr.split(' ') : []
-		const mails = emailStr ? emailStr.split(' ') : []
-		const keywords = keyword ? keyword.split(' ') : []
-
-		const options = {
+	async updateSiteInfo() {
+		const {
 			title,
-			sub_title: subTitle,
+			sub_title,
+			domain,
+			icp,
+			email,
 			description,
 			keywords,
+			blacklist,
+		} = this.state.siteInfo
+
+		const ips = blacklist.ips
+		const mails = blacklist.mails
+		const keywordAry = keywords
+
+		const siteOpts = {
+			title,
+			sub_title,
+			description,
+			keywords: keywordAry,
 			email,
 			domain,
 			icp,
@@ -200,7 +213,21 @@ export class Settings extends React.Component<
 				keywords,
 			},
 		}
-		this.props.updateSite(options)
+		const res = await this.props.updateSite(siteOpts)
+		console.log(res)
+		// const { error, message } = this.props.site
+
+		let type = 'success'
+		let msg = '更新成功'
+		// if (error) {
+		// 	type = 'error'
+		// 	msg = message
+		// }
+
+		this.notice({
+			type,
+			content: msg,
+		})
 	}
 
 	openModal(id: string) {
@@ -219,6 +246,13 @@ export class Settings extends React.Component<
 	}
 
 	renderSiteSetting(): JSX.Element | void {
+		const { title, sub_title, email, description, domain, icp, keywords, blacklist } = this.props.site
+		let { mails, ips } = blacklist
+
+		let mailsStr = (mails || []).join(' ')
+		let ipsStr = (ips || []).join(' ')
+		let keywordsStr = (keywords || []).join(' ')
+
 		return (
 			<div className="module flex60">
 				<div className="title">
@@ -227,41 +261,104 @@ export class Settings extends React.Component<
 				<div className="content">
 					<div className="inputWrap">
 						<span className="label">网站标题</span>
-						<FancyInput ref={this.inputTitle} tip="网站的标题" />
+						<TextInput
+							text={title}
+							name="title"
+							placeholder="网站的标题"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">网站副标题</span>
-						<FancyInput ref={this.inputSubTitle} tip="网站副标题" />
+						<TextInput
+							text={sub_title}
+							name="sub_title"
+							placeholder="网站副标题"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">网站关键字</span>
-						<FancyInput ref={this.inputSEO} tip="网站关键字" />
+						<TextInput
+							text={keywordsStr}
+							name="keywords"
+							placeholder="网站关键字"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">网站域名</span>
-						<FancyInput ref={this.inputSiteName} tip="网站域名" />
+						<TextInput
+							text={domain}
+							name="domain"
+							placeholder="网站域名"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">网站电子邮件</span>
-						<FancyInput ref={this.inputEmail} tip="admin@ykpine.com" />
+						<TextInput
+							text={email}
+							name="email"
+							placeholder="admin@ykpine.com"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">网站备案号</span>
-						<FancyInput ref={this.inputICP} tip="网站ICP备案号" />
+						<TextInput
+							text={icp}
+							name="icp"
+							placeholder="网站ICP备案号"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">网站描述</span>
-						<FancyTextarea ref={this.inputDescription} tip="网站简介描述" />
+						<TextInput
+							type="textarea"
+							text={description}
+							name="description"
+							placeholder="网站简介描述"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">黑名单 - IP</span>
-						<FancyTextarea ref={this.inputBlackListIp} tip="网站IP黑名单列表" />
+						<TextInput
+							type="textarea"
+							text={ipsStr}
+							name="ips"
+							placeholder="网站IP黑名单列表"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">黑名单 - 邮箱</span>
-						<FancyTextarea
-							ref={this.inputBlackListEmail}
-							tip="网站邮箱黑名单列表"
+						<TextInput
+							type="textarea"
+							text={mailsStr}
+							placeholder="网站邮箱黑名单列表"
+							name="mails"
+							valueChange={(name: string, e: any) =>
+								this.siteInfoChange(name, e)
+							}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -276,8 +373,7 @@ export class Settings extends React.Component<
 	}
 
 	renderUserSetting(): JSX.Element | void {
-		const { user } = this.props
-		const avatar = user.avatar || this.state.avatar
+		const { name, avatar, slogan } = this.state.userInfo
 
 		return (
 			<div className="module flex1 pdl0">
@@ -304,57 +400,43 @@ export class Settings extends React.Component<
 					</div>
 					<div className="inputWrap">
 						<span className="label">姓名</span>
-						{user.name ? (
-							<TextInput
-								text={user.name}
-								name="name"
-								valueChange={(name: string, e: any) =>
-									this.userInfoChange(name, e)
-								}
-							/>
-						) : (
-							<div>no user</div>
-						)}
+						<TextInput
+							text={name}
+							name="name"
+							valueChange={(name: string, e: any) =>
+								this.userInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">口号</span>
-						{user.slogan ? (
-							<TextInput
-								text={user.slogan}
-								name="slogan"
-								valueChange={(name: string, e: any) =>
-									this.userInfoChange(name, e)
-								}
-							/>
-						) : (
-							<div>no slogan</div>
-						)}
+						<TextInput
+							text={slogan}
+							name="slogan"
+							valueChange={(name: string, e: any) =>
+								this.userInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">旧密码</span>
-							<TextInput
-								type="password"
-								name="password"
-								valueChange={(name: string, e: any) =>
-									this.userInfoChange(name, e)
-								}
-							/>
-						{/* <FancyInput ref={this.inputPassword} tip="旧密码" type="password" /> */}
+						<TextInput
+							type="password"
+							name="password"
+							valueChange={(name: string, e: any) =>
+								this.userInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">新密码</span>
 						<TextInput
-								type="password"
-								name="passwordNew"
-								valueChange={(name: string, e: any) =>
-									this.userInfoChange(name, e)
-								}
-							/>
-						{/* <FancyInput
-							ref={this.inputPasswordNew}
-							tip="新密码"
 							type="password"
-						/> */}
+							name="passwordNew"
+							valueChange={(name: string, e: any) =>
+								this.userInfoChange(name, e)
+							}
+						/>
 					</div>
 					<div className="inputWrap">
 						<span className="label">确认密码</span>
@@ -365,11 +447,6 @@ export class Settings extends React.Component<
 								this.userInfoChange(name, e)
 							}
 						/>
-						{/* <FancyInput
-							ref={this.inputPasswordConfirm}
-							tip="确认新密码"
-							type="password"
-						/> */}
 					</div>
 					<div className="inputWrap">
 						<span className="label"></span>

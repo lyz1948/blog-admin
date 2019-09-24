@@ -8,9 +8,3 @@ export interface UserModel {
 	access_token?: string
 	[propName: string]: any
 }
-
-export namespace UserModel {
-	export enum Filter {
-		SHOW_USER = 'USER',
-	}
-}

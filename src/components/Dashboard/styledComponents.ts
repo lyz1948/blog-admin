@@ -16,6 +16,7 @@ export const GridCard = styled.div`
 	padding: 1rem 20px;
 	border-radius: 3px;
 	box-sizing: border-box;
+	background: rgb(38, 42, 51);
 `
 
 export const GridCardDark = styled(GridCard)`

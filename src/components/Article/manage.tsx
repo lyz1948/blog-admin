@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { Table, Button, Image, Pagination } from 'react-bootstrap'
+import { Table, Button, Image, Pagination, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
 import { ArticleModel, TagModel } from '../../store/models'
 import { ArticleActions } from '../../store/actions'
-import { ConfirmModal, Empty } from '../index'
+import { ConfirmModal, Empty, TextInput } from '../index'
 import { formatDate } from '../../utils'
 import * as CONFIG from '../../config'
 
@@ -61,6 +61,9 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		const { _id } = article
 		this.props.updateArticle(_id, article)
 	}
+
+	inputKeyword(name: string, event: React.ChangeEvent<HTMLInputElement>) {}
+
 	render() {
 		const { articles } = this.props
 		const { showModal } = this.state
@@ -86,7 +89,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 			items.push(
 				<Pagination.Item key={number} active={number === active}>
 					{number}
-				</Pagination.Item>,
+				</Pagination.Item>
 			)
 		}
 
@@ -97,6 +100,38 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 					onHide={() => this.setState({ showModal: false })}
 					onClose={(e: any) => this.handleDelete(e)}
 				/>
+				<div className="flex">
+					<div className="flex flex30">
+						{/* <div className="flex30 mr10">
+							<select name="article" id="select" className="formInput">
+								<option>排序</option>
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+							</select>
+						</div> */}
+						<InputGroup className="mb-3">
+							<TextInput
+								placeholder="Recipient's username"
+								valueChange={() => this.inputKeyword}
+							/>
+							<InputGroup.Append>
+								<Button variant="primary">搜索</Button>
+							</InputGroup.Append>
+						</InputGroup>
+					</div>
+					<div className="flex1">
+						<Pagination className="flex-end">
+							<Pagination.First />
+							<Pagination.Prev />
+							{items}
+							<Pagination.Next />
+							<Pagination.Last />
+						</Pagination>
+					</div>
+				</div>
 				<div className="flex1 tac">
 					<Table striped bordered hover variant="dark">
 						<thead>

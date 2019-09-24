@@ -6,6 +6,7 @@ import { ArticleActions } from '../actions'
 const initialState: RootState.SiteState = {
 	title: '',
 	sub_title: '',
+	description: '',
 	keywords: [],
 	email: '',
 	domain: '',
@@ -13,18 +14,28 @@ const initialState: RootState.SiteState = {
 	blacklist: {
 		ips: [],
 		mails: [],
-		keywords: []
+		keywords: [],
 	},
-	description: '',
 }
 
 export const siteReducer = handleActions<RootState.SiteState, IResponseData>(
 	{
 		[ArticleActions.Type.GET_SITE_INFO]: (state, action) => {
-			return state
+			if (action.payload && action.payload.result) {
+				const { result } = action.payload
+				return {
+					...result
+				}
+			}
+			// return state
 		},
 		[ArticleActions.Type.UPDATE_SITE_INFO]: (state, action) => {
-			return state
+			if (action.payload && action.payload.result) {
+				const { result } = action.payload
+				return {
+					...result
+				}
+			}
 		},
 	},
 	initialState

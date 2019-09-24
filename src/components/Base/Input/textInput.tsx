@@ -2,18 +2,18 @@ import * as React from 'react'
 
 export namespace TextInput {
 	export interface IProps {
-		name?: string
 		text?: string
+		name?: string
 		type?: string
 		placeholder?: string
-		newTodo?: boolean
 		editing?: boolean
+		onSave?: (e: React.ChangeEvent) => void
 		valueChange: (name: string, e: React.ChangeEvent) => void
 	}
 
 	export interface IState {
-		name: string
 		text: string
+		name: string
 		type: string
 	}
 }
@@ -24,12 +24,11 @@ export class TextInput extends React.Component<
 > {
 	constructor(props: TextInput.IProps, context?: any) {
 		super(props, context)
-		this.state = { 
-			text: this.props.text || '', 
+		this.state = {
+			text: this.props.text || '',
 			name: this.props.name || '',
 			type: this.props.type || 'text',
 		}
-		this.handleBlur = this.handleBlur.bind(this)
 	}
 
 	handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -37,21 +36,25 @@ export class TextInput extends React.Component<
 		this.props.valueChange(this.props.name!, event)
 	}
 
-	handleBlur(event: React.FocusEvent<HTMLInputElement>) {
-		// const text = event.target.value.trim()
-		
-	}
-
 	render() {
-		return (
+		return this.state.type !== 'textarea' ? (
 			<input
-				className="formInput"
+				// autoFocus
 				type={this.state.type}
-				autoFocus
+				className="formInput"
 				placeholder={this.props.placeholder}
 				name={this.props.name}
 				value={this.state.text}
-				onBlur={this.handleBlur}
+				onBlur={(e: any) => this.handleChange(e)}
+				onChange={(e: any) => this.handleChange(e)}
+			/>
+		) : (
+			<textarea
+				className="formTextarea"
+				placeholder={this.props.placeholder}
+				name={this.props.name}
+				value={this.state.text}
+				onBlur={(e: any) => this.handleChange(e)}
 				onChange={(e: any) => this.handleChange(e)}
 			/>
 		)

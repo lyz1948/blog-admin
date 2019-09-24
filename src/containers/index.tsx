@@ -30,6 +30,7 @@ export namespace App {
 		categories: RootState.CategoryState
 		tags: RootState.TagState
 		user: RootState.UserState
+		site: RootState.SiteState
 	}
 
 	export interface IState {
@@ -52,7 +53,7 @@ const sleep = (time: number) =>
 		ownProps
 	): Pick<
 		App.IProps,
-		'filter' | 'articles' | 'categories' | 'tags' | 'user'
+		'filter' | 'articles' | 'categories' | 'tags' | 'user' | 'site'
 	> => {
 		const hash =
 			ownProps.location && ownProps.location.hash.replace('#', '').split('?')[0]
@@ -66,6 +67,7 @@ const sleep = (time: number) =>
 			articles: state.articles,
 			categories: state.categories,
 			tags: state.tags,
+			site: state.site
 		}
 	},
 	(dispatch: Dispatch): Pick<App.IProps, 'actions'> => ({
@@ -114,7 +116,6 @@ export class App extends React.Component<App.IProps, App.IState> {
 	}
 
 	componentDidMount() {
-		console.log('mounted')
 		const { articles, actions } = this.props
 		const id = window.location.hash.split('=')[1]
 
@@ -223,7 +224,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 	filterCompoent(): JSX.Element | void {
 		this.hasPermission()
 
-		const { filter, articles, categories, tags, user, actions } = this.props
+		const { filter, articles, categories, tags, user, site, actions } = this.props
 		const { editArticle } = this.state
 
 		switch (filter) {
@@ -275,6 +276,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 				return (
 					<Settings
 						user={user}
+						site={site}
 						updateSite={actions.updateSiteInfo}
 						updateUser={actions.updateUser}
 						uploadAvatar={actions.uploadAvatar}
