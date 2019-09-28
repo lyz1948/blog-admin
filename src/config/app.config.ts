@@ -12,13 +12,13 @@ import {
 import { NavModel } from '../store/models'
 
 export const APP = {
-	port: 3000,
+	port: 5382,
 	errno: 200,
 	isProd,
 	tokenKey: 'blogKey',
 	baseUrl: isProd ? 'https://ykpine.com' : 'http://localhost:5381/',
-	apiUrl: 'http://localhost:5381/api',
-	viewUrl: isProd ? 'https://ykpine.com' : 'http://localhost:3000',
+	apiUrl: isProd ? 'https://ykpine.com/api' : 'http://localhost:5381/api',
+	viewUrl: isProd ? 'https://ykpine.com' : 'http://localhost:5380',
 }
 
 export const SIDER_MENU = [
