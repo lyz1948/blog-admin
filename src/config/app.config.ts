@@ -11,14 +11,19 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { NavModel } from '../store/models'
 
+const LOCAL = 'http://localhost:5381'
+const PREFIX = 'https://ykpine.com/'
+const PROD_API = PREFIX + '/api'
+const DEV_API = LOCAL + '/api'
+
 export const APP = {
 	port: 5382,
 	errno: 200,
 	isProd,
 	tokenKey: 'blogKey',
-	baseUrl: isProd ? 'https://ykpine.com' : 'http://localhost:5381/',
-	apiUrl: isProd ? 'https://ykpine.com/api' : 'http://localhost:5381/api',
-	viewUrl: isProd ? 'https://ykpine.com' : 'http://localhost:5380',
+	baseUrl: isProd ? PREFIX : LOCAL,
+	apiUrl: isProd ? PROD_API : DEV_API,
+	viewUrl: isProd ? PREFIX : LOCAL,
 }
 
 export const SIDER_MENU = [
