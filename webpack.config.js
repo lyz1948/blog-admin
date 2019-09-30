@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const TerserPlugin = require('terser-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -97,6 +98,11 @@ module.exports = {
     ],
   },
   optimization: {
+    minimizer: [
+      new TerserPlugin({
+        chunkFilter: () => false, // <-- set to false
+      }),
+    ],
     splitChunks: {
       name: true,
       cacheGroups: {
