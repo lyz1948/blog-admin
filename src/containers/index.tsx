@@ -6,8 +6,8 @@ import { RootState } from '@app/store/reducers'
 import { NavModel, ArticleModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 
-import { omit } from '../utils'
-import * as CONFIG from '../config/app.config'
+import { omit } from '@app/utils'
+import * as CONFIG from '@app/config/app.config'
 
 // component
 import {
@@ -67,7 +67,7 @@ const sleep = (time: number) =>
 			articles: state.articles,
 			categories: state.categories,
 			tags: state.tags,
-			site: state.site
+			site: state.site,
 		}
 	},
 	(dispatch: Dispatch): Pick<App.IProps, 'actions'> => ({
@@ -99,7 +99,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 		// if (!this.hasPermission()) { return }
 		// 用户信息
 		actions.getUser()
-		
+
 		// 站点信息
 		actions.getSiteInfo()
 
@@ -224,7 +224,15 @@ export class App extends React.Component<App.IProps, App.IState> {
 	filterCompoent(): JSX.Element | void {
 		this.hasPermission()
 
-		const { filter, articles, categories, tags, user, site, actions } = this.props
+		const {
+			filter,
+			articles,
+			categories,
+			tags,
+			user,
+			site,
+			actions,
+		} = this.props
 		const { editArticle } = this.state
 
 		switch (filter) {
@@ -290,7 +298,9 @@ export class App extends React.Component<App.IProps, App.IState> {
 	render() {
 		const { user } = this.props
 		const { loading } = this.state
-		return loading ? (<Loading />) : (
+		return loading ? (
+			<Loading />
+		) : (
 			<div className="home">
 				<SideBar user={user} onClickFilter={this.handleFilterChange} />
 				<div className="main">

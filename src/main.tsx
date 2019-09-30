@@ -17,7 +17,7 @@ const render = (Component: any) => {
 				<Component />
 			</Router>
 		</Provider>,
-		document.getElementById('app') as HTMLElement,
+		document.getElementById('app') as HTMLElement
 	)
 }
 

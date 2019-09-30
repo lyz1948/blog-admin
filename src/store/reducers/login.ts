@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions'
 import { RootState } from './state'
-import { IResponseData } from '../../interfaces/data'
 import { LoginActions } from '../actions'
-import * as CONFIG from '../../config/app.config'
+import { IResponseData } from '@app/interfaces/data'
+import * as CONFIG from '@app/config/app.config'
 
 const initialState: RootState.LoginState = {
 	expires_in: '',
@@ -18,7 +18,7 @@ export const loginReducer = handleActions<RootState.LoginState, IResponseData>(
 				result.expires_in = result.expires_in * 1000 + Date.now()
 				localStorage.setItem(CONFIG.APP.tokenKey, JSON.stringify(result))
 				return {
-					...result
+					...result,
 				}
 			}
 			return state

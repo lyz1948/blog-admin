@@ -1,6 +1,6 @@
 import { Store, createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { logger } from '../middleware'
+import { logger } from '@app/middleware'
 import { rootReducer, RootState } from './reducers'
 import promiseMiddleware from 'redux-promise'
 // import promise from 'redux-promise-middleware'
@@ -15,7 +15,7 @@ export function configureStore(initialState?: RootState): Store<RootState> {
 	const store = createStore(
 		rootReducer as any,
 		initialState as any,
-		middleware,
+		middleware
 	) as Store<RootState>
 
 	if (module.hot) {

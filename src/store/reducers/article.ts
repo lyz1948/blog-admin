@@ -74,5 +74,5 @@ export const articleReducer = handleActions<
 			return state
 		},
 	},
-	initialState,
+	initialState
 )

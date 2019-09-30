@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions'
-import * as API from '../../api'
+import * as API from '@app/api'
 
 export namespace UserActions {
 	export enum Type {

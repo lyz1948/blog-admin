@@ -2,9 +2,14 @@ import * as React from 'react'
 import { CategoryModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
-import { ConfirmModal, Notication, FancyInput, FancyTextarea } from '../index'
-import { INotice } from '../../interfaces/notice'
-import { formatDate } from '../../utils'
+import { INotice } from '@app/interfaces/notice'
+import { formatDate } from '@app/utils'
+import {
+	ConfirmModal,
+	Notication,
+	FancyInput,
+	FancyTextarea,
+} from '@app/components'
 
 export namespace CategoryManage {
 	export interface IProps {

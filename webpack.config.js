@@ -11,8 +11,8 @@ const r = path => resolve(__dirname, path)
 const isProdMode =
   process.argv.indexOf('-p') >= 0 || process.env.NODE_ENV === 'production'
 
-var sourcePath = join(__dirname, './src');
-var outPath = join(__dirname, './build');
+const sourcePath = join(__dirname, './src');
+const outPath = join(__dirname, './build');
 
 module.exports = {
   context: sourcePath,
@@ -155,6 +155,7 @@ module.exports = {
   ],
   devServer: {
     contentBase: outPath,
+    port: 5382,
     hot: true,
     inline: true,
     historyApiFallback: {

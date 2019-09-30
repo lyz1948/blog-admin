@@ -17,14 +17,10 @@ import {
 	faCloudUploadAlt,
 	faPlus,
 } from '@fortawesome/free-solid-svg-icons'
-import {
-	ArticleActions,
-	CategoryActions,
-	TagActions,
-} from '../../store/actions'
-import { CategoryModel, TagModel, ArticleModel } from '../../store/models'
-import { Notication, FancyInput, FancyTextarea } from '../index'
-import { INotice } from '../../interfaces/notice'
+import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
+import { CategoryModel, TagModel, ArticleModel } from '@app/store/models'
+import { Notication, FancyInput, FancyTextarea } from '@app/components'
+import { INotice } from '@app/interfaces/notice'
 
 const STATE_VALUE = [
 	{ text: '公开', id: ArticleModel.EStatePublic.Public },
@@ -188,7 +184,7 @@ export class ArticleAdd extends React.Component<
 			checkedTagValues!.push(tag)
 		} else {
 			checkedTagValues = checkedTagValues!.filter(
-				(item: any) => item._id !== tag._id,
+				(item: any) => item._id !== tag._id
 			)
 		}
 
@@ -323,7 +319,7 @@ export class ArticleAdd extends React.Component<
 			</div>
 		)
 	}
-	
+
 	// 缩略图
 	renderThumb(): JSX.Element | void {
 		const { thumb } = this.state
@@ -341,17 +337,17 @@ export class ArticleAdd extends React.Component<
 	renderMdEditor(): JSX.Element | void {
 		return (
 			<ContentEditable
-			innerRef={React.createRef()}
-			html={this.state.postContent!}
-			disabled={false}
-			onChange={this.handleChange}
-			tagName="article"
+				innerRef={React.createRef()}
+				html={this.state.postContent!}
+				disabled={false}
+				onChange={this.handleChange}
+				tagName="article"
 			/>
-			)
-		}
-		
+		)
+	}
+
 	// MD预览
-		renderMdView(): JSX.Element | void {
+	renderMdView(): JSX.Element | void {
 		return (
 			<div className={styles.markdownPreview}>
 				<ReactMarkdown source={this.state.postContent} />

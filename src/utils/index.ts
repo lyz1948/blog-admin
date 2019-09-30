@@ -25,7 +25,7 @@ export const formatDate = (d: Date) => {
 	const sec = myDate.getUTCSeconds()
 
 	return `${year}-${month + 1}-${date} ${h > 12 ? '下午' : '上午'} ${toDouble(
-		h,
+		h
 	)}:${toDouble(min)}:${toDouble(sec)}`
 }
 
@@ -40,6 +40,6 @@ export function omit<T extends object, K extends keyof T>(
 			}
 			return res
 		},
-		{} as any,
+		{} as any
 	)
 }

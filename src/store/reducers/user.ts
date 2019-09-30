@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 import { RootState } from './state'
-import { IResponseData } from '../../interfaces/data'
+import { IResponseData } from '@app/interfaces/data'
 import { UserActions } from '../actions'
 
 const initialState: RootState.UserState = {
@@ -31,7 +31,7 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
 				const { result } = action.payload
 				return {
 					...state,
-					avatar: result
+					avatar: result,
 				}
 			}
 			return state
@@ -50,5 +50,5 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
 			return { ...state, error: true, message: '密码错误，更新失败！' }
 		},
 	},
-	initialState,
+	initialState
 )

@@ -1,10 +1,10 @@
 import { createAction } from 'redux-actions'
-import * as API from '../../api'
+import * as API from '@app/api'
 
 export namespace SiteActions {
 	export enum Type {
 		GET = 'GET',
-		UPDATE = 'UPDATE'
+		UPDATE = 'UPDATE',
 	}
 
 	export const getSiteInfo = createAction(Type.GET, API.fetchSiteInfo)

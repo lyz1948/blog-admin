@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions'
 import { CategoryModel } from '@app/store/models'
-import * as API from '../../api'
+import * as API from '@app/api'
 
 export namespace CategoryActions {
 	export enum Type {
@@ -15,13 +15,13 @@ export namespace CategoryActions {
 
 	export const deleteCategory = createAction(
 		Type.DELETE_CATEGORY,
-		API.deleteCategory,
+		API.deleteCategory
 	)
 	export const getCategory = createAction(Type.GET_CATEGORY, API.fetchCategory)
 	export const addCategory = createAction(Type.GET_CATEGORY, API.addCategory)
 	export const selectCategory = createAction(Type.SELECT_CATEGORY)
 	export const editCategory = createAction<PartialPick<CategoryModel, '_id'>>(
-		Type.EDIT_CATEGORY,
+		Type.EDIT_CATEGORY
 	)
 }
 

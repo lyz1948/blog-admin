@@ -59,5 +59,5 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
 			return state
 		},
 	},
-	initialState,
+	initialState
 )

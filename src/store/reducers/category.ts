@@ -60,5 +60,5 @@ export const categoryReducer = handleActions<
 			})
 		},
 	},
-	initialState,
+	initialState
 )

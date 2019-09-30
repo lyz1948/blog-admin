@@ -92,7 +92,7 @@ export class Upload {
 			null!,
 			(uploadSize: any) => {
 				progressCb(id, Math.floor((uploadSize / size!) * 100))
-			},
+			}
 		)
 
 		if (this.inUpload <= this.MAX_UPLOAD_COUNT) {
@@ -117,7 +117,7 @@ export class Upload {
 					} else {
 						resCb(id, null, body, respInfo.code)
 					}
-				},
+				}
 			)
 		} else {
 			this.uploadQueue.push({

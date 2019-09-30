@@ -2,13 +2,13 @@ import * as React from 'react'
 import * as styles from './style.css'
 import { Base64 } from 'js-base64'
 import { Button, Image } from 'react-bootstrap'
-import { Notication, TextInput } from '../index'
 import { INotice } from '@app/interfaces/notice'
 import { UserActions, ArticleActions } from '@app/store/actions'
 import { UserModel, SiteModel } from '@app/store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
-import { prefixUrl } from '../../utils'
+import { Notication, TextInput } from '@app/components'
+import { prefixUrl } from '@app/utils'
 
 export namespace SettingComp {
 	export interface IProps {
@@ -90,7 +90,7 @@ export class Settings extends React.Component<
 	siteInfoChange(name: string, event: React.ChangeEvent<HTMLInputElement>) {
 		const value = event.target.value
 		const { siteInfo } = this.state
-		
+
 		// 切割成数组
 		if (name === 'keywords') {
 			siteInfo[name] = value.split(' ')
@@ -246,7 +246,16 @@ export class Settings extends React.Component<
 	}
 
 	renderSiteSetting(): JSX.Element | void {
-		const { title, sub_title, email, description, domain, icp, keywords, blacklist } = this.props.site
+		const {
+			title,
+			sub_title,
+			email,
+			description,
+			domain,
+			icp,
+			keywords,
+			blacklist,
+		} = this.props.site
 		let { mails, ips } = blacklist
 
 		let mailsStr = (mails || []).join(' ')

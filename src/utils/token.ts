@@ -1,4 +1,4 @@
-import * as CONFIG from '../config/app.config'
+import * as CONFIG from '@app/config/app.config'
 
 export function getToken(): any {
 	let token = localStorage.getItem(CONFIG.APP.tokenKey) as any

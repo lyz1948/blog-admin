@@ -1,12 +1,12 @@
 .container {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .progress .loading {
-  position: relative;
+	position: relative;
 	width: 150px;
 	height: 8px;
 	border-radius: 4px;

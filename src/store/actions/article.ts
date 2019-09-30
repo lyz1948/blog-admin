@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions'
 import { CategoryModel } from '@app/store/models'
-import * as API from '../../api'
+import * as API from '@app/api'
 
 export namespace ArticleActions {
 	export enum Type {
@@ -30,31 +30,33 @@ export namespace ArticleActions {
 		EDIT_CATEGORY = 'EDIT_CATEGORY',
 		DELETE_CATEGORY = 'DELETE_CATEGORY',
 		SELECT_CATEGORY = 'SELECT_CATEGORY',
-
 	}
 	// ARTICLE
 	export const getArticleList = createAction(
 		Type.GET_ARTICLE_LIST,
-		API.fetchArticle,
+		API.fetchArticle
 	)
 	export const getArticle = createAction(Type.GET_ARTICLE, API.getArticle)
 	export const addArticle = createAction(Type.ADD_ARTICLE, API.addArticle)
 	export const deleteArticle = createAction(
 		Type.DELETE_ARTICLE,
-		API.deleteArticle,
+		API.deleteArticle
 	)
 	export const uplodThumb = createAction(
 		Type.UPLOAD_ARTICLE_THUMB,
-		API.uploadThumb,
+		API.uploadThumb
 	)
 	export const updateArticle = createAction(
 		Type.UPDATE_ARTICLE,
-		API.updateArticle,
+		API.updateArticle
 	)
 
 	// SITE
 	export const getSiteInfo = createAction(Type.GET_SITE_INFO, API.fetchSiteInfo)
-	export const updateSiteInfo = createAction(Type.UPDATE_SITE_INFO, API.updateSiteInfo)
+	export const updateSiteInfo = createAction(
+		Type.UPDATE_SITE_INFO,
+		API.updateSiteInfo
+	)
 
 	// USER
 	export const getUser = createAction(Type.GET_USER, API.getUser)
@@ -71,13 +73,13 @@ export namespace ArticleActions {
 	// CATEGORY
 	export const deleteCategory = createAction(
 		Type.DELETE_CATEGORY,
-		API.deleteCategory,
+		API.deleteCategory
 	)
 	export const getCategory = createAction(Type.GET_CATEGORY, API.fetchCategory)
 	export const addCategory = createAction(Type.ADD_CATEGORY, API.addCategory)
 	export const selectCategory = createAction(Type.SELECT_CATEGORY)
 	export const editCategory = createAction<PartialPick<CategoryModel, '_id'>>(
-		Type.EDIT_CATEGORY,
+		Type.EDIT_CATEGORY
 	)
 }
 

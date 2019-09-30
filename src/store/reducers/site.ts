@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 import { RootState } from './state'
-import { IResponseData } from '../../interfaces/data'
+import { IResponseData } from '@app/interfaces/data'
 import { ArticleActions } from '../actions'
 
 const initialState: RootState.SiteState = {
@@ -24,7 +24,7 @@ export const siteReducer = handleActions<RootState.SiteState, IResponseData>(
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				return {
-					...result
+					...result,
 				}
 			}
 			// return state
@@ -33,7 +33,7 @@ export const siteReducer = handleActions<RootState.SiteState, IResponseData>(
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				return {
-					...result
+					...result,
 				}
 			}
 		},

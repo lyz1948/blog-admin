@@ -1,6 +1,6 @@
 import axios from 'axios'
-import * as CONFIG from '../config/app.config'
-import { getToken, getStatus } from '../utils'
+import * as CONFIG from '@app/config/app.config'
+import { getToken, getStatus } from '@app/utils'
 import { IFatchData, IResponseData } from '@app/interfaces/data'
 import { UserModel, ArticleModel, TagModel, SiteModel } from '@app/store/models'
 const token = getToken()
@@ -31,7 +31,9 @@ service.interceptors.response.use(
 		if (code === '500') {
 			console.log('500 错误了')
 		}
-		return new Promise((resolve) => resolve({ message: '错误了', status: 'fail', }))
+		return new Promise(resolve =>
+			resolve({ message: '错误了', status: 'fail' })
+		)
 	}
 )
 

@@ -19,7 +19,7 @@ export namespace Login {
 	},
 	(dispatch: Dispatch): Pick<Login.IProps, 'actions'> => ({
 		actions: bindActionCreators(omit(LoginActions, 'Type'), dispatch),
-	}),
+	})
 )
 export class LoginApp extends React.Component<Login.IProps> {
 	constructor(props: Login.IProps, context?: any) {

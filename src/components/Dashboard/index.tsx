@@ -15,7 +15,7 @@ import {
 	mapConfigs,
 	gaugeConfigs,
 	doughuntConfigs,
-} from '../../config'
+} from '@app/config'
 
 // styled components
 import {

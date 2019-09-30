@@ -5,8 +5,8 @@ import { Base64 } from 'js-base64'
 import { Form, Button } from 'react-bootstrap'
 import { LoginActions } from '@app/store/actions'
 import { INotice } from '@app/interfaces/notice'
-import { FancyInput, Notication } from '../index'
 import { LoginModel } from '@app/store/models'
+import { FancyInput, Notication } from '@app/components'
 
 export namespace User {
 	export interface IProps {
@@ -52,7 +52,7 @@ export class Login extends React.Component<User.IProps, User.IState> {
 		password = password ? Base64.encode(password) : password
 		// 提交登录
 		const res = await this.props.onLogin({ name, password })
-		
+
 		const { access_token } = this.props.token
 
 		if (!access_token || !res) {

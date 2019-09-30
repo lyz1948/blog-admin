@@ -1,12 +1,12 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { NavModel, UserModel } from '../../store/models'
 import { Nav } from 'react-bootstrap'
 import { Image, Accordion } from 'react-bootstrap'
+import { NavModel, UserModel } from '@app/store/models'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
-import { SIDER_MENU } from '../../config'
-import { prefixUrl } from '../../utils'
+import { SIDER_MENU } from '@app/config'
+import { prefixUrl } from '@app/utils'
 
 export namespace Nav {
 	export interface IProps {

@@ -2,9 +2,14 @@ import * as React from 'react'
 import { TagModel } from '@app/store/models'
 import { TagActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
-import { Notication, ConfirmModal, FancyInput, FancyTextarea } from '../index'
-import { INotice } from '../../interfaces/notice'
-import { formatDate } from '../../utils'
+import { INotice } from '@app/interfaces/notice'
+import { formatDate } from '@app/utils'
+import {
+	Notication,
+	ConfirmModal,
+	FancyInput,
+	FancyTextarea,
+} from '@app/components'
 
 export namespace TagComp {
 	export interface IProps {

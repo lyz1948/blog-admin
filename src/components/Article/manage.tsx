@@ -2,11 +2,11 @@ import * as React from 'react'
 import { Table, Button, Image, Pagination, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
-import { ArticleModel, TagModel } from '../../store/models'
-import { ArticleActions } from '../../store/actions'
-import { ConfirmModal, Empty, TextInput } from '../index'
-import { formatDate } from '../../utils'
-import * as CONFIG from '../../config'
+import { ArticleModel, TagModel } from '@app/store/models'
+import { ArticleActions } from '@app/store/actions'
+import { formatDate } from '@app/utils'
+import { ConfirmModal, Empty, TextInput } from '@app/components'
+import * as CONFIG from '@app/config'
 
 export namespace Article {
 	export interface IProps {
@@ -54,7 +54,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 	}
 	// 预览
 	handleView(_id: string) {
-		window.open(`${CONFIG.APP.viewUrl}/article/${_id}`)
+		window.open(`${CONFIG.APP.baseUrl}/article/${_id}`)
 	}
 	// 发布
 	handlePublish(article: ArticleModel) {

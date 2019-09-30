@@ -9,7 +9,7 @@ import {
 	faLock,
 } from '@fortawesome/free-solid-svg-icons'
 import { UserModel } from '@app/store/models'
-import { prefixUrl } from '../../utils'
+import { prefixUrl } from '@app/utils'
 
 export namespace TopNav {
 	export interface IProps {
