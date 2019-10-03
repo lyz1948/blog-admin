@@ -105,6 +105,13 @@ export class ArticleAdd extends React.Component<
 		}
 	}
 
+	componentWillUnmount() {
+		// 置空选中的分类
+		this.props.selectCategory({})
+		// 置空选中的标签
+		this.props.selectTag({})
+	}
+
 	_processArticle() {
 		const { article, categories, tags } = this.props
 
@@ -135,7 +142,7 @@ export class ArticleAdd extends React.Component<
 				})
 			})
 			tags.forEach(it => {
-				tag.forEach((t: any) => {
+				tag && tag.forEach((t: any) => {
 					if (t._id === it._id) {
 						tagList.push(it._id)
 						this.props.selectTag({ _id: t._id })
@@ -257,13 +264,10 @@ export class ArticleAdd extends React.Component<
 
 		let password = ''
 		if (radioPublic === 0) {
+			password = this.inputPassword.current!.value
 			if (!password || password === '') {
 				this.showNotice({ type: 'warn', content: '请填写访问密码！' })
 				return
-			} else {
-				if (this.inputPassword.current) {
-					password = this.inputPassword.current!.value
-				}
 			}
 		}
 
@@ -429,7 +433,7 @@ export class ArticleAdd extends React.Component<
 										onChange={(e: any) => this.processPost(e)}
 									/>
 								</div>
-								{this.renderMdView()}
+								{/* {this.renderMdView()} */}
 							</div>
 						</div>
 					</div>

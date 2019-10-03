@@ -4,8 +4,8 @@ import {
 	UserModel,
 	TagModel,
 	NavModel,
-	ArticleModel,
 	CategoryModel,
+	ArticleDataModel,
 } from '../models'
 
 export interface RootState {
@@ -21,7 +21,7 @@ export interface RootState {
 
 export namespace RootState {
 	export type CategoryState = CategoryModel[]
-	export type ArticleState = ArticleModel[]
+	export type ArticleState = ArticleDataModel
 	export type TagState = TagModel[]
 	export type UserState = UserModel
 	export type LoginState = LoginModel

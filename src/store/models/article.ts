@@ -1,14 +1,19 @@
+export interface ArticleDataModel {
+	data: ArticleModel[]
+	pagination: any
+	result?: any
+}
+
 export interface ArticleModel {
 	id?: number
-	_id?: string
 	title: string
 	content: string
 	description: string
 	author: string
-	tag: string[]
-	category: string[]
-	extends?: []
 	keywords: string[]
+	category: string[]
+	tag?: string[]
+	extends?: []
 	meta?: any
 	public: number
 	origin: number

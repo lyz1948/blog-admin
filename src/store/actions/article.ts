@@ -31,6 +31,7 @@ export namespace ArticleActions {
 		DELETE_CATEGORY = 'DELETE_CATEGORY',
 		SELECT_CATEGORY = 'SELECT_CATEGORY',
 	}
+
 	// ARTICLE
 	export const getArticleList = createAction(
 		Type.GET_ARTICLE_LIST,

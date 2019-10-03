@@ -41,8 +41,13 @@ export const categoryReducer = handleActions<
 				if (!category || !action || !action.payload) {
 					return category
 				}
-				if (category._id === action.payload._id) {
-					category.isSelected = !category.isSelected
+				if (action.payload._id) {
+					if (category._id === action.payload._id) {
+						category.isSelected = !category.isSelected
+					}
+				} else {
+					// 如果没有传id, 表示要置空所有选中
+					category.isSelected = false
 				}
 				return category
 			})

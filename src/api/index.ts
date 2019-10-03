@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as CONFIG from '@app/config/app.config'
-import { getToken, getStatus } from '@app/utils'
+import { getToken, getStatus, formatQuery } from '@app/utils'
 import { IFatchData, IResponseData } from '@app/interfaces/data'
 import { UserModel, ArticleModel, TagModel, SiteModel } from '@app/store/models'
 const token = getToken()
@@ -50,8 +50,10 @@ export const updateSiteInfo = (option: SiteModel) => {
 /**
  * 获取文章列表
  */
-export const fetchArticle = <T>() => {
-	return service.get<IFatchData<T>>('/article')
+export const fetchArticle = (querys: object = {}) => {
+	const url = `/article`
+	const queryUrl = formatQuery(url, querys)
+	return service.get(queryUrl)
 }
 
 /**

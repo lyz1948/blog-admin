@@ -92,7 +92,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 	}
 
 	componentWillMount() {
-		const { categories, tags, articles, actions } = this.props
+		const { categories, tags, actions } = this.props
 		// 获取签名
 		this.getUserTokenFromStorage()
 
@@ -104,9 +104,9 @@ export class App extends React.Component<App.IProps, App.IState> {
 		actions.getSiteInfo()
 
 		// 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
-		if (!articles[0]._id) {
-			actions.getArticleList()
-		}
+		// if (!articles[0]._id) {
+			actions.getArticleList({})
+		// }
 		if (!tags[0]._id) {
 			actions.getTag()
 		}
@@ -122,7 +122,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 		// 修改文章，刷新页面处理
 		if (id) {
 			actions.getArticle(id)
-			articles.map((article: any) => {
+			articles.data.map((article: any) => {
 				if (id == article._id) {
 					this.setState({
 						editArticle: article,
@@ -142,12 +142,12 @@ export class App extends React.Component<App.IProps, App.IState> {
 
 	// 添加文章
 	handleNewArticle(article: ArticleModel): any {
-		const { thumb } = this.props.articles[0]
+		// const { thumb } = this.props.articles[0]
 		const { actions, history } = this.props
 
-		article.thumb = thumb
+		// article.thumb = thumb
 		actions.addArticle(article)
-		actions.getArticleList()
+		actions.getArticleList({})
 
 		sleep(1000).then(() => {
 			history.push('#ARTICLE_LIST')
@@ -159,7 +159,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 		const { actions, history } = this.props
 
 		actions.updateArticle(_id, article)
-		actions.getArticleList()
+		actions.getArticleList({})
 
 		sleep(1000).then(() => {
 			history.push('#ARTICLE_LIST')
@@ -169,7 +169,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 	// 获取修改的文章
 	handleEdit(_id: string) {
 		const { articles, categories, tags } = this.props
-		const article = articles.find(it => it._id === _id)
+		const article = articles.data.find(it => it._id === _id)
 		if (article) {
 			// 获取文章所属分类
 			categories.forEach(it => {
@@ -179,7 +179,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 			})
 			// 获取文章的标签
 			tags.forEach(it => {
-				if (article.tag.includes(it._id!)) {
+				if (article.tag && article.tag.includes(it._id!)) {
 					it.isSelected = true
 				}
 			})
@@ -189,6 +189,11 @@ export class App extends React.Component<App.IProps, App.IState> {
 		})
 		this.props.history.push(`#${NavModel.Filter.ARTICLE_ADD}?id=${_id}`)
 	}
+
+	// handlePagination(num: any) {
+	// 	const { actions } = this.props
+	// 	actions.getArticleList({ page: num })
+	// }
 
 	// 校验token
 	hasPermission() {
@@ -246,6 +251,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 						deleteArticle={actions.deleteArticle}
 						updateArticle={actions.updateArticle}
 						editArticle={this.handleEdit.bind(this)}
+						// pagination={this.handlePagination.bind(this)}
 					/>
 				)
 			case 'ARTICLE_ADD':

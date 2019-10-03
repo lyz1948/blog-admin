@@ -37,8 +37,14 @@ export const tagReducer = handleActions<RootState.TagState, TagModel>(
 				if (!tag || !action || !action.payload) {
 					return tag
 				}
-				if (tag._id === action.payload._id) {
-					tag.isSelected = !tag.isSelected
+				if (action.payload._id) {
+
+					if (tag._id === action.payload._id) {
+						tag.isSelected = !tag.isSelected
+					}
+				} else {
+					// 清空所有选中的tag
+					tag.isSelected = false
 				}
 				return tag
 			})

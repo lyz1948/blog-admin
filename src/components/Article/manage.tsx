@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Table, Button, Image, Pagination, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
-import { ArticleModel, TagModel } from '@app/store/models'
+import { ArticleModel, ArticleDataModel, TagModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 import { formatDate } from '@app/utils'
 import { ConfirmModal, Empty, TextInput } from '@app/components'
@@ -11,16 +11,18 @@ import * as CONFIG from '@app/config'
 export namespace Article {
 	export interface IProps {
 		tags: TagModel[]
-		articles: ArticleModel[]
+		articles: ArticleDataModel
 		getArticleList: typeof ArticleActions.getArticleList
 		deleteArticle: typeof ArticleActions.deleteArticle
 		updateArticle: typeof ArticleActions.updateArticle
 		editArticle: (_id: string) => void
+		// pagination: (num: number) => void
 	}
 
 	export interface IState {
 		showModal: boolean
 		articleId: string
+		active: number
 	}
 }
 
@@ -31,6 +33,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		this.state = {
 			showModal: false,
 			articleId: '',
+			active: 1,
 		}
 	}
 
@@ -54,7 +57,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 	}
 	// 预览
 	handleView(_id: string) {
-		window.open(`${CONFIG.APP.baseUrl}/article/${_id}`)
+		window.open(`${CONFIG.APP.baseUrl}article/${_id}`)
 	}
 	// 发布
 	handlePublish(article: ArticleModel) {
@@ -64,8 +67,18 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 
 	inputKeyword(name: string, event: React.ChangeEvent<HTMLInputElement>) {}
 
+	// 分页
+	handlePagination(num: number, event: React.MouseEvent) {
+
+		this.setState({
+			active: num
+		})
+		this.props.getArticleList({ page: num })
+		// this.props.pagination(num)
+	}
+
 	render() {
-		const { articles } = this.props
+		const { data, pagination } = this.props.articles
 		const { showModal } = this.state
 		const artHeads = [
 			'缩略图',
@@ -79,15 +92,16 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 			'操作',
 		]
 
-		if (!articles.length) {
+		if (!data.length) {
 			return <Empty text="沙发留给你" />
 		}
 
-		let active = 1
+		const { active } = this.state
 		let items = []
-		for (let number = 1; number <= articles.length; number++) {
+		const len = Math.ceil(pagination.total / 10)
+		for (let number = 1; number <= len; number++) {
 			items.push(
-				<Pagination.Item key={number} active={number === active}>
+				<Pagination.Item key={number} active={number === active} onClick={(e: any) => this.handlePagination(number, e)}>
 					{number}
 				</Pagination.Item>
 			)
@@ -142,7 +156,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 							</tr>
 						</thead>
 						<tbody>
-							{articles.map((it: any) => (
+							{data.map((it: any) => (
 								<tr key={it._id}>
 									<td className="thumb-box">
 										<Image
@@ -157,7 +171,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 										{it.tag.length > 0 &&
 											it.tag.map((it: any, idx: number) => (
 												<div key={it._id}>
-													<FontAwesomeIcon icon={faFolder} size="1x" />
+													<FontAwesomeIcon icon={faTags} size="1x" />
 													<span> {it.name} </span>
 												</div>
 											))}
@@ -166,7 +180,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 										{it.category.length > 0 &&
 											it.category.map((cate: any, idx: number) => (
 												<div key={cate._id}>
-													<FontAwesomeIcon icon={faTags} size="1x" />
+													<FontAwesomeIcon icon={faFolder} size="1x" />
 													<span> {cate.name} </span>
 												</div>
 											))}
