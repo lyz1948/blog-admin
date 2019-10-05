@@ -1,22 +1,21 @@
 import * as React from 'react'
-import { Table, Button, Image, Pagination, InputGroup } from 'react-bootstrap'
+import { Table, Button, Image } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
-import { ArticleModel, ArticleDataModel, TagModel } from '@app/store/models'
+import { ArticleModel, ArticleDataModel, TagDataModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 import { formatDate } from '@app/utils'
-import { ConfirmModal, Empty, TextInput } from '@app/components'
+import { ConfirmModal, Empty, Paging, Search } from '@app/components'
 import * as CONFIG from '@app/config'
 
 export namespace Article {
 	export interface IProps {
-		tags: TagModel[]
+		tags: TagDataModel
 		articles: ArticleDataModel
 		getArticleList: typeof ArticleActions.getArticleList
 		deleteArticle: typeof ArticleActions.deleteArticle
 		updateArticle: typeof ArticleActions.updateArticle
 		editArticle: (_id: string) => void
-		// pagination: (num: number) => void
 	}
 
 	export interface IState {
@@ -68,13 +67,11 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 	inputKeyword(name: string, event: React.ChangeEvent<HTMLInputElement>) {}
 
 	// 分页
-	handlePagination(num: number, event: React.MouseEvent) {
-
+	handlePagination(num: number) {
 		this.setState({
-			active: num
+			active: num,
 		})
 		this.props.getArticleList({ page: num })
-		// this.props.pagination(num)
 	}
 
 	render() {
@@ -97,15 +94,6 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		}
 
 		const { active } = this.state
-		let items = []
-		const len = Math.ceil(pagination.total / 10)
-		for (let number = 1; number <= len; number++) {
-			items.push(
-				<Pagination.Item key={number} active={number === active} onClick={(e: any) => this.handlePagination(number, e)}>
-					{number}
-				</Pagination.Item>
-			)
-		}
 
 		return (
 			<div className="module">
@@ -114,36 +102,20 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 					onHide={() => this.setState({ showModal: false })}
 					onClose={(e: any) => this.handleDelete(e)}
 				/>
-				<div className="flex">
+				<div className="title">
+					<h3>文章列表</h3>
+				</div>
+				<div className="flex mt20">
 					<div className="flex flex30">
-						{/* <div className="flex30 mr10">
-							<select name="article" id="select" className="formInput">
-								<option>排序</option>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select>
-						</div> */}
-						<InputGroup className="mb-3">
-							<TextInput
-								placeholder="Recipient's username"
-								valueChange={() => this.inputKeyword}
-							/>
-							<InputGroup.Append>
-								<Button variant="primary">搜索</Button>
-							</InputGroup.Append>
-						</InputGroup>
+						<Search placeholder="搜索关键字" handleSearch={() => this.inputKeyword} />
+
 					</div>
 					<div className="flex1">
-						<Pagination className="flex-end">
-							<Pagination.First />
-							<Pagination.Prev />
-							{items}
-							<Pagination.Next />
-							<Pagination.Last />
-						</Pagination>
+						<Paging
+							total={pagination.total}
+							active={active}
+							handlePage={this.handlePagination.bind(this)}
+						/>
 					</div>
 				</div>
 				<div className="flex1 tac">

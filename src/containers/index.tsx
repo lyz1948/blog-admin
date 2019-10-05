@@ -108,7 +108,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 			actions.getArticleList({})
 		}
 
-		if (!tags[0]._id) {
+		if (!tags.data.length) {
 			actions.getTag()
 		}
 
@@ -172,7 +172,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 	handleEdit(_id: string) {
 		const { articles, categories, tags } = this.props
 		const article = articles.data.find(it => it._id === _id)
-		console.log('categories', categories)
+
 		if (article) {
 			// 获取文章所属分类
 			categories.data.forEach(it => {
@@ -181,7 +181,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 				}
 			})
 			// 获取文章的标签
-			tags.forEach(it => {
+			tags.data.forEach(it => {
 				if (article.tag && article.tag.includes(it._id!)) {
 					it.isSelected = true
 				}

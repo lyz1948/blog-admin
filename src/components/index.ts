@@ -11,8 +11,10 @@ export { Dashboard } from './Dashboard'
 export * from './Base/Loading'
 export * from './Base/Modal'
 export * from './Base/Notication'
-export * from './Base/Input'
+export * from './Base/Paging'
 export * from './Base/Empty'
+export * from './Base/Search'
+export * from './Base/Input'
 export * from './Base/Input/textInput'
 
 // Style components

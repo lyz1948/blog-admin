@@ -2,10 +2,10 @@ import {
 	LoginModel,
 	SiteModel,
 	UserModel,
-	TagModel,
 	NavModel,
 	ArticleDataModel,
 	CategoryDataModel,
+	TagDataModel,
 } from '../models'
 
 export interface RootState {
@@ -22,7 +22,7 @@ export interface RootState {
 export namespace RootState {
 	export type CategoryState = CategoryDataModel
 	export type ArticleState = ArticleDataModel
-	export type TagState = TagModel[]
+	export type TagState = TagDataModel
 	export type UserState = UserModel
 	export type LoginState = LoginModel
 	export type SiteState = SiteModel

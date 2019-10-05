@@ -18,7 +18,7 @@ import {
 	faPlus,
 } from '@fortawesome/free-solid-svg-icons'
 import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
-import { CategoryDataModel, TagModel, ArticleModel } from '@app/store/models'
+import { CategoryDataModel, ArticleModel, TagDataModel } from '@app/store/models'
 import { Notication, FancyInput, FancyTextarea } from '@app/components'
 import { INotice } from '@app/interfaces/notice'
 
@@ -37,7 +37,7 @@ const PUBLISH_VALUE = [
 export namespace ArticleAdd {
 	export interface IProps {
 		article: ArticleModel
-		tags: TagModel[]
+		tags: TagDataModel
 		categories: CategoryDataModel
 		getArticle: typeof ArticleActions.getArticle
 		addArticle: typeof ArticleActions.addArticle
@@ -141,7 +141,7 @@ export class ArticleAdd extends React.Component<
 					}
 				})
 			})
-			tags.forEach(it => {
+			tags.data.forEach(it => {
 				tag && tag.forEach((t: any) => {
 					if (t._id === it._id) {
 						tagList.push(it._id)
@@ -499,7 +499,7 @@ export class ArticleAdd extends React.Component<
 					</div>
 					<div className="content">
 						<div className={styles.inputWrap}>
-							{tags.map((tag: any, index: number) => (
+							{tags.data.map((tag: any, index: number) => (
 								<div
 									className={classNames({
 										[styles.labelBox]: true,

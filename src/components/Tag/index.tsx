@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { TagModel } from '@app/store/models'
+import { TagModel, TagDataModel } from '@app/store/models'
 import { TagActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
 import { INotice } from '@app/interfaces/notice'
@@ -9,11 +9,13 @@ import {
 	ConfirmModal,
 	FancyInput,
 	FancyTextarea,
+	Paging,
+	Search,
 } from '@app/components'
 
 export namespace TagComp {
 	export interface IProps {
-		tags: TagModel[]
+		tags: TagDataModel
 		addTag: typeof TagActions.addTag
 		updateTag: typeof TagActions.updateTag
 		deleteTag: typeof TagActions.deleteTag
@@ -21,6 +23,7 @@ export namespace TagComp {
 
 	export interface IState {
 		tagId: string
+		active: number
 		showModal: boolean
 		isUpdate: boolean
 		show: boolean
@@ -39,6 +42,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 
 		this.state = {
 			tagId: '',
+			active: 1,
 			show: false,
 			showModal: false,
 			isUpdate: false,
@@ -134,15 +138,38 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 		this.inputDescription.current!.value = ''
 	}
 
+	inputKeyword() {}
+
+	handlePagination(num: number) {
+
+	}
+
 	renderList(): JSX.Element | void {
-		const { tags } = this.props
+		const { data, pagination } = this.props.tags
+		const { active } = this.state
 		const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
+
 		return (
 			<div className="module flex1 pdl0">
 				<div className="title">
 					<h3>标签列表</h3>
 				</div>
 				<div className="content tac">
+					<div className="flex">
+						<div className="flex flex30">
+							<Search
+								placeholder="搜索关键字"
+								handleSearch={() => this.inputKeyword}
+							/>
+						</div>
+						<div className="flex1">
+							<Paging
+								total={pagination.total}
+								active={active}
+								handlePage={this.handlePagination.bind(this)}
+							/>
+						</div>
+					</div>
 					<Table striped bordered hover variant="dark">
 						<thead>
 							<tr>
@@ -152,7 +179,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 							</tr>
 						</thead>
 						<tbody>
-							{tags.map((it: any, index: number) => (
+							{data.map((it: any, index: number) => (
 								<tr key={index}>
 									<td>{it.name}</td>
 									<td>{it.description}</td>

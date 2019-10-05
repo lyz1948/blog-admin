@@ -1,5 +1,9 @@
+export interface TagDataModel {
+	data: TagModel[]
+	pagination: any
+	result?: any
+}
 export interface TagModel {
-	// _id?: string
 	name: string
 	slug: string
 	description: string
@@ -7,8 +11,8 @@ export interface TagModel {
 	[propName: string]: any
 }
 
-export namespace TagModel {
-	export enum Filter {
-		SHOW_ALL = 'ALL',
-	}
-}
+// export namespace TagModel {
+// 	export enum Filter {
+// 		SHOW_ALL = 'ALL',
+// 	}
+// }
