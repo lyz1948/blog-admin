@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CategoryModel } from '@app/store/models'
+import { CategoryModel, CategoryDataModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
 import { Table, Button } from 'react-bootstrap'
 import { INotice } from '@app/interfaces/notice'
@@ -13,7 +13,7 @@ import {
 
 export namespace CategoryManage {
 	export interface IProps {
-		categories: CategoryModel[]
+		categories: CategoryDataModel
 		addCategory: typeof CategoryActions.addCategory
 		deleteCategory: typeof CategoryActions.deleteCategory
 		editCategory: typeof CategoryActions.editCategory
@@ -145,7 +145,7 @@ export class Category extends React.Component<
 							</tr>
 						</thead>
 						<tbody>
-							{categories.map((it: any, index: number) => (
+							{categories.data.map((it: any, index: number) => (
 								<tr key={index}>
 									<td>{it.name}</td>
 									<td>{it.description}</td>

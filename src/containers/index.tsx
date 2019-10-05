@@ -92,7 +92,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 	}
 
 	componentWillMount() {
-		const { categories, tags, actions } = this.props
+		const { articles, tags, actions } = this.props
 		// 获取签名
 		this.getUserTokenFromStorage()
 
@@ -104,15 +104,17 @@ export class App extends React.Component<App.IProps, App.IState> {
 		actions.getSiteInfo()
 
 		// 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
-		// if (!articles[0]._id) {
+		if (!articles.data.length) {
 			actions.getArticleList({})
-		// }
+		}
+
 		if (!tags[0]._id) {
 			actions.getTag()
 		}
-		if (!categories[0]._id) {
+
+		// if (!categories.data.length) {
 			actions.getCategory()
-		}
+		// }
 	}
 
 	componentDidMount() {
@@ -170,9 +172,10 @@ export class App extends React.Component<App.IProps, App.IState> {
 	handleEdit(_id: string) {
 		const { articles, categories, tags } = this.props
 		const article = articles.data.find(it => it._id === _id)
+		console.log('categories', categories)
 		if (article) {
 			// 获取文章所属分类
-			categories.forEach(it => {
+			categories.data.forEach(it => {
 				if (article.category.includes(it._id)) {
 					it.isSelected = true
 				}
