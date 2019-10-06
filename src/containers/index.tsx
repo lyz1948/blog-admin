@@ -109,7 +109,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 		}
 
 		if (!tags.data.length) {
-			actions.getTag()
+			actions.getTag({})
 		}
 
 		// if (!categories.data.length) {
@@ -284,6 +284,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 				return (
 					<Tag
 						tags={tags}
+						getTag={actions.getTag}
 						addTag={actions.addTag}
 						updateTag={actions.updateTag}
 						deleteTag={actions.deleteTag}

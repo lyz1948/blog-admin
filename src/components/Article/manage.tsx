@@ -5,7 +5,7 @@ import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
 import { ArticleModel, ArticleDataModel, TagDataModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 import { formatDate } from '@app/utils'
-import { ConfirmModal, Empty, Paging, Search } from '@app/components'
+import { ConfirmModal, Paging, Search } from '@app/components'
 import * as CONFIG from '@app/config'
 
 export namespace Article {
@@ -21,9 +21,22 @@ export namespace Article {
 	export interface IState {
 		showModal: boolean
 		articleId: string
-		active: number
+		keyword: string
+		currentPage: number
 	}
 }
+
+const artHeads = [
+	'缩略图',
+	'标题',
+	'描述',
+	'标签',
+	'所属分类',
+	'关键字',
+	'类型',
+	'时间',
+	'操作',
+]
 
 export class Article extends React.Component<Article.IProps, Article.IState> {
 	constructor(props: Article.IProps, context?: any) {
@@ -32,8 +45,12 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		this.state = {
 			showModal: false,
 			articleId: '',
-			active: 1,
+			keyword: '',
+			currentPage: 1,
 		}
+
+		this.handlePagination = this.handlePagination.bind(this)
+		this.handleKeywordSearch = this.handleKeywordSearch.bind(this)
 	}
 
 	openModal(id: string) {
@@ -64,37 +81,168 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		this.props.updateArticle(_id, article)
 	}
 
-	inputKeyword(name: string, event: React.ChangeEvent<HTMLInputElement>) {}
+	// 关键字输入
+	keywordChange(name: string, event: React.ChangeEvent<HTMLInputElement>) {
+		const keyword = event.target.value
+		this.setState({ keyword })
+	}
+
+	// 关键字搜索
+	handleKeywordSearch() {
+		const { keyword, currentPage } = this.state
+		this.props.getArticleList({ page: currentPage, keyword })
+	}
 
 	// 分页
-	handlePagination(num: number) {
+	handlePagination(currentPage: number) {
 		this.setState({
-			active: num,
+			currentPage,
 		})
-		this.props.getArticleList({ page: num })
+		this.props.getArticleList({ page: currentPage })
+	}
+
+	renderHeaderBar(): JSX.Element | void {
+		const { pagination } = this.props.articles
+		const { currentPage } = this.state
+		return (
+			<div className="flex pdb10 pdt10">
+				<div className="flex flex30">
+					<Search
+						placeholder="搜索关键字"
+						handleChange={(name: string, val: any) =>
+							this.keywordChange(name, val)
+						}
+						handleSearch={this.handleKeywordSearch}
+					/>
+				</div>
+				<div className="flex1">
+					<Paging
+						total={pagination.total}
+						active={currentPage}
+						handlePage={this.handlePagination}
+					/>
+				</div>
+			</div>
+		)
+	}
+
+	renderTableHeader(): JSX.Element | void {
+		return (
+			<thead>
+				<tr>
+					{artHeads.map((header, i) => (
+						<th key={i}>{header}</th>
+					))}
+				</tr>
+			</thead>
+		)
+	}
+
+	renderList(): JSX.Element | void {
+		const { data } = this.props.articles
+		if (!data || data.length === 0) {
+			return (
+				<tbody>
+					<tr>
+						<td colSpan={artHeads.length}>搜索不到任何相关的文章</td>
+					</tr>
+				</tbody>
+			)
+		}
+		return (
+			<tbody>
+				{data.map((it: any) => (
+					<tr key={it._id}>
+						<td className="thumb-box">
+							<Image
+								src={`${CONFIG.APP.baseUrl}${it.thumb}`}
+								alt="用户头像"
+								thumbnail
+							/>
+						</td>
+						<td>{it.title}</td>
+						<td>{it.description}</td>
+						<td>
+							{it.tag.length > 0 &&
+								it.tag.map((it: any, idx: number) => (
+									<div key={it._id}>
+										<FontAwesomeIcon icon={faTags} size="1x" />
+										<span> {it.name} </span>
+									</div>
+								))}
+						</td>
+						<td>
+							{it.category.length > 0 &&
+								it.category.map((cate: any, idx: number) => (
+									<div key={cate._id}>
+										<FontAwesomeIcon icon={faFolder} size="1x" />
+										<span> {cate.name} </span>
+									</div>
+								))}
+						</td>
+						<td>{it.keywords.join(' ')}</td>
+						<td>
+							{it.origin === ArticleModel.EStateOrigin.Original
+								? '原创'
+								: it.origin === ArticleModel.EStateOrigin.Reprint
+								? '转载'
+								: '混合'}
+						</td>
+						<td>{formatDate(it.create_at)}</td>
+						<td className="ctrl">
+							<Button
+								size="sm"
+								variant="success"
+								onClick={() => this.handleView(it._id)}>
+								查看
+							</Button>
+
+							<Button
+								size="sm"
+								variant="info"
+								onClick={() => this.handleUpdate(it._id)}>
+								修改
+							</Button>
+
+							<Button
+								size="sm"
+								variant="warning"
+								onClick={() => this.handlePublish(it)}>
+								发布
+							</Button>
+
+							<Button
+								size="sm"
+								variant="danger"
+								onClick={() => this.openModal(it._id)}>
+								删除
+							</Button>
+						</td>
+					</tr>
+				))}
+			</tbody>
+		)
+	}
+
+	renderArticleList(): JSX.Element | void {
+		return (
+			<div>
+				<div className="title">
+					<h3>文章列表</h3>
+				</div>
+				{this.renderHeaderBar()}
+				<div className="flex1 tac">
+					<Table striped bordered hover variant="dark">
+						{this.renderTableHeader()}
+						{this.renderList()}
+					</Table>
+				</div>
+			</div>
+		)
 	}
 
 	render() {
-		const { data, pagination } = this.props.articles
 		const { showModal } = this.state
-		const artHeads = [
-			'缩略图',
-			'标题',
-			'描述',
-			'标签',
-			'所属分类',
-			'关键字',
-			'类型',
-			'时间',
-			'操作',
-		]
-
-		if (!data.length) {
-			return <Empty text="沙发留给你" />
-		}
-
-		const { active } = this.state
-
 		return (
 			<div className="module">
 				<ConfirmModal
@@ -102,104 +250,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 					onHide={() => this.setState({ showModal: false })}
 					onClose={(e: any) => this.handleDelete(e)}
 				/>
-				<div className="title">
-					<h3>文章列表</h3>
-				</div>
-				<div className="flex mt20">
-					<div className="flex flex30">
-						<Search placeholder="搜索关键字" handleSearch={() => this.inputKeyword} />
-
-					</div>
-					<div className="flex1">
-						<Paging
-							total={pagination.total}
-							active={active}
-							handlePage={this.handlePagination.bind(this)}
-						/>
-					</div>
-				</div>
-				<div className="flex1 tac">
-					<Table striped bordered hover variant="dark">
-						<thead>
-							<tr>
-								{artHeads.map((header, i) => (
-									<th key={i}>{header}</th>
-								))}
-							</tr>
-						</thead>
-						<tbody>
-							{data.map((it: any) => (
-								<tr key={it._id}>
-									<td className="thumb-box">
-										<Image
-											src={`${CONFIG.APP.baseUrl}${it.thumb}`}
-											alt="用户头像"
-											thumbnail
-										/>
-									</td>
-									<td>{it.title}</td>
-									<td>{it.description}</td>
-									<td>
-										{it.tag.length > 0 &&
-											it.tag.map((it: any, idx: number) => (
-												<div key={it._id}>
-													<FontAwesomeIcon icon={faTags} size="1x" />
-													<span> {it.name} </span>
-												</div>
-											))}
-									</td>
-									<td>
-										{it.category.length > 0 &&
-											it.category.map((cate: any, idx: number) => (
-												<div key={cate._id}>
-													<FontAwesomeIcon icon={faFolder} size="1x" />
-													<span> {cate.name} </span>
-												</div>
-											))}
-									</td>
-									<td>{it.keywords.join(' ')}</td>
-									<td>
-										{it.origin === ArticleModel.EStateOrigin.Original
-											? '原创'
-											: it.origin === ArticleModel.EStateOrigin.Reprint
-											? '转载'
-											: '混合'}
-									</td>
-									<td>{formatDate(it.create_at)}</td>
-									<td className="ctrl">
-										<Button
-											size="sm"
-											variant="success"
-											onClick={() => this.handleView(it._id)}>
-											查看
-										</Button>
-
-										<Button
-											size="sm"
-											variant="info"
-											onClick={() => this.handleUpdate(it._id)}>
-											修改
-										</Button>
-
-										<Button
-											size="sm"
-											variant="warning"
-											onClick={() => this.handlePublish(it)}>
-											发布
-										</Button>
-
-										<Button
-											size="sm"
-											variant="danger"
-											onClick={() => this.openModal(it._id)}>
-											删除
-										</Button>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</Table>
-				</div>
+				{this.renderArticleList()}
 			</div>
 		)
 	}

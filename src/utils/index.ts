@@ -10,12 +10,19 @@ const toDouble = (s: number) => {
 }
 
 export const formatQuery = (url: string, querys: any) => {
-	if (toString.call(querys) !== '[object Object]') return url
+	const isObj = toString.call(querys) === '[object Object]'
+	if (!isObj) return url
+	
+	// 空对象
+	if (JSON.stringify(querys) === '{}') {
+		return url
+	}
+
 	let str: string = ''
 	for (let key in querys) {
 		str += `&${key}=${querys[key]}`
 	}
-	if (!~url.indexOf('?')) {
+	if (url.indexOf('?') === -1) {
 		return `${url}?${str.substring(1)}`
 	}
 	return `${url}${str}`

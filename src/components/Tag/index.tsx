@@ -17,13 +17,15 @@ export namespace TagComp {
 	export interface IProps {
 		tags: TagDataModel
 		addTag: typeof TagActions.addTag
+		getTag: typeof TagActions.getTag
 		updateTag: typeof TagActions.updateTag
 		deleteTag: typeof TagActions.deleteTag
 	}
 
 	export interface IState {
 		tagId: string
-		active: number
+		currentPage: number
+		keyword: string
 		showModal: boolean
 		isUpdate: boolean
 		show: boolean
@@ -31,6 +33,8 @@ export namespace TagComp {
 		content: string
 	}
 }
+
+const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
 
 export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 	private inputName = React.createRef<HTMLInputElement>()
@@ -42,7 +46,8 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 
 		this.state = {
 			tagId: '',
-			active: 1,
+			currentPage: 1,
+			keyword: '',
 			show: false,
 			showModal: false,
 			isUpdate: false,
@@ -51,6 +56,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 		}
 		this.handleDelete = this.handleDelete.bind(this)
 		this.handleEdit = this.handleEdit.bind(this)
+		this.handleKeywordSearch = this.handleKeywordSearch.bind(this)
 	}
 
 	openModal(id: string) {
@@ -138,16 +144,48 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 		this.inputDescription.current!.value = ''
 	}
 
-	inputKeyword() {}
+	keywordChange(name: string, event: React.ChangeEvent<HTMLInputElement>) {
+		const value = event.target.value
+		this.setState({ keyword: value })
+	}
 
-	handlePagination(num: number) {
+	// 搜索
+	handleKeywordSearch() {
+		const { currentPage, keyword } = this.state
+		this.props.getTag({ page: currentPage, keyword })
+	}
 
+	// 分页
+	handlePagination(page: number) {
+		this.setState({
+			currentPage: page,
+		})
+		this.props.getTag({ page })
 	}
 
 	renderList(): JSX.Element | void {
-		const { data, pagination } = this.props.tags
-		const { active } = this.state
-		const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
+		const { data } = this.props.tags
+
+		if (!data || data.length === 0) {
+			return (
+				<div className="module flex1 pdl0">
+					<div className="title">
+						<h3>标签列表</h3>
+					</div>
+					<div className="content tac">
+						{this.renderHeaderBar()}
+						<Table striped bordered hover variant="dark">
+							{this.renderTableHeader()}
+							<tbody>
+								<tr>
+									<td colSpan={tableHeads.length}>搜索不到任何相关的标签</td>
+								</tr>
+							</tbody>
+						</Table>
+					</div>
+				</div>
+			)
+		}
 
 		return (
 			<div className="module flex1 pdl0">
@@ -155,29 +193,9 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 					<h3>标签列表</h3>
 				</div>
 				<div className="content tac">
-					<div className="flex">
-						<div className="flex flex30">
-							<Search
-								placeholder="搜索关键字"
-								handleSearch={() => this.inputKeyword}
-							/>
-						</div>
-						<div className="flex1">
-							<Paging
-								total={pagination.total}
-								active={active}
-								handlePage={this.handlePagination.bind(this)}
-							/>
-						</div>
-					</div>
+					{this.renderHeaderBar()}
 					<Table striped bordered hover variant="dark">
-						<thead>
-							<tr>
-								{tableHeads.map(h => (
-									<th key={h}>{h}</th>
-								))}
-							</tr>
-						</thead>
+						{this.renderTableHeader()}
 						<tbody>
 							{data.map((it: any, index: number) => (
 								<tr key={index}>
@@ -205,6 +223,46 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 					</Table>
 				</div>
 			</div>
+		)
+	}
+
+	renderHeaderBar(): JSX.Element | void {
+		const { pagination } = this.props.tags
+		const { currentPage, keyword } = this.state
+
+		return (
+			<div className="flex pdb10">
+				<div className="flex flex30">
+					<Search
+						placeholder="搜索关键字"
+						name="keyword"
+						value={keyword}
+						handleChange={(name: string, val: any) =>
+							this.keywordChange(name, val)
+						}
+						handleSearch={this.handleKeywordSearch}
+					/>
+				</div>
+				<div className="flex1">
+					<Paging
+						total={pagination.total}
+						active={currentPage}
+						handlePage={() => this.handlePagination}
+					/>
+				</div>
+			</div>
+		)
+	}
+
+	renderTableHeader(): JSX.Element | void {
+		return (
+			<thead>
+				<tr>
+					{tableHeads.map(h => (
+						<th key={h}>{h}</th>
+					))}
+				</tr>
+			</thead>
 		)
 	}
 

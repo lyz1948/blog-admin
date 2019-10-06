@@ -20,6 +20,7 @@ body {
 ul {
 	list-style: none;
 	padding: 0;
+	margin: 0;
 }
 
 :global(.flex) {
@@ -80,6 +81,10 @@ ul {
 
 :global(.pdt20) {
 	padding-top: 1.13rem;
+}
+
+:global(.pdb10) {
+	padding-bottom: .63rem;
 }
 
 :global(.mr10) {
@@ -200,7 +205,7 @@ ul {
 }
 
 :global(.module .content) {
-	padding: 20px;
+	padding: 10px 20px;
 	color: #a7b2ae;
 	background-color: #2b3c4c;
 	/* background-color: #2f4050; */

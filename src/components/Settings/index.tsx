@@ -277,6 +277,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -288,6 +289,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -299,6 +301,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -310,6 +313,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -321,6 +325,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -332,6 +337,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -344,6 +350,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -356,6 +363,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -368,6 +376,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.siteInfoChange(name, e)
 							}
+							onSave={() => this.updateSiteInfo()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -415,6 +424,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.userInfoChange(name, e)
 							}
+							onSave={() => this.handleUpdate()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -425,6 +435,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.userInfoChange(name, e)
 							}
+							onSave={() => this.handleUpdate()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -435,6 +446,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.userInfoChange(name, e)
 							}
+							onSave={() => this.handleUpdate()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -445,6 +457,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.userInfoChange(name, e)
 							}
+							onSave={() => this.handleUpdate()}
 						/>
 					</div>
 					<div className="inputWrap">
@@ -455,6 +468,7 @@ export class Settings extends React.Component<
 							valueChange={(name: string, e: any) =>
 								this.userInfoChange(name, e)
 							}
+							onSave={() => this.handleUpdate()}
 						/>
 					</div>
 					<div className="inputWrap">

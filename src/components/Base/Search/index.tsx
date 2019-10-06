@@ -4,14 +4,19 @@ import { TextInput } from '@app/components'
 
 export function Search(props: any) {
 	return (
-    <InputGroup className="mb-3">
-    <TextInput
-      placeholder={props.placeholder}
-      valueChange={() => props.handleSearch}
-    />
-    <InputGroup.Append>
-      <Button variant="primary">搜索</Button>
-    </InputGroup.Append>
-  </InputGroup>
+		<InputGroup>
+			<TextInput
+				name={props.name}
+				text={props.value}
+				placeholder={props.placeholder}
+				valueChange={props.handleChange}
+				onSave={props.handleSearch}
+			/>
+			{/* <InputGroup.Append> */}
+				<Button variant="primary" onClick={props.handleSearch}>
+					搜索
+				</Button>
+			{/* </InputGroup.Append> */}
+		</InputGroup>
 	)
 }

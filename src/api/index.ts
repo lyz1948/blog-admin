@@ -92,7 +92,7 @@ export const uploadAvatar = (file: any): any => {
  * 删除指定id文章
  * @param id 文章id
  */
-export const deleteArticle = <T>(id: any): Promise<IResponseData> => {
+export const deleteArticle = (id: any): Promise<IResponseData> => {
 	return service.delete(`/article/${id}`)
 }
 
@@ -122,8 +122,10 @@ export const deleteCategory = (id: any) => {
 /**
  * 获取文章的标签
  */
-export const fetchTag = <T>() => {
-	return service.get<IFatchData<T>>(`/tag`)
+export const fetchTag = <T>(querys: object = {}) => {
+	const url = `/tag`
+	const queryUrl = formatQuery(url, querys)
+	return service.get<IFatchData<T>>(queryUrl)
 }
 
 /**
