@@ -81,12 +81,12 @@
 }
 
 /* 缩略图 */
-.thumbBox {
+.sideBox .thumbBox {
 	position: relative;
 	height: 200px;
 }
 
-.thumbBox input[type='file'] {
+.sideBox .thumbBox input[type='file'] {
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -95,7 +95,7 @@
 	cursor: pointer;
 }
 
-.thumbBox .thumb {
+.sideBox .thumbBox .thumb {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -126,6 +126,23 @@
 	max-height: 300px;
 }
 
+/* table */
+
+.table td {
+	max-width: 200px;
+	vertical-align: middle;
+}
+
+.table .thumbnail {
+	width: 120px;
+	height: 100px;
+}
+.table .btnGroup button {
+	display: block;
+	margin: 2px auto;
+}
+
+/* markdown */
 .markdownWrap {
 	flex: 1;
 	background-color: #4d5b69;

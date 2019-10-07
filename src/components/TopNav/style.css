@@ -1,9 +1,14 @@
 .topNav {
+	position: fixed;
+	left: 200px;
+	right: 0;
+	top: 0;
 	padding: 10px 20px;
 	line-height: 40px;
 	color: #f0f0f0;
 	background-color: #2e4050;
 	box-shadow: 0 0px 1px #4c4c4c;
+	z-index: 9;
 }
 
 .topNav .navIcon {

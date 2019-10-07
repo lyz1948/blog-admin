@@ -1,7 +1,15 @@
 import * as React from 'react'
+import * as styles from './style.css'
 import { Table, Button, Image } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTags, faFolder } from '@fortawesome/free-solid-svg-icons'
+import {
+	faTags,
+	faFolder,
+	faEdit,
+	faTrash,
+	faDesktop,
+	faSatelliteDish,
+} from '@fortawesome/free-solid-svg-icons'
 import { ArticleModel, ArticleDataModel, TagDataModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 import { formatDate } from '@app/utils'
@@ -153,7 +161,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 			<tbody>
 				{data.map((it: any) => (
 					<tr key={it._id}>
-						<td className="thumb-box">
+						<td className={styles.thumbnail}>
 							<Image
 								src={`${CONFIG.APP.baseUrl}${it.thumb}`}
 								alt="用户头像"
@@ -189,33 +197,53 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 								: '混合'}
 						</td>
 						<td>{formatDate(it.create_at)}</td>
-						<td className="ctrl">
+						<td className={styles.btnGroup}>
 							<Button
 								size="sm"
-								variant="success"
+								variant="secondary"
 								onClick={() => this.handleView(it._id)}>
-								查看
+								<FontAwesomeIcon
+									icon={faDesktop}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>
+								查看文章
 							</Button>
 
 							<Button
 								size="sm"
 								variant="info"
 								onClick={() => this.handleUpdate(it._id)}>
-								修改
+								<FontAwesomeIcon
+									icon={faEdit}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>
+								修改文章
 							</Button>
 
 							<Button
 								size="sm"
-								variant="warning"
+								variant="success"
 								onClick={() => this.handlePublish(it)}>
-								发布
+								<FontAwesomeIcon
+									icon={faSatelliteDish}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>
+								发布文章
 							</Button>
 
 							<Button
 								size="sm"
 								variant="danger"
 								onClick={() => this.openModal(it._id)}>
-								删除
+								<FontAwesomeIcon
+									icon={faTrash}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>
+								删除文章
 							</Button>
 						</td>
 					</tr>
@@ -232,7 +260,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 				</div>
 				{this.renderHeaderBar()}
 				<div className="flex1 tac">
-					<Table striped bordered hover variant="dark">
+					<Table striped bordered hover variant="dark" className={styles.table}>
 						{this.renderTableHeader()}
 						{this.renderList()}
 					</Table>

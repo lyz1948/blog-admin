@@ -188,8 +188,7 @@ ul {
 	left: 0;
 	right: 0;
 	width: 100%;
-	height: 100%;
-	padding-left: 200px;
+	padding: 60px 0 0 200px;
 	overflow-x: hidden;
 	/* background-color: #4d5b69; */
 }
@@ -251,19 +250,6 @@ ul {
 	background-color: #2e4050 !important;
 }
 
-:global(.table-dark td) {
-	max-width: 200px;
-	vertical-align: middle;
-}
-
-:global(.table-dark td.ctrl) {
-	width: 220px;
-}
-
-:global(.table-dark td.thumb-box) {
-	width: 120px;
-	height: 100px;
-}
 :global(.page-link) {
 	color: #fff;
 	background-color: #394959;
