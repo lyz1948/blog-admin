@@ -12,11 +12,9 @@ export function Search(props: any) {
 				valueChange={props.handleChange}
 				onSave={props.handleSearch}
 			/>
-			{/* <InputGroup.Append> */}
-				<Button variant="primary" onClick={props.handleSearch}>
-					搜索
-				</Button>
-			{/* </InputGroup.Append> */}
+			<Button variant="info" onClick={props.handleSearch}>
+				搜索
+			</Button>
 		</InputGroup>
 	)
 }

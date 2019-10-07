@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { Table, Button, Image } from 'react-bootstrap'
+import { Table, Button, Image, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faTags,
@@ -123,7 +123,28 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 						handleSearch={this.handleKeywordSearch}
 					/>
 				</div>
-				<div className="flex1">
+				<div className="flex flex1 flex-end">
+					<div className={styles.filterBox}>
+						<Form.Control as="select">
+							<option>所有分类</option>
+							<option>测试</option>
+						</Form.Control>
+						<Form.Control as="select">
+							<option>所有标签</option>
+							<option>测试</option>
+						</Form.Control>
+						<Form.Control as="select">
+							<option>来源</option>
+							<option>原创</option>
+							<option>装载</option>
+							<option>混合</option>
+						</Form.Control>
+						<Form.Control as="select">
+							<option>公开</option>
+							<option>密码访问</option>
+							<option>私密</option>
+						</Form.Control>
+					</div>
 					<Paging
 						total={pagination.total}
 						active={currentPage}

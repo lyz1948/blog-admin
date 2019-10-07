@@ -462,7 +462,7 @@ export class ArticleAdd extends React.Component<
 						<h3>文章分类</h3>
 					</div>
 					<div className="content">
-						<div className="inputWrap">
+						<div className={styles.inputWrap}>
 							{categories.data.map((cate: any, index: number) => (
 								<div
 									className={classNames({
@@ -498,7 +498,7 @@ export class ArticleAdd extends React.Component<
 						<h3>文章标签</h3>
 					</div>
 					<div className="content">
-						<div className="inputWrap">
+						<div className={styles.inputWrap}>
 							{tags.data.map((tag: any, index: number) => (
 								<div
 									className={classNames({
@@ -535,7 +535,7 @@ export class ArticleAdd extends React.Component<
 					</div>
 					<div className="content">
 						<p>访问状态 </p>
-						<div className="inputWrap">
+						<div className={styles.inputWrap}>
 							{STATE_VALUE.map((type, idx) => (
 								<div
 									className={classNames({
@@ -557,7 +557,7 @@ export class ArticleAdd extends React.Component<
 						</div>
 						{this.renderPassword()}
 						<p className="mt10">发布状态</p>
-						<div className="inputWrap">
+						<div className={styles.inputWrap}>
 							{PUBLISH_VALUE.map((type, idx) => (
 								<div
 									className={classNames({

@@ -1,3 +1,4 @@
+/* 文章添加 */
 .inputWrap {
 	display: flex;
 	flex-wrap: wrap;
@@ -80,6 +81,15 @@
 	cursor: pointer;
 }
 
+.sideBox {
+	margin-bottom: 20px;
+}
+
+.sideBox .thumb img {
+	width: 100%;
+	max-height: 300px;
+}
+
 /* 缩略图 */
 .sideBox .thumbBox {
 	position: relative;
@@ -101,45 +111,6 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-size: 50px;
-}
-
-.articleMain {
-	flex: 0 0 70%;
-	box-shadow: 0 2px 12px #283847;
-}
-
-.articleMain .content {
-	padding-right: 100px;
-}
-
-.articleSide {
-	flex: 0 0 30%;
-	padding-left: 20px;
-}
-
-.sideBox {
-	margin-bottom: 20px;
-}
-
-.sideBox .thumb img {
-	width: 100%;
-	max-height: 300px;
-}
-
-/* table */
-
-.table td {
-	max-width: 200px;
-	vertical-align: middle;
-}
-
-.table .thumbnail {
-	width: 120px;
-	height: 100px;
-}
-.table .btnGroup button {
-	display: block;
-	margin: 2px auto;
 }
 
 /* markdown */
@@ -199,4 +170,34 @@
 	box-sizing: border-box;
 	background: #4d5b69;
 	border-radius: 4px;
+}
+
+/* 文章列表 */
+.filterBox {
+	display: flex;
+}
+
+.filterBox select {
+	min-width: 80px;
+	max-width: 100px;
+	margin-right: 10px;
+}
+
+.filterBox select option {
+	background: #333;
+}
+
+/* table */
+.table td {
+	max-width: 200px;
+	vertical-align: middle;
+}
+
+.table .thumbnail {
+	width: 120px;
+	height: 100px;
+}
+.table .btnGroup button {
+	display: block;
+	margin: 2px auto;
 }

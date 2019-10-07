@@ -283,5 +283,5 @@ ul {
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	-khtml-border-radius: 0;
-	-webkit-appearance: button;
+	/* -webkit-appearance: button; */
 }
