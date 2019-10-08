@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { Table, Button, Image } from 'react-bootstrap'
+import { Table, Button, Image, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faTags,
@@ -38,12 +38,16 @@ const PUBLISH_LIST = [
 ]
 
 const artHeads = [
+	'ID',
 	'缩略图',
 	'标题',
 	'描述',
-	'标签',
 	'分类',
-	'公开方式',
+	'标签',
+	'点赞',
+	'围观',
+	'评论',
+	'访问',
 	'状态',
 	'类型',
 	'时间',
@@ -204,7 +208,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		)
 	}
 
-	renderList(): JSX.Element | void {
+	renderTableBody(): JSX.Element | void {
 		const { data } = this.props.articles
 		if (!data || data.length === 0) {
 			return (
@@ -219,6 +223,9 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 			<tbody>
 				{data.map((it: any) => (
 					<tr key={it._id}>
+						<td>
+    					<Form.Check type="checkbox" label={it.id} />
+						</td>
 						<td className={styles.thumbnail}>
 							<Image
 								src={`${CONFIG.APP.baseUrl}${it.thumb}`}
@@ -229,15 +236,6 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 						<td>{it.title}</td>
 						<td>{it.description}</td>
 						<td>
-							{it.tag.length > 0 &&
-								it.tag.map((it: any, idx: number) => (
-									<div key={it._id}>
-										<FontAwesomeIcon icon={faTags} size="1x" />
-										<span> {it.name} </span>
-									</div>
-								))}
-						</td>
-						<td>
 							{it.category.length > 0 &&
 								it.category.map((cate: any, idx: number) => (
 									<div key={cate._id}>
@@ -246,6 +244,18 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 									</div>
 								))}
 						</td>
+						<td>
+							{it.tag.length > 0 &&
+								it.tag.map((it: any, idx: number) => (
+									<div key={it._id}>
+										<FontAwesomeIcon icon={faTags} size="1x" />
+										<span> {it.name} </span>
+									</div>
+								))}
+						</td>
+						<td>{it.meta.likes === 0 ? '无人鼓励' : it.meta.likes + '个赞'}</td>
+						<td>{it.meta.views === 0 ? '无人围观' : it.meta.views + '围观'}</td>
+						<td>{it.meta.comments === 0 ? '无人说话' : it.meta.comments + '条评论' }</td>
 						<td>
 							{it.state === ArticleModel.EStatePublic.Public
 								? '公开'
@@ -267,7 +277,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 								? '转载'
 								: '混合'}
 						</td>
-						<td>{formatDate(it.create_at)}</td>
+						<td className={styles.dateTime}>{formatDate(it.create_at)}</td>
 						<td className={styles.btnGroup}>
 							<Button
 								size="sm"
@@ -307,7 +317,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 
 							<Button
 								size="sm"
-								variant="danger"
+								variant="warning"
 								onClick={() => this.openModal(it._id)}>
 								<FontAwesomeIcon
 									icon={faTrash}
@@ -330,10 +340,10 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 					<h3>文章列表</h3>
 				</div>
 				{this.renderHeaderBar()}
-				<div className="flex1 tac">
+				<div className="flex1">
 					<Table striped bordered hover variant="dark" className={styles.table}>
 						{this.renderTableHeader()}
-						{this.renderList()}
+						{this.renderTableBody()}
 					</Table>
 				</div>
 			</div>

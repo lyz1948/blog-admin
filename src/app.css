@@ -249,6 +249,9 @@ ul {
 	color: #fff;
 	background-color: #2e4050 !important;
 }
+:global(.table-dark td), :global(.table-dark thead th) {
+	border-color: transparent;
+}
 
 :global(.page-link) {
 	color: #fff;
