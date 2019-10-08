@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as styles from './style.css'
-import { Table, Button, Image, Form } from 'react-bootstrap'
+import { Table, Button, Image } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faTags,
@@ -10,16 +10,51 @@ import {
 	faDesktop,
 	faSatelliteDish,
 } from '@fortawesome/free-solid-svg-icons'
-import { ArticleModel, ArticleDataModel, TagDataModel } from '@app/store/models'
+import { ArticleModel, ArticleDataModel, TagDataModel, CategoryDataModel } from '@app/store/models'
 import { ArticleActions } from '@app/store/actions'
 import { formatDate } from '@app/utils'
-import { ConfirmModal, Paging, Search } from '@app/components'
+import { ConfirmModal, Paging, Search, Selector } from '@app/components'
 import * as CONFIG from '@app/config'
+
+const STATE_LIST = [
+	{ name: '访问权限', _id: '' },
+	{ name: '公开', _id: ArticleModel.EStatePublic.Public },
+	{ name: '密码', _id: ArticleModel.EStatePublic.Password },
+	{ name: '私密', _id: ArticleModel.EStatePublic.Secret },
+]
+
+const ORIGIN_LIST = [
+	{ name: '状态', _id: '' },
+	{ name: '原创', _id: ArticleModel.EStateOrigin.Original },
+	{ name: '转载', _id: ArticleModel.EStateOrigin.Reprint },
+	{ name: '混合', _id: ArticleModel.EStateOrigin.Hybrid },
+]
+
+const PUBLISH_LIST = [
+	{ name: '类型', _id: '' },
+	{ name: '发布', _id: ArticleModel.EStatePublish.Published },
+	{ name: '草稿', _id: ArticleModel.EStatePublish.Draft },
+	{ name: '撤回', _id: ArticleModel.EStatePublish.Recycle },
+]
+
+const artHeads = [
+	'缩略图',
+	'标题',
+	'描述',
+	'标签',
+	'分类',
+	'公开方式',
+	'状态',
+	'类型',
+	'时间',
+	'操作',
+]
 
 export namespace Article {
 	export interface IProps {
 		tags: TagDataModel
 		articles: ArticleDataModel
+		categories: CategoryDataModel
 		getArticleList: typeof ArticleActions.getArticleList
 		deleteArticle: typeof ArticleActions.deleteArticle
 		updateArticle: typeof ArticleActions.updateArticle
@@ -30,21 +65,10 @@ export namespace Article {
 		showModal: boolean
 		articleId: string
 		keyword: string
+		querys: any
 		currentPage: number
 	}
 }
-
-const artHeads = [
-	'缩略图',
-	'标题',
-	'描述',
-	'标签',
-	'所属分类',
-	'关键字',
-	'类型',
-	'时间',
-	'操作',
-]
 
 export class Article extends React.Component<Article.IProps, Article.IState> {
 	constructor(props: Article.IProps, context?: any) {
@@ -54,9 +78,11 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 			showModal: false,
 			articleId: '',
 			keyword: '',
+			querys: {},
 			currentPage: 1,
 		}
 
+		this.handleCategory = this.handleCategory.bind(this)
 		this.handlePagination = this.handlePagination.bind(this)
 		this.handleKeywordSearch = this.handleKeywordSearch.bind(this)
 	}
@@ -109,9 +135,34 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		this.props.getArticleList({ page: currentPage })
 	}
 
+	// 分类/tag/state/public 查询
+	handleCategory(event: any, type: string) {
+		const value = event.currentTarget.value
+		const { keyword, currentPage, querys } = this.state
+
+		querys['keyword'] = keyword
+		querys['page'] = currentPage
+		querys['isAuthenticated'] = true
+		
+		if (value !== '') {
+			querys[type] = value
+		} else {
+			delete querys[type]
+		}
+
+		this.setState({
+			querys
+		})
+
+		this.props.getArticleList(querys)
+	}
+
 	renderHeaderBar(): JSX.Element | void {
-		const { pagination } = this.props.articles
+		const { categories, tags, articles } = this.props
 		const { currentPage } = this.state
+		const catSelectList = [{_id: '', name: '分类不限'}, ...categories.data]
+		const tagSelectList = [{_id: '', name: '标签不限'}, ...tags.data]
+		
 		return (
 			<div className="flex pdb10 pdt10">
 				<div className="flex flex30">
@@ -125,28 +176,14 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 				</div>
 				<div className="flex flex1 flex-end">
 					<div className={styles.filterBox}>
-						<Form.Control as="select">
-							<option>所有分类</option>
-							<option>测试</option>
-						</Form.Control>
-						<Form.Control as="select">
-							<option>所有标签</option>
-							<option>测试</option>
-						</Form.Control>
-						<Form.Control as="select">
-							<option>来源</option>
-							<option>原创</option>
-							<option>装载</option>
-							<option>混合</option>
-						</Form.Control>
-						<Form.Control as="select">
-							<option>公开</option>
-							<option>密码访问</option>
-							<option>私密</option>
-						</Form.Control>
+						<Selector list={catSelectList} onChange={(e: any) => this.handleCategory(e, 'category')}/>
+						<Selector list={tagSelectList} onChange={(e: any) => this.handleCategory(e, 'tag')}/>
+						<Selector list={STATE_LIST} onChange={(e: any) => this.handleCategory(e, 'state')}/>
+						<Selector list={ORIGIN_LIST} onChange={(e: any) => this.handleCategory(e, 'origin')}/>
+						<Selector list={PUBLISH_LIST} onChange={(e: any) => this.handleCategory(e, 'public')}/>
 					</div>
 					<Paging
-						total={pagination.total}
+						total={articles.pagination.total}
 						active={currentPage}
 						handlePage={this.handlePagination}
 					/>
@@ -209,7 +246,20 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 									</div>
 								))}
 						</td>
-						<td>{it.keywords.join(' ')}</td>
+						<td>
+							{it.state === ArticleModel.EStatePublic.Public
+								? '公开'
+								: it.state === ArticleModel.EStatePublic.Password
+								? '密码'
+								: '私密'}
+						</td>
+						<td>
+							{it.public === ArticleModel.EStatePublish.Draft
+								? '草稿'
+								: it.public === ArticleModel.EStatePublish.Published
+								? '发布'
+								: '回收'}
+						</td>
 						<td>
 							{it.origin === ArticleModel.EStateOrigin.Original
 								? '原创'

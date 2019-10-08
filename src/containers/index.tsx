@@ -193,11 +193,6 @@ export class App extends React.Component<App.IProps, App.IState> {
 		this.props.history.push(`#${NavModel.Filter.ARTICLE_ADD}?id=${_id}`)
 	}
 
-	// handlePagination(num: any) {
-	// 	const { actions } = this.props
-	// 	actions.getArticleList({ page: num })
-	// }
-
 	// 校验token
 	hasPermission() {
 		const { token } = this.state
@@ -250,11 +245,11 @@ export class App extends React.Component<App.IProps, App.IState> {
 					<Article
 						tags={tags}
 						articles={articles}
+						categories={categories}
 						getArticleList={actions.getArticleList}
 						deleteArticle={actions.deleteArticle}
 						updateArticle={actions.updateArticle}
 						editArticle={this.handleEdit.bind(this)}
-						// pagination={this.handlePagination.bind(this)}
 					/>
 				)
 			case 'ARTICLE_ADD':
