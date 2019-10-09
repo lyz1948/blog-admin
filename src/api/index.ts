@@ -1,57 +1,23 @@
-import axios from 'axios'
-import * as CONFIG from '@app/config/app.config'
-import { getToken, getStatus, formatQuery } from '@app/utils'
+import { service } from './axios'
 import { IFatchData, IResponseData } from '@app/interfaces/data'
 import { UserModel, ArticleModel, TagModel, SiteModel } from '@app/store/models'
-const token = getToken()
-
-const service = axios.create({
-	timeout: 5000,
-	baseURL: CONFIG.APP.apiUrl,
-})
-
-service.interceptors.request.use((config: any) => {
-	config.headers = Object.assign(config.headers || {}, {
-		Authorization: 'Bearer ' + token,
-	})
-	return config
-})
-
-service.interceptors.response.use(
-	(response: any) => {
-		if (getStatus(response)) {
-			return Promise.resolve(response.data)
-		} else {
-			return Promise.reject(response)
-		}
-	},
-	error => {
-		const errMsg = error.toString()
-		const code = errMsg.substr(errMsg.indexOf('code') + 5)
-		if (code === '500') {
-			console.log('500 错误了')
-		}
-		return new Promise(resolve =>
-			resolve({ message: '错误了', status: 'fail' })
-		)
-	}
-)
+import { formatQuery } from '@app/utils'
 
 // 获取网站信息
 export const fetchSiteInfo = <T>() => {
-	return service.get<IFatchData<T>>('/site')
+	return service.get<IFatchData<T>>('site')
 }
 
 // 更新网站信息
 export const updateSiteInfo = (option: SiteModel) => {
-	return service.put('/site', option)
+	return service.put('site', option)
 }
 
 /**
  * 获取文章列表
  */
 export const fetchArticle = (querys: object = {}) => {
-	const url = `/article`
+	const url = `article`
 	const queryUrl = formatQuery(url, querys)
 	return service.get(queryUrl)
 }
@@ -60,14 +26,14 @@ export const fetchArticle = (querys: object = {}) => {
  * 获取文章详情
  */
 export const getArticle = (id: any) => {
-	return service.get(`/article/${id}`)
+	return service.get(`article/${id}`)
 }
 
 /**
  * 更新文章
  */
 export const updateArticle = (id: any, newArticle: ArticleModel) => {
-	return service.put(`/article/${id}`, newArticle)
+	return service.put(`article/${id}`, newArticle)
 }
 
 /**
@@ -75,17 +41,17 @@ export const updateArticle = (id: any, newArticle: ArticleModel) => {
  * @param article 文章对象
  */
 export const addArticle = (article: ArticleModel) => {
-	return service.post('/article', { ...article })
+	return service.post('article', { ...article })
 }
 
 // 上传文章缩略图
 export const uploadThumb = (file: any): any => {
-	return service.post('/upload/article', file)
+	return service.post('upload/article', file)
 }
 
 // 上传文章缩略图
 export const uploadAvatar = (file: any): any => {
-	return service.post('/upload/avatar', file)
+	return service.post('upload/avatar', file)
 }
 
 /**
@@ -93,14 +59,14 @@ export const uploadAvatar = (file: any): any => {
  * @param id 文章id
  */
 export const deleteArticle = (id: any): Promise<IResponseData> => {
-	return service.delete(`/article/${id}`)
+	return service.delete(`article/${id}`)
 }
 
 /**
  * 获取文章分类
  */
 export const fetchCategory = <T>() => {
-	return service.get<IFatchData<T>>('/category')
+	return service.get<IFatchData<T>>('category')
 }
 
 /**
@@ -108,7 +74,7 @@ export const fetchCategory = <T>() => {
  * @param category 分类对象
  */
 export const addCategory = (category: any) => {
-	return service.post('/category', { ...category })
+	return service.post('category', { ...category })
 }
 
 /**
@@ -116,14 +82,14 @@ export const addCategory = (category: any) => {
  * @param id 分类id
  */
 export const deleteCategory = (id: any) => {
-	return service.delete(`/category/${id}`)
+	return service.delete(`category/${id}`)
 }
 
 /**
  * 获取文章的标签
  */
 export const fetchTag = <T>(querys: object = {}) => {
-	const url = `/tag`
+	const url = `tag`
 	const queryUrl = formatQuery(url, querys)
 	return service.get<IFatchData<T>>(queryUrl)
 }
@@ -133,7 +99,7 @@ export const fetchTag = <T>(querys: object = {}) => {
  * @param tag 标签对象
  */
 export const addTag = (tag: any) => {
-	return service.post('/tag', { ...tag })
+	return service.post('tag', { ...tag })
 }
 
 /**
@@ -143,7 +109,7 @@ export const addTag = (tag: any) => {
 
 export const updateTag = (newTag: TagModel) => {
 	const { _id } = newTag
-	return service.put(`/tag/${_id}`, newTag)
+	return service.put(`tag/${_id}`, newTag)
 }
 
 /**
@@ -151,7 +117,7 @@ export const updateTag = (newTag: TagModel) => {
  * @param id 标签id
  */
 export const deleteTag = (id: string | number) => {
-	return service.delete(`/tag/${id}`)
+	return service.delete(`tag/${id}`)
 }
 
 /**
@@ -159,7 +125,7 @@ export const deleteTag = (id: string | number) => {
  * @param user 用户名和密码
  */
 export const signIn = (user: UserModel) => {
-	return service.post('/user/signin', { ...user })
+	return service.post('user/signin', { ...user })
 }
 
 /**
@@ -167,14 +133,14 @@ export const signIn = (user: UserModel) => {
  * @param user 注册用户
  */
 export const signUp = (user: UserModel): Promise<UserModel> => {
-	return service.post('/user/signup', { ...user })
+	return service.post('user/signup', { ...user })
 }
 
 /**
  * 获取用户列表
  */
 export const fetchUsers = (): Promise<UserModel> => {
-	return service.get('/user')
+	return service.get('user')
 }
 
 /**
@@ -182,10 +148,10 @@ export const fetchUsers = (): Promise<UserModel> => {
  * @param id 用户id
  */
 export const getUser = (): Promise<IResponseData> => {
-	return service.get(`/user/admin`)
+	return service.get(`user/admin`)
 }
 
 // 更新用户信息
 export const updateUser = (user: UserModel): Promise<UserModel> => {
-	return service.put(`/user/profile`, user)
+	return service.put(`user/profile`, user)
 }
