@@ -1,7 +1,7 @@
 import { isProd } from '../environment'
 
-const PREFIX = isProd ? 'https://ykpine.com/' : 'http://localhost:5381/'
-const API_URL = PREFIX + 'api'
+const PREFIX = isProd ? 'https://www.ykpine.com/' : 'http://localhost:5381/'
+const API_URL = PREFIX + 'api/'
 
 export const APP = {
 	port: 5382,
