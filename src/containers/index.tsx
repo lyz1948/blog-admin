@@ -213,6 +213,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 		} catch (error) {
 			throw new Error(error)
 		}
+
 		this.setState({
 			token,
 		})

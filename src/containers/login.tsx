@@ -2,10 +2,11 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router'
-import { Login } from '../components'
-import { LoginActions } from '../store/actions'
-import { RootState } from '../store/reducers'
-import { omit } from '../utils'
+import { Login } from '@app/components'
+import { LoginActions } from '@app/store/actions'
+import { RootState } from '@app/store/reducers'
+import { omit } from '@app/utils'
+import * as CONFIG from '@app/config/app.config'
 
 export namespace Login {
 	export interface IProps extends RouteComponentProps<void> {
@@ -26,8 +27,19 @@ export class LoginApp extends React.Component<Login.IProps> {
 		super(props, context)
 	}
 
+	componentDidMount() {
+		// 如果登录过来，直接进入后台
+		let token = localStorage.getItem(CONFIG.APP.tokenKey) as any
+		token = JSON.parse(token)
+
+		if (token && token.expires_in > Date.now()) {
+			this.props.history.push('/#DASHBOARD')
+		}
+	}
+
 	render() {
 		const { login, actions } = this.props
+
 		if (login && login.access_token) {
 			this.props.history.push('/#DASHBOARD')
 			return null

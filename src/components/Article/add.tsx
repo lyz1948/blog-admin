@@ -58,7 +58,7 @@ export namespace ArticleAdd {
 		show: boolean
 		type: string
 		content: string
-		[propName: string]: any
+		formData: any
 	}
 }
 
@@ -131,13 +131,16 @@ export class ArticleAdd extends React.Component<
 			this.inputDescription.current!.value = description
 			this.inputDescription.current!.value = description
 
+			console.log('category', category)
+			console.log('tag', tag)
+
 			const cateList: any[] = []
 			const tagList: any[] = []
 			categories.data.forEach(it => {
 				category.forEach((cate: any) => {
 					if (cate._id === it._id) {
 						cateList.push(it._id)
-						this.props.selectCategory({ _id: it._id })
+						this.props.selectCategory(it._id)
 					}
 				})
 			})
@@ -145,7 +148,7 @@ export class ArticleAdd extends React.Component<
 				tag && tag.forEach((t: any) => {
 					if (t._id === it._id) {
 						tagList.push(it._id)
-						this.props.selectTag({ _id: t._id })
+						this.props.selectTag(t._id)
 					}
 				})
 			})
@@ -195,7 +198,7 @@ export class ArticleAdd extends React.Component<
 			)
 		}
 
-		this.props.selectTag({ _id: tag._id })
+		this.props.selectTag(tag._id)
 	}
 
 	changeCategory(cate: any, event: React.ChangeEvent<HTMLInputElement>) {
@@ -207,7 +210,7 @@ export class ArticleAdd extends React.Component<
 		} else {
 			checkedValues = checkedValues!.filter((item: any) => item !== cate._id)
 		}
-		this.props.selectCategory({ _id: cate._id })
+		this.props.selectCategory(cate._id)
 	}
 
 	async changeFile(event: React.ChangeEvent<HTMLInputElement>) {
@@ -441,7 +444,7 @@ export class ArticleAdd extends React.Component<
 						<span className="label"></span>
 						<Button
 							type="submit"
-							variant="primary"
+							variant="info"
 							onClick={(e: any) => this.handleSubmit(e)}>
 							{isUpdate ? '更新文章' : '创建文章'}
 						</Button>
@@ -556,7 +559,8 @@ export class ArticleAdd extends React.Component<
 							))}
 						</div>
 						{this.renderPassword()}
-						<p className="mt10">发布状态</p>
+
+						<p className="mt20">发布状态</p>
 						<div className={styles.inputWrap}>
 							{PUBLISH_VALUE.map((type, idx) => (
 								<div

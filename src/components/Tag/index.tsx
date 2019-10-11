@@ -12,6 +12,8 @@ import {
 	Paging,
 	Search,
 } from '@app/components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export namespace TagComp {
 	export interface IProps {
@@ -192,7 +194,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 				<div className="title">
 					<h3>标签列表</h3>
 				</div>
-				<div className="content tac">
+				<div className="content">
 					{this.renderHeaderBar()}
 					<Table striped bordered hover variant="dark">
 						{this.renderTableHeader()}
@@ -203,18 +205,28 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 									<td>{it.description}</td>
 									<td>{it.slug}</td>
 									<td>{formatDate(it.update_at)}</td>
-									<td className="ctrl">
+									<td className="ctrl-btn-group">
 										<Button
 											size="sm"
 											variant="info"
 											onClick={(e: any) => this.handleEdit(it, e)}>
-											编辑
+											<FontAwesomeIcon
+												icon={faEdit}
+												size="1x"
+												style={{ marginRight: '2px' }}
+											/>
+											编辑标签
 										</Button>
 										<Button
 											size="sm"
-											variant="danger"
+											variant="warning"
 											onClick={() => this.openModal(it._id)}>
-											删除
+											<FontAwesomeIcon
+												icon={faTrash}
+												size="1x"
+												style={{ marginRight: '2px' }}
+											/>
+											删除标签
 										</Button>
 									</td>
 								</tr>
@@ -288,7 +300,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 					</div>
 					<div className="inputWrap">
 						<span className="label"></span>
-						<Button variant="primary" onClick={() => this.handleCreate()}>
+						<Button variant="info" onClick={() => this.handleCreate()}>
 							{isUpdate ? '更新标签' : '创建标签'}
 						</Button>
 					</div>

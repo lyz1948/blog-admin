@@ -1,7 +1,7 @@
 export interface LoginModel {
 	expires_in?: string
 	access_token?: string
-	[propName: string]: any
+	result?: any
 }
 
 export namespace LoginModel {}

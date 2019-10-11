@@ -35,11 +35,8 @@ export const tagReducer = handleActions<RootState.TagState, TagDataModel>(
 		},
 		[TagActions.Type.SELECT_TAG]: (state, action) => {
 			state.data.map((tag: TagModel) => {
-				// if (!tag || !action || !action.payload) {
-				// 	return state
-				// }
-				if (action.payload && action.payload.result) {
-					if (tag._id === action.payload.result) {
+				if (action.payload) {
+					if (tag._id == action.payload) {
 						tag.isSelected = !tag.isSelected
 					}
 				} else {
@@ -47,7 +44,10 @@ export const tagReducer = handleActions<RootState.TagState, TagDataModel>(
 					tag.isSelected = false
 				}
 			})
-			return state
+			return {
+				data: state.data,
+				pagination: state.pagination
+			}
 		},
 		[TagActions.Type.DELETE_TAG]: (state, action) => {
 			const { _id: id } = (action.payload as any).result

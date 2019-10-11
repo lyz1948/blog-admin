@@ -7,15 +7,6 @@ const initialState: RootState.CategoryState = {
 	data: [],
 	pagination: {}
 }
-	// {
-	// 	name: '生活随笔',
-	// 	description: '测试描述',
-	// 	slug: 'test slug',
-	// 	pid: {},
-	// 	extends: [],
-	// 	isSelected: false,
-	// },
-
 
 export const categoryReducer = handleActions<
 	RootState.CategoryState,
@@ -43,21 +34,20 @@ export const categoryReducer = handleActions<
 			return state
 		},
 		[CategoryActions.Type.SELECT_CATEGORY]: (state, action) => {
-			// state.data.map((category: any) => {
-			// 	if (!category || !action || !action.payload) {
-			// 		return category
-			// 	}
-			// 	if (action.payload._id) {
-			// 		if (category._id === action.payload._id) {
-			// 			category.isSelected = !category.isSelected
-			// 		}
-			// 	} else {
-			// 		// 如果没有传id, 表示要置空所有选中
-			// 		category.isSelected = false
-			// 	}
-			// 	return state
-			// })
-			return state
+			state.data.map((category: any) => {
+				if (action.payload) {
+					if (category._id == action.payload) {
+						category.isSelected = !category.isSelected
+					}
+				} else {
+					// 如果没有传id, 表示要置空所有选中
+					category.isSelected = false
+				}
+			})
+			return {
+				data: state.data,
+				pagination: state.pagination
+			}
 		},
 		[CategoryActions.Type.DELETE_CATEGORY]: (state, action) => {
 			// const { _id: id } = (action.payload as any).result

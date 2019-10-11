@@ -4,8 +4,9 @@ body {
 	margin: 0;
 	padding: 0;
 	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: 400;
 	line-height: 1.4em;
-	color: #4d5b69;
+	color: #a6c3dc;
 	background-color: #2e3f50;
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
@@ -205,13 +206,15 @@ ul {
 
 :global(.module .content) {
 	padding: 10px 20px;
-	color: #a7b2ae;
+	font-size: 14px;
+	font-weight: 400;
+	color: #a6c3dc;
 	background-color: #2b3c4c;
 	/* background-color: #2f4050; */
 }
 
 :global(.module .title > h3) {
-	font-size: 18px;
+	font-size: 15px;
 	color: #79fded;
 	margin-bottom: 0;
 }
@@ -223,8 +226,9 @@ ul {
 :global(.inputWrap .label) {
 	width: 100px;
 	line-height: 38px;
-	font-size: 15px;
+	font-size: 14px;
 	font-weight: 500;
+	color: #a6c3dc;
 }
 
 /* 无数据 */
@@ -246,8 +250,9 @@ ul {
 
 /* bootstrap */
 :global(.table-dark) {
-	color: #fff;
+	color: #a6c3dc;
 	background-color: #2e4050 !important;
+	font-size: 13px;
 }
 :global(.table-dark td), :global(.table-dark thead th) {
 	border-color: transparent;

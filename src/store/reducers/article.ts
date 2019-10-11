@@ -37,10 +37,17 @@ export const articleReducer = handleActions<
 			return state
 		},
 		[ArticleActions.Type.DELETE_ARTICLE]: (state, action) => {
-			// if (action.payload && action.payload.result) {
-			// 	return state.data.filter(article => article._id !== action.payload!.result)
-			// }
-			return state
+			const { result } = action.payload!
+
+			state.data.map((article, index) => {
+				if (article._id === result) {
+					state.data.splice(index, 1)
+				}
+			})
+			return {
+				data: state.data,
+				pagination: state.pagination
+			}
 		},
 		[ArticleActions.Type.UPDATE_ARTICLE]: (state, action) => {
 			const { result } = action.payload!

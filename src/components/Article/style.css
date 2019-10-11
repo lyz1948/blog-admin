@@ -8,13 +8,14 @@
 	margin-right: 10px;
 	margin-bottom: 10px;
 	min-width: 60px;
-	text-align: center;
-	color: #fff;
-	background-color: #6c757d;
+	padding: 0 10px;
+	font-size: 13px;
+	font-weight: 600;
 	line-height: 30px;
 	border-radius: 3px;
-	font-weight: bold;
-	padding: 0 10px;
+	background-color: #6c757d;
+	color: #e7fbff;
+	text-align: center;
 	cursor: pointer;
 }
 

@@ -1,11 +1,11 @@
 import { service } from './axios'
-import { IFatchData, IResponseData } from '@app/interfaces/data'
+import { IResponseData } from '@app/interfaces/data'
 import { UserModel, ArticleModel, TagModel, SiteModel } from '@app/store/models'
 import { formatQuery } from '@app/utils'
 
 // 获取网站信息
-export const fetchSiteInfo = <T>() => {
-	return service.get<IFatchData<T>>('site')
+export const fetchSiteInfo = () => {
+	return service.get<IResponseData>('site')
 }
 
 // 更新网站信息
@@ -30,18 +30,26 @@ export const getArticle = (id: any) => {
 }
 
 /**
- * 更新文章
- */
-export const updateArticle = (id: any, newArticle: ArticleModel) => {
-	return service.put(`article/${id}`, newArticle)
-}
-
-/**
  * 添加文章
  * @param article 文章对象
  */
 export const addArticle = (article: ArticleModel) => {
 	return service.post('article', { ...article })
+}
+
+/**
+ * 删除指定id文章
+ * @param id 文章id
+ */
+export const deleteArticle = (id: any): Promise<IResponseData> => {
+	return service.delete(`article/${id}`)
+}
+
+/**
+ * 更新文章
+ */
+export const updateArticle = (id: any, newArticle: ArticleModel) => {
+	return service.put(`article/${id}`, newArticle)
 }
 
 // 上传文章缩略图
@@ -55,18 +63,10 @@ export const uploadAvatar = (file: any): any => {
 }
 
 /**
- * 删除指定id文章
- * @param id 文章id
- */
-export const deleteArticle = (id: any): Promise<IResponseData> => {
-	return service.delete(`article/${id}`)
-}
-
-/**
  * 获取文章分类
  */
-export const fetchCategory = <T>() => {
-	return service.get<IFatchData<T>>('category')
+export const fetchCategory = () => {
+	return service.get<IResponseData>('category')
 }
 
 /**
@@ -88,10 +88,10 @@ export const deleteCategory = (id: any) => {
 /**
  * 获取文章的标签
  */
-export const fetchTag = <T>(querys: object = {}) => {
+export const fetchTag = (querys: object = {}) => {
 	const url = `tag`
 	const queryUrl = formatQuery(url, querys)
-	return service.get<IFatchData<T>>(queryUrl)
+	return service.get<IResponseData>(queryUrl)
 }
 
 /**
@@ -124,7 +124,7 @@ export const deleteTag = (id: string | number) => {
  * 用户登录
  * @param user 用户名和密码
  */
-export const signIn = (user: UserModel) => {
+export const signIn = (user: UserModel): Promise<IResponseData> => {
 	return service.post('user/signin', { ...user })
 }
 

@@ -10,6 +10,8 @@ import {
 	FancyInput,
 	FancyTextarea,
 } from '@app/components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export namespace CategoryManage {
 	export interface IProps {
@@ -135,7 +137,7 @@ export class Category extends React.Component<
 				<div className="title">
 					<h3>分类列表</h3>
 				</div>
-				<div className="content tac">
+				<div className="content">
 					<Table striped bordered hover variant="dark">
 						<thead>
 							<tr>
@@ -156,13 +158,23 @@ export class Category extends React.Component<
 											size="sm"
 											variant="info"
 											onClick={() => this.handleEditor(it)}>
-											修改
+											<FontAwesomeIcon
+												icon={faEdit}
+												size="1x"
+												style={{ marginRight: '2px' }}
+											/>
+											编辑分类
 										</Button>
 										<Button
 											size="sm"
-											variant="danger"
+											variant="warning"
 											onClick={() => this.openModal(it._id)}>
-											删除
+											<FontAwesomeIcon
+												icon={faTrash}
+												size="1x"
+												style={{ marginRight: '2px' }}
+											/>{' '}
+											删除分类
 										</Button>
 									</td>
 								</tr>
@@ -196,7 +208,7 @@ export class Category extends React.Component<
 					</div>
 					<div className="inputWrap">
 						<span className="label"></span>
-						<Button variant="primary" onClick={() => this.handleCreate()}>
+						<Button variant="info" onClick={() => this.handleCreate()}>
 							{isUpdate ? '更新分类' : '创建分类'}
 						</Button>
 					</div>
