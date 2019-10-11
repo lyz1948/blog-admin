@@ -15,7 +15,7 @@ export const userReducer = handleActions<RootState.UserState, IResponseData>(
 		[UserActions.Type.FETCH_USER]: (state, action) => {
 			return state
 		},
-		[UserActions.Type.GET_USER]: (state, action) => {
+		[UserActions.Type.BATCH_USER]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				const { result, message } = action.payload
 				return {

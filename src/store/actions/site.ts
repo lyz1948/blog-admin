@@ -7,7 +7,7 @@ export namespace SiteActions {
 		UPDATE = 'UPDATE',
 	}
 
-	export const getSiteInfo = createAction(Type.GET, API.fetchSiteInfo)
+	export const fetchSiteInfo = createAction(Type.GET, API.fetchSiteInfo)
 	export const updateSiteInfo = createAction(Type.UPDATE, API.updateSiteInfo)
 }
 

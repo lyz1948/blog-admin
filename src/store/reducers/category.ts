@@ -13,7 +13,7 @@ export const categoryReducer = handleActions<
 	CategoryDataModel
 >(
 	{
-		[CategoryActions.Type.GET_CATEGORY]: (state, action) => {
+		[CategoryActions.Type.BATCH_CATEGORY]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				const { data } = result
@@ -27,11 +27,31 @@ export const categoryReducer = handleActions<
 			}
 			return state
 		},
-		[CategoryActions.Type.ADD_CATEGORY]: (state, action) => {
+		[CategoryActions.Type.CREATE_CATEGORY]: (state, action) => {
 			if (action.payload && action.payload.result) {
-				return action.payload.result
+				const { result } = action.payload
+				state.data.unshift(result)
+				return {
+					...state
+				}
 			}
 			return state
+		},
+		[CategoryActions.Type.DELETE_CATEGORY]: (state, action) => {
+			const { _id: id } = (action.payload as any).result
+			state.data = state.data.filter(tag => tag._id !== id)
+			return { ...state }
+		},
+		[CategoryActions.Type.UPDATE_CATEGORY]: (state, action) => {
+			if (action.payload && action.payload.result) {
+				const { result } = action.payload
+				state.data.map((tag, index) => {
+					if (tag._id === result._id) {
+						state.data.splice(index, 1, result)
+					}
+				})
+			}
+			return { ...state }
 		},
 		[CategoryActions.Type.SELECT_CATEGORY]: (state, action) => {
 			state.data.map((category: any) => {
@@ -48,14 +68,6 @@ export const categoryReducer = handleActions<
 				data: state.data,
 				pagination: state.pagination
 			}
-		},
-		[CategoryActions.Type.DELETE_CATEGORY]: (state, action) => {
-			// const { _id: id } = (action.payload as any).result
-			// state.data = state.data.filter((category: any) => category._id !== id)
-			return state
-		},
-		[CategoryActions.Type.EDIT_CATEGORY]: (state, action) => {
-			return state
 		},
 	},
 	initialState

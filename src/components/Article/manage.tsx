@@ -78,7 +78,7 @@ export namespace Article {
 		tags: TagDataModel
 		articles: ArticleDataModel
 		categories: CategoryDataModel
-		getArticleList: typeof ArticleActions.getArticleList
+		batchArticle: typeof ArticleActions.batchArticle
 		deleteArticle: typeof ArticleActions.deleteArticle
 		updateArticle: typeof ArticleActions.updateArticle
 		editArticle: (_id: string) => void
@@ -195,7 +195,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 	// 关键字搜索
 	handleKeywordSearch() {
 		const { keyword, currentPage } = this.state
-		this.props.getArticleList({ page: currentPage, keyword })
+		this.props.batchArticle({ page: currentPage, keyword })
 	}
 
 	// 分页
@@ -203,7 +203,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		this.setState({
 			currentPage,
 		})
-		this.props.getArticleList({ page: currentPage })
+		this.props.batchArticle({ page: currentPage })
 	}
 
 	// 分类/tag/state/public 查询
@@ -225,7 +225,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 			querys,
 		})
 
-		this.props.getArticleList(querys)
+		this.props.batchArticle(querys)
 	}
 
 	// 复选框选择
@@ -270,7 +270,6 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 			<div className="flex pdb10 pdt10">
 				<div className="flex flex30">
 					<Search
-						
 						placeholder="搜索关键字"
 						handleChange={(name: string, val: any) =>
 							this.keywordChange(name, val)
@@ -333,7 +332,7 @@ export class Article extends React.Component<Article.IProps, Article.IState> {
 		if (!data || data.length === 0) {
 			return (
 				<tbody>
-					<tr>
+					<tr className="tac">
 						<td colSpan={artHeads.length}>搜索不到任何相关的文章</td>
 					</tr>
 				</tbody>

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { TagModel, TagDataModel } from '@app/store/models'
 import { TagActions } from '@app/store/actions'
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Form } from 'react-bootstrap'
 import { INotice } from '@app/interfaces/notice'
 import { formatDate } from '@app/utils'
 import {
@@ -18,8 +18,8 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 export namespace TagComp {
 	export interface IProps {
 		tags: TagDataModel
-		addTag: typeof TagActions.addTag
-		getTag: typeof TagActions.getTag
+		createTag: typeof TagActions.createTag
+		batchTag: typeof TagActions.batchTag
 		updateTag: typeof TagActions.updateTag
 		deleteTag: typeof TagActions.deleteTag
 	}
@@ -33,6 +33,7 @@ export namespace TagComp {
 		show: boolean
 		type: string
 		content: string
+		checkedValues: string[]
 	}
 }
 
@@ -55,6 +56,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 			isUpdate: false,
 			type: 'info',
 			content: '添加成功',
+			checkedValues: [],
 		}
 		this.handleDelete = this.handleDelete.bind(this)
 		this.handleEdit = this.handleEdit.bind(this)
@@ -95,7 +97,21 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 		})
 	}
 
-	handleCreate() {
+	// 复选框选择
+	handleChecked(_id: any, event: React.ChangeEvent<HTMLInputElement>) {
+		const { checked } = event.target
+		let { checkedValues } = this.state
+
+		if (checked && checkedValues!.filter((item: any) => item !== _id)) {
+			checkedValues!.push(_id)
+		} else {
+			checkedValues = checkedValues!.filter((item: any) => item !== _id)
+		}
+		console.log('checked', checkedValues)
+		this.setState({ checkedValues })
+	}
+
+	handleSave() {
 		let name = this.inputName.current!.value
 		let slug = this.inputSlug.current!.value
 		let description = this.inputDescription.current!.value
@@ -133,7 +149,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 				isUpdate: false,
 			})
 		} else {
-			this.props.addTag(tagObj)
+			this.props.createTag(tagObj)
 			this.showNotice({ type: 'success', content: '添加成功！' })
 		}
 		this.handleResize()
@@ -154,7 +170,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 	// 搜索
 	handleKeywordSearch() {
 		const { currentPage, keyword } = this.state
-		this.props.getTag({ page: currentPage, keyword })
+		this.props.batchTag({ page: currentPage, keyword })
 	}
 
 	// 分页
@@ -162,80 +178,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 		this.setState({
 			currentPage: page,
 		})
-		this.props.getTag({ page })
-	}
-
-	renderList(): JSX.Element | void {
-		const { data } = this.props.tags
-
-		if (!data || data.length === 0) {
-			return (
-				<div className="module flex1 pdl0">
-					<div className="title">
-						<h3>标签列表</h3>
-					</div>
-					<div className="content tac">
-						{this.renderHeaderBar()}
-						<Table striped bordered hover variant="dark">
-							{this.renderTableHeader()}
-							<tbody>
-								<tr>
-									<td colSpan={tableHeads.length}>搜索不到任何相关的标签</td>
-								</tr>
-							</tbody>
-						</Table>
-					</div>
-				</div>
-			)
-		}
-
-		return (
-			<div className="module flex1 pdl0">
-				<div className="title">
-					<h3>标签列表</h3>
-				</div>
-				<div className="content">
-					{this.renderHeaderBar()}
-					<Table striped bordered hover variant="dark">
-						{this.renderTableHeader()}
-						<tbody>
-							{data.map((it: any, index: number) => (
-								<tr key={index}>
-									<td>{it.name}</td>
-									<td>{it.description}</td>
-									<td>{it.slug}</td>
-									<td>{formatDate(it.update_at)}</td>
-									<td className="ctrl-btn-group">
-										<Button
-											size="sm"
-											variant="info"
-											onClick={(e: any) => this.handleEdit(it, e)}>
-											<FontAwesomeIcon
-												icon={faEdit}
-												size="1x"
-												style={{ marginRight: '2px' }}
-											/>
-											编辑标签
-										</Button>
-										<Button
-											size="sm"
-											variant="warning"
-											onClick={() => this.openModal(it._id)}>
-											<FontAwesomeIcon
-												icon={faTrash}
-												size="1x"
-												style={{ marginRight: '2px' }}
-											/>
-											删除标签
-										</Button>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</Table>
-				</div>
-			</div>
-		)
+		this.props.batchTag({ page })
 	}
 
 	renderHeaderBar(): JSX.Element | void {
@@ -278,6 +221,79 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 		)
 	}
 
+	renderTableBody(): JSX.Element | void {
+		const { data } = this.props.tags
+		if (!data || data.length === 0) {
+			return (
+				<tbody>
+					<tr className="tac">
+						<td colSpan={tableHeads.length}>搜索不到任何相关的标签</td>
+					</tr>
+				</tbody>
+			)
+		}
+		return (
+			<tbody>
+				{data.map((it: any, index: number) => (
+					<tr key={index}>
+						<td>
+							<Form.Check
+								type="checkbox"
+								label={it.id}
+								onChange={(e: any) => this.handleChecked(it._id, e)}
+							/>
+						</td>
+						<td>{it.name}</td>
+						<td>{it.description}</td>
+						<td>{it.slug}</td>
+						<td>{formatDate(it.update_at)}</td>
+						<td className="ctrl-btn-group">
+							<Button
+								size="sm"
+								variant="info"
+								onClick={(e: any) => this.handleEdit(it, e)}>
+								<FontAwesomeIcon
+									icon={faEdit}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>
+								编辑标签
+							</Button>
+							<Button
+								size="sm"
+								variant="warning"
+								onClick={() => this.openModal(it._id)}>
+								<FontAwesomeIcon
+									icon={faTrash}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>
+								删除标签
+							</Button>
+						</td>
+					</tr>
+				))}
+			</tbody>
+		)
+	}
+
+	renderTagList(): JSX.Element | void {
+		return (
+			<div className="module flex1 pdl0">
+				<div className="title">
+					<h3>标签列表</h3>
+				</div>
+				<div className="content">
+					{this.renderHeaderBar()}
+					<Table striped bordered hover variant="dark">
+						{this.renderTableHeader()}
+						{this.renderTableBody()}
+					</Table>
+				</div>
+			</div>
+		)
+	}
+
 	renderCreated(): JSX.Element | void {
 		const { isUpdate } = this.state
 		return (
@@ -300,7 +316,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 					</div>
 					<div className="inputWrap">
 						<span className="label"></span>
-						<Button variant="info" onClick={() => this.handleCreate()}>
+						<Button variant="info" onClick={() => this.handleSave()}>
 							{isUpdate ? '更新标签' : '创建标签'}
 						</Button>
 					</div>
@@ -332,7 +348,7 @@ export class Tag extends React.Component<TagComp.IProps, TagComp.IState> {
 				/>
 				<div className="flex">
 					{this.renderCreated()}
-					{this.renderList()}
+					{this.renderTagList()}
 				</div>
 			</div>
 		)

@@ -92,29 +92,29 @@ export class App extends React.Component<App.IProps, App.IState> {
 	}
 
 	componentWillMount() {
-		const { articles, tags, actions } = this.props
+		const { articles, categories, tags, actions } = this.props
 		// 获取签名
 		this.getUserTokenFromStorage()
 
 		// if (!this.hasPermission()) { return }
 		// 用户信息
-		actions.getUser()
+		actions.fetchUser()
 
 		// 站点信息
-		actions.getSiteInfo()
+		actions.fetchSiteInfo()
 
 		// 如果数据小于2条则获取, 因为初始化的时候有一条默认数据
 		if (!articles.data.length) {
-			actions.getArticleList({})
+			actions.batchArticle({})
 		}
 
 		if (!tags.data.length) {
-			actions.getTag({})
+			actions.batchTag({})
 		}
 
-		// if (!categories.data.length) {
-			actions.getCategory()
-		// }
+		if (!categories.data.length) {
+			actions.batchCategory({})
+		}
 	}
 
 	componentDidMount() {
@@ -123,7 +123,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 
 		// 修改文章，刷新页面处理
 		if (id) {
-			actions.getArticle(id)
+			actions.fetchArticle(id)
 			articles.data.map((article: any) => {
 				if (id == article._id) {
 					this.setState({
@@ -148,8 +148,8 @@ export class App extends React.Component<App.IProps, App.IState> {
 		const { actions, history } = this.props
 
 		// article.thumb = thumb
-		actions.addArticle(article)
-		actions.getArticleList({})
+		actions.createArticle(article)
+		actions.batchArticle({})
 
 		sleep(1000).then(() => {
 			history.push('#ARTICLE_LIST')
@@ -161,7 +161,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 		const { actions, history } = this.props
 
 		actions.updateArticle(_id, article)
-		actions.getArticleList({})
+		actions.batchArticle({})
 
 		sleep(1000).then(() => {
 			history.push('#ARTICLE_LIST')
@@ -247,7 +247,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 						tags={tags}
 						articles={articles}
 						categories={categories}
-						getArticleList={actions.getArticleList}
+						batchArticle={actions.batchArticle}
 						deleteArticle={actions.deleteArticle}
 						updateArticle={actions.updateArticle}
 						editArticle={this.handleEdit.bind(this)}
@@ -262,8 +262,7 @@ export class App extends React.Component<App.IProps, App.IState> {
 						uploadThumb={actions.uplodThumb}
 						selectTag={actions.selectTag}
 						selectCategory={actions.selectCategory}
-						getArticle={actions.getArticle}
-						addArticle={this.handleNewArticle}
+						createArticle={this.handleNewArticle}
 						updateArticle={this.handleUpdateArticle}
 					/>
 				)
@@ -271,17 +270,18 @@ export class App extends React.Component<App.IProps, App.IState> {
 				return (
 					<Category
 						categories={categories}
-						addCategory={actions.addCategory}
+						batchCategory={actions.batchCategory}
+						createCategory={actions.createCategory}
 						deleteCategory={actions.deleteCategory}
-						editCategory={actions.editCategory}
+						updateCategory={actions.updateCategory}
 					/>
 				)
 			case 'ARTICLE_TAG':
 				return (
 					<Tag
 						tags={tags}
-						getTag={actions.getTag}
-						addTag={actions.addTag}
+						batchTag={actions.batchTag}
+						createTag={actions.createTag}
 						updateTag={actions.updateTag}
 						deleteTag={actions.deleteTag}
 					/>

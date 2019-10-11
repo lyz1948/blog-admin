@@ -11,6 +11,7 @@ const toDouble = (s: number) => {
 
 export const formatQuery = (url: string, querys: any) => {
 	const isObj = toString.call(querys) === '[object Object]'
+
 	if (!isObj) return url
 	
 	// 空对象

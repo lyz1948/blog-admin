@@ -20,7 +20,7 @@ const initialState: RootState.SiteState = {
 
 export const siteReducer = handleActions<RootState.SiteState, IResponseData>(
 	{
-		[ArticleActions.Type.GET_SITE_INFO]: (state, action) => {
+		[ArticleActions.Type.FETCH_SITE_INFO]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				return {

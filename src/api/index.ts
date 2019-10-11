@@ -16,7 +16,7 @@ export const updateSiteInfo = (option: SiteModel) => {
 /**
  * 获取文章列表
  */
-export const fetchArticle = (querys: object = {}) => {
+export const batchArticle = (querys: any) => {
 	const url = `article`
 	const queryUrl = formatQuery(url, querys)
 	return service.get(queryUrl)
@@ -25,7 +25,7 @@ export const fetchArticle = (querys: object = {}) => {
 /**
  * 获取文章详情
  */
-export const getArticle = (id: any) => {
+export const fetchArticle = (id: any) => {
 	return service.get(`article/${id}`)
 }
 
@@ -33,7 +33,7 @@ export const getArticle = (id: any) => {
  * 添加文章
  * @param article 文章对象
  */
-export const addArticle = (article: ArticleModel) => {
+export const createArticle = (article: ArticleModel) => {
 	return service.post('article', { ...article })
 }
 
@@ -65,30 +65,41 @@ export const uploadAvatar = (file: any): any => {
 /**
  * 获取文章分类
  */
-export const fetchCategory = () => {
-	return service.get<IResponseData>('category')
+export const batchCategory = (querys: object = {}) => {
+	const url = `category`
+	const queryUrl = formatQuery(url, querys)
+	return service.get<IResponseData>(queryUrl)
 }
 
 /**
  * 添加分类
  * @param category 分类对象
  */
-export const addCategory = (category: any) => {
+export const createCategory = (category: any) => {
 	return service.post('category', { ...category })
+}
+
+/**
+ * 更新分类
+ * @param category 分类对象
+ */
+export const updateCategory = (category: any) => {
+	const { id } = category
+	return service.put(`category/${id}`, { ...category })
 }
 
 /**
  * 删除分类
  * @param id 分类id
  */
-export const deleteCategory = (id: any) => {
+export const deleteCategory = (id: string) => {
 	return service.delete(`category/${id}`)
 }
 
 /**
  * 获取文章的标签
  */
-export const fetchTag = (querys: object = {}) => {
+export const batchTag = (querys: object = {}) => {
 	const url = `tag`
 	const queryUrl = formatQuery(url, querys)
 	return service.get<IResponseData>(queryUrl)
@@ -98,7 +109,7 @@ export const fetchTag = (querys: object = {}) => {
  * 添加标签
  * @param tag 标签对象
  */
-export const addTag = (tag: any) => {
+export const createTag = (tag: any) => {
 	return service.post('tag', { ...tag })
 }
 
@@ -139,7 +150,7 @@ export const signUp = (user: UserModel): Promise<UserModel> => {
 /**
  * 获取用户列表
  */
-export const fetchUsers = (): Promise<UserModel> => {
+export const batchUsers = (): Promise<UserModel> => {
 	return service.get('user')
 }
 
@@ -147,7 +158,7 @@ export const fetchUsers = (): Promise<UserModel> => {
  * 获取指定用户
  * @param id 用户id
  */
-export const getUser = (): Promise<IResponseData> => {
+export const fetchUser = (): Promise<IResponseData> => {
 	return service.get(`user/admin`)
 }
 

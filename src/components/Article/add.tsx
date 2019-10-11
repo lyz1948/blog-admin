@@ -36,11 +36,10 @@ const PUBLISH_VALUE = [
 
 export namespace ArticleAdd {
 	export interface IProps {
-		article: ArticleModel
 		tags: TagDataModel
+		article: ArticleModel
 		categories: CategoryDataModel
-		getArticle: typeof ArticleActions.getArticle
-		addArticle: typeof ArticleActions.addArticle
+		createArticle: typeof ArticleActions.createArticle
 		updateArticle: typeof ArticleActions.updateArticle
 		uploadThumb: typeof ArticleActions.uplodThumb
 		selectTag: typeof TagActions.selectTag
@@ -300,7 +299,7 @@ export class ArticleAdd extends React.Component<
 			if (res && res.payload && res.payload.result) {
 				article.thumb = res.payload.result
 				// 添加
-				this.props.addArticle(article)
+				this.props.createArticle(article)
 				this.showNotice({ type: 'success', content: '添加成功！' })
 			}
 		}

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { CategoryModel, CategoryDataModel } from '@app/store/models'
 import { CategoryActions } from '@app/store/actions'
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Form } from 'react-bootstrap'
 import { INotice } from '@app/interfaces/notice'
 import { formatDate } from '@app/utils'
 import {
@@ -9,6 +9,7 @@ import {
 	Notication,
 	FancyInput,
 	FancyTextarea,
+	Search,
 } from '@app/components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -16,20 +17,26 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 export namespace CategoryManage {
 	export interface IProps {
 		categories: CategoryDataModel
-		addCategory: typeof CategoryActions.addCategory
+		batchCategory: typeof CategoryActions.batchCategory
+		createCategory: typeof CategoryActions.createCategory
 		deleteCategory: typeof CategoryActions.deleteCategory
-		editCategory: typeof CategoryActions.editCategory
+		updateCategory: typeof CategoryActions.updateCategory
 	}
 
 	export interface IState {
 		cateId: string
-		showModal: boolean
-		show: boolean
+		keyword: string
 		type: string
 		content: string
+		currentPage: number
+		show: boolean
+		showModal: boolean
 		isUpdate: boolean
+		curCategory?: any
+		checkedValues: string[]
 	}
 }
+const tableHeads = ['ID', '标题', '描述', 'slug', '时间', '操作']
 
 export class Category extends React.Component<
 	CategoryManage.IProps,
@@ -44,14 +51,20 @@ export class Category extends React.Component<
 
 		this.state = {
 			cateId: '',
-			showModal: false,
-			show: false,
+			keyword: '',
 			type: 'info',
 			content: '添加成功',
+			currentPage: 1,
+			show: false,
+			showModal: false,
 			isUpdate: false,
+			curCategory: null,
+			checkedValues: [],
 		}
 
-		this._handleResize = this._handleResize.bind(this)
+		this.batchDelete = this.batchDelete.bind(this)
+		this.handleResize = this.handleResize.bind(this)
+		this.handleKeywordSearch = this.handleKeywordSearch.bind(this)
 	}
 
 	openModal(id: string) {
@@ -70,13 +83,49 @@ export class Category extends React.Component<
 
 		this.setState({
 			isUpdate: true,
+			curCategory: category,
 		})
 	}
 
-	handleCreate() {
+	keywordChange(name: string, event: React.ChangeEvent<HTMLInputElement>) {
+		const value = event.target.value
+		this.setState({ keyword: value })
+	}
+
+	// 搜索
+	handleKeywordSearch() {
+		const { currentPage, keyword } = this.state
+		this.props.batchCategory({ page: currentPage, keyword })
+	}
+
+	// 复选框选择
+	handleChecked(_id: any, event: React.ChangeEvent<HTMLInputElement>) {
+		const { checked } = event.target
+		let { checkedValues } = this.state
+
+		if (checked && checkedValues!.filter((item: any) => item !== _id)) {
+			checkedValues!.push(_id)
+		} else {
+			checkedValues = checkedValues!.filter((item: any) => item !== _id)
+		}
+		this.setState({ checkedValues })
+	}
+
+	// 批量删除
+	batchDelete() {
+		const { checkedValues } = this.state
+		if (!checkedValues.length) {
+			this.showNotice({ type: 'warn', content: '请选择要删除的分类' })
+		}
+	}
+
+	// 新增或更新
+	handleSave() {
 		let name = this.inputName.current!.value
 		let slug = this.inputSlug.current!.value
 		let description = this.inputDescription.current!.value
+		const { isUpdate, curCategory } = this.state
+
 		if (!name) {
 			this.showNotice({ type: 'warn', content: '标题不能为空' })
 			return
@@ -92,22 +141,28 @@ export class Category extends React.Component<
 			return
 		}
 
-		const cateObj = {
+		const category = {
+			id: '',
 			name,
 			slug,
 			description,
 			extends: [],
 		}
 
-		if (name && slug && description) {
-			this.props.addCategory(cateObj)
-			this.showNotice({ type: 'success', content: '添加成功' })
-			this._handleResize()
+		if (isUpdate) {
+			category.id = curCategory._id
+			this.props.updateCategory(category)
+		} else {
+			this.props.createCategory(category)
 		}
+		const message = isUpdate ? '更新成功' : '添加成功'
+
+		this.showNotice({ type: 'success', content: message })
+		this.handleResize()
 	}
 
 	// 重置
-	_handleResize() {
+	handleResize() {
 		this.inputName.current!.value = ''
 		this.inputSlug.current!.value = ''
 		this.inputDescription.current!.value = ''
@@ -128,58 +183,116 @@ export class Category extends React.Component<
 		})
 	}
 
-	renderList(): JSX.Element | void {
-		const { categories } = this.props
-		const tableHeads = ['标题', '描述', 'slug', '时间', '操作']
+	renderHeaderBar(): JSX.Element | void {
+		const { keyword } = this.state
 
+		return (
+			<div className="flex pdb10">
+				<div className="flex flex50">
+					<Search
+						placeholder="搜索关键字"
+						name="keyword"
+						value={keyword}
+						handleChange={(name: string, val: any) =>
+							this.keywordChange(name, val)
+						}
+						handleSearch={this.handleKeywordSearch}
+					/>
+					<span className="mr10"></span>
+					<Button
+						size="sm"
+						variant="warning"
+						style={{ width: '120px' }}
+						onClick={this.batchDelete}>
+						<FontAwesomeIcon icon={faEdit} size="1x" />
+						批量删除
+					</Button>
+				</div>
+			</div>
+		)
+	}
+
+	renderTableHeader(): JSX.Element | void {
+		return (
+			<thead>
+				<tr>
+					{tableHeads.map(h => (
+						<th key={h}>{h}</th>
+					))}
+				</tr>
+			</thead>
+		)
+	}
+
+	renderTableBody(): JSX.Element | void {
+		const { categories } = this.props
+
+		if (categories.data.length === 0) {
+			return (
+				<tbody>
+					<tr className="tac">
+						<td colSpan={tableHeads.length}>搜索不到任何相关的分类</td>
+					</tr>
+				</tbody>
+			)
+		}
+
+		return (
+			<tbody>
+				{categories.data.map((it: any, index: number) => (
+					<tr key={index}>
+						<td>
+							<Form.Check
+								type="checkbox"
+								label={it.id}
+								onChange={(e: any) => this.handleChecked(it._id, e)}
+							/>
+						</td>
+						<td>{it.name}</td>
+						<td>{it.description}</td>
+						<td>{it.slug}</td>
+						<td>{formatDate(it.update_at)}</td>
+						<td className="ctrl">
+							<Button
+								size="sm"
+								variant="info"
+								onClick={() => this.handleEditor(it)}>
+								<FontAwesomeIcon
+									icon={faEdit}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>
+								编辑分类
+							</Button>
+							<Button
+								size="sm"
+								variant="warning"
+								onClick={() => this.openModal(it._id)}>
+								<FontAwesomeIcon
+									icon={faTrash}
+									size="1x"
+									style={{ marginRight: '2px' }}
+								/>{' '}
+								删除分类
+							</Button>
+						</td>
+					</tr>
+				))}
+			</tbody>
+		)
+	}
+
+	renderList(): JSX.Element | void {
 		return (
 			<div className="module flex1 pdl0">
 				<div className="title">
 					<h3>分类列表</h3>
 				</div>
 				<div className="content">
+					{this.renderHeaderBar()}
 					<Table striped bordered hover variant="dark">
-						<thead>
-							<tr>
-								{tableHeads.map(h => (
-									<th key={h}>{h}</th>
-								))}
-							</tr>
-						</thead>
-						<tbody>
-							{categories.data.map((it: any, index: number) => (
-								<tr key={index}>
-									<td>{it.name}</td>
-									<td>{it.description}</td>
-									<td>{it.slug}</td>
-									<td>{formatDate(it.update_at)}</td>
-									<td className="ctrl">
-										<Button
-											size="sm"
-											variant="info"
-											onClick={() => this.handleEditor(it)}>
-											<FontAwesomeIcon
-												icon={faEdit}
-												size="1x"
-												style={{ marginRight: '2px' }}
-											/>
-											编辑分类
-										</Button>
-										<Button
-											size="sm"
-											variant="warning"
-											onClick={() => this.openModal(it._id)}>
-											<FontAwesomeIcon
-												icon={faTrash}
-												size="1x"
-												style={{ marginRight: '2px' }}
-											/>{' '}
-											删除分类
-										</Button>
-									</td>
-								</tr>
-							))}
-						</tbody>
+						{this.renderTableHeader()}
+						{this.renderTableBody()}
 					</Table>
 				</div>
 			</div>
@@ -208,7 +321,7 @@ export class Category extends React.Component<
 					</div>
 					<div className="inputWrap">
 						<span className="label"></span>
-						<Button variant="info" onClick={() => this.handleCreate()}>
+						<Button variant="info" onClick={() => this.handleSave()}>
 							{isUpdate ? '更新分类' : '创建分类'}
 						</Button>
 					</div>

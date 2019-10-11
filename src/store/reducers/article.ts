@@ -13,7 +13,7 @@ export const articleReducer = handleActions<
 	ArticleDataModel
 >(
 	{
-		[ArticleActions.Type.GET_ARTICLE_LIST]: (state, action) => {
+		[ArticleActions.Type.BATCH_ARTICLE]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				return {
@@ -23,14 +23,14 @@ export const articleReducer = handleActions<
 			}
 			return state
 		},
-		[ArticleActions.Type.GET_ARTICLE]: (state, action) => {
+		[ArticleActions.Type.FETCH_ARTICLE]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				return result
 			}
 			// return state
 		},
-		[ArticleActions.Type.ADD_ARTICLE]: (state, action) => {
+		[ArticleActions.Type.CREATE_ARTICLE]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				return action.payload.result
 			}

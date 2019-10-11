@@ -10,7 +10,7 @@ const initialState: RootState.TagState = {
 
 export const tagReducer = handleActions<RootState.TagState, TagDataModel>(
 	{
-		[TagActions.Type.GET_TAG]: (state, action) => {
+		[TagActions.Type.BATCH_TAG]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
 				result.data.map((it: TagModel) => {
@@ -23,15 +23,31 @@ export const tagReducer = handleActions<RootState.TagState, TagDataModel>(
 			}
 			return state
 		},
-		[TagActions.Type.ADD_TAG]: (state, action) => {
+		[TagActions.Type.CREATE_TAG]: (state, action) => {
 			if (action.payload && action.payload.result) {
 				const { result } = action.payload
+				state.data.unshift(result)
 				return {
-					...state,
-					...result
+					...state
 				}
 			}
 			return state
+		},
+		[TagActions.Type.DELETE_TAG]: (state, action) => {
+			const { _id: id } = (action.payload as any).result
+			state.data = state.data.filter(tag => tag._id !== id)
+			return { ...state }
+		},
+		[TagActions.Type.UPDATE_TAG]: (state, action) => {
+			if (action.payload && action.payload.result) {
+				const { result } = action.payload
+				state.data.map((tag, index) => {
+					if (tag._id === result._id) {
+						state.data.splice(index, 1, result)
+					}
+				})
+			}
+			return { ...state }
 		},
 		[TagActions.Type.SELECT_TAG]: (state, action) => {
 			state.data.map((tag: TagModel) => {
@@ -48,22 +64,6 @@ export const tagReducer = handleActions<RootState.TagState, TagDataModel>(
 				data: state.data,
 				pagination: state.pagination
 			}
-		},
-		[TagActions.Type.DELETE_TAG]: (state, action) => {
-			const { _id: id } = (action.payload as any).result
-			state.data = state.data.filter(tag => tag._id !== id)
-			return state
-		},
-		[TagActions.Type.UPDATE_TAG]: (state, action) => {
-			if (action.payload && action.payload.result) {
-				const { result } = action.payload
-				state.data.map((tag, index) => {
-					if (tag._id === result._id) {
-						state.data.splice(index, 1, result)
-					}
-				})
-			}
-			return state
 		},
 	},
 	initialState
