@@ -1,9 +1,17 @@
 import * as React from 'react'
 import * as styles from './style.css'
 import classNames from 'classnames'
-import ReactMarkdown from 'react-markdown'
-import ContentEditable from 'react-contenteditable'
-import { Form, Button } from 'react-bootstrap'
+
+import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
+import {
+	CategoryDataModel,
+	ArticleModel,
+	TagDataModel,
+} from '@app/store/models'
+import { Notication, FancyInput, FancyTextarea } from '@app/components'
+
+import { Button } from 'react-bootstrap'
+// icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	faBold,
@@ -17,9 +25,11 @@ import {
 	faCloudUploadAlt,
 	faPlus,
 } from '@fortawesome/free-solid-svg-icons'
-import { ArticleActions, CategoryActions, TagActions } from '@app/store/actions'
-import { CategoryDataModel, ArticleModel, TagDataModel } from '@app/store/models'
-import { Notication, FancyInput, FancyTextarea } from '@app/components'
+
+// markdown editor
+import ReactMarkdown from 'react-markdown'
+import ContentEditable from 'react-contenteditable'
+
 import { INotice } from '@app/interfaces/notice'
 
 const STATE_VALUE = [
@@ -130,9 +140,6 @@ export class ArticleAdd extends React.Component<
 			this.inputDescription.current!.value = description
 			this.inputDescription.current!.value = description
 
-			console.log('category', category)
-			console.log('tag', tag)
-
 			const cateList: any[] = []
 			const tagList: any[] = []
 			categories.data.forEach(it => {
@@ -144,12 +151,13 @@ export class ArticleAdd extends React.Component<
 				})
 			})
 			tags.data.forEach(it => {
-				tag && tag.forEach((t: any) => {
-					if (t._id === it._id) {
-						tagList.push(it._id)
-						this.props.selectTag(t._id)
-					}
-				})
+				tag &&
+					tag.forEach((t: any) => {
+						if (t._id === it._id) {
+							tagList.push(it._id)
+							this.props.selectTag(t._id)
+						}
+					})
 			})
 
 			this.setState({
@@ -168,8 +176,6 @@ export class ArticleAdd extends React.Component<
 			postContent: event.target.value,
 		})
 	}
-
-	handleChange(event: any) {}
 
 	changeStateRadio(event: React.ChangeEvent<HTMLInputElement>) {
 		this.setState({
@@ -305,6 +311,8 @@ export class ArticleAdd extends React.Component<
 		}
 	}
 
+	handleChange(value: any) {}
+
 	showNotice(obj: INotice) {
 		const { type, content } = obj
 		this.setState({
@@ -339,6 +347,7 @@ export class ArticleAdd extends React.Component<
 			</div>
 		)
 	}
+
 	// MD编辑框
 	renderMdEditor(): JSX.Element | void {
 		return (
@@ -426,16 +435,17 @@ export class ArticleAdd extends React.Component<
 
 							<div className={styles.markdownBox}>
 								<div className={styles.markdowInput}>
-									<Form.Control
+									{this.renderMdEditor()}
+									{/* <Form.Control
 										as="textarea"
 										rows="10"
 										className={styles.formTextarea}
 										placeholder="文章内容"
 										value={this.state.postContent}
 										onChange={(e: any) => this.processPost(e)}
-									/>
+									/> */}
 								</div>
-								{/* {this.renderMdView()} */}
+								{this.renderMdView()}
 							</div>
 						</div>
 					</div>

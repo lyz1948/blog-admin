@@ -74,6 +74,7 @@ const sleep = (time: number) =>
 		actions: bindActionCreators(omit(ArticleActions, 'Type'), dispatch),
 	})
 )
+
 export class App extends React.Component<App.IProps, App.IState> {
 	constructor(props: App.IProps, context?: any) {
 		super(props, context)
