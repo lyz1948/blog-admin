@@ -18,6 +18,8 @@ yarn install
 
 * 启动项目
 
+> 需要先启动后端api服务 [https://github.com/lyz1948/blog-backend](https://github.com/lyz1948/blog-backend)
+
 ```js
 yarn start
 ```
@@ -65,3 +67,9 @@ yarn start
 ## 项目截图
 
 <img src="https://github.com/lyz1948/blog-admin/blob/master/screenshots/login.png" width="800" height="450"/>
+<img src="https://github.com/lyz1948/blog-admin/blob/master/screenshots/dashboard.png" width="800" height="450"/>
+<img src="https://github.com/lyz1948/blog-admin/blob/master/screenshots/article_add.png" width="800" height="450"/>
+<img src="https://github.com/lyz1948/blog-admin/blob/master/screenshots/article.png" width="800" height="450"/>
+<img src="https://github.com/lyz1948/blog-admin/blob/master/screenshots/category.png" width="800" height="450"/>
+<img src="https://github.com/lyz1948/blog-admin/blob/master/screenshots/tag.png" width="800" height="450"/>
+<img src="https://github.com/lyz1948/blog-admin/blob/master/screenshots/settings.png" width="800" height="450"/>

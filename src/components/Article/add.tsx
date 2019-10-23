@@ -10,7 +10,7 @@ import {
 } from '@app/store/models'
 import { Notication, FancyInput, FancyTextarea } from '@app/components'
 
-import { Button } from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
 // icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -435,17 +435,16 @@ export class ArticleAdd extends React.Component<
 
 							<div className={styles.markdownBox}>
 								<div className={styles.markdowInput}>
-									{this.renderMdEditor()}
-									{/* <Form.Control
+									<Form.Control
 										as="textarea"
 										rows="10"
 										className={styles.formTextarea}
 										placeholder="文章内容"
 										value={this.state.postContent}
 										onChange={(e: any) => this.processPost(e)}
-									/> */}
+									/>
 								</div>
-								{this.renderMdView()}
+								{/* {this.renderMdView()} */}
 							</div>
 						</div>
 					</div>
