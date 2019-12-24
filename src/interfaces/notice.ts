@@ -1,4 +1,4 @@
 export interface INotice {
-	type: string
-	content: string
+  type: string
+  content: string
 }

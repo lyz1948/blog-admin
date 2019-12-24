@@ -1,14 +1,14 @@
 export interface TagDataModel {
-	data: TagModel[]
-	pagination: any
-	result?: any
+  data: TagModel[]
+  pagination: any
+  result?: any
 }
 export interface TagModel {
-	name: string
-	slug: string
-	description: string
-	extends?: []
-	[propName: string]: any
+  name: string
+  slug: string
+  description: string
+  extends?: []
+  [propName: string]: any
 }
 
 // export namespace TagModel {

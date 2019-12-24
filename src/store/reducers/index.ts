@@ -10,10 +10,10 @@ import { categoryReducer } from './category'
 export { RootState }
 
 export const rootReducer = combineReducers({
-	login: loginReducer as any,
-	site: siteReducer as any,
-	user: userReducer as any,
-	articles: articleReducer as any,
-	categories: categoryReducer as any,
-	tags: tagReducer as any,
+  login: loginReducer as any,
+  site: siteReducer as any,
+  user: userReducer as any,
+  articles: articleReducer as any,
+  categories: categoryReducer as any,
+  tags: tagReducer as any,
 })

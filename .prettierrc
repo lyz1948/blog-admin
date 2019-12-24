@@ -1,8 +1,8 @@
 {
-  "trailingComma": "es5",
+  "trailingComma": "all",
   "arrowParens": "avoid",
   "semi": false,
-  "useTabs": true,
+  "useTabs": false,
   "singleQuote": true,
   "bracketSpacing": true,
   "jsxBracketSameLine": true

@@ -1,15 +1,15 @@
 .userLogin {
-	background-color: #2f4050;
+  background-color: #2f4050;
 }
 
 .userLogin .content {
-	min-width: 500px;
-	padding: 30px 20px;
-	color: #fff;
-	background-color: #2e4050;
-	box-shadow: 2px 2px 12px #112525;
+  min-width: 500px;
+  padding: 30px 20px;
+  color: #fff;
+  background-color: #2e4050;
+  box-shadow: 2px 2px 12px #112525;
 }
 
 .userLogin h2 {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }

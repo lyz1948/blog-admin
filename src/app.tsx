@@ -5,8 +5,8 @@ import { App as HomeApp } from './containers'
 import { LoginApp } from './containers/login'
 
 export const App = hot(module)(() => (
-	<Switch>
-		<Route exact path="/" component={HomeApp} />
-		<Route path="/login" component={LoginApp} />
-	</Switch>
+  <Switch>
+    <Route exact path="/" component={HomeApp} />
+    <Route path="/login" component={LoginApp} />
+  </Switch>
 ))

@@ -9,41 +9,41 @@ import { omit } from '@app/utils'
 import * as CONFIG from '@app/config/app.config'
 
 export namespace Login {
-	export interface IProps extends RouteComponentProps<void> {
-		login: RootState.LoginState
-		actions: LoginActions
-	}
+  export interface IProps extends RouteComponentProps<void> {
+    login: RootState.LoginState
+    actions: LoginActions
+  }
 }
 @connect(
-	(state: RootState, ownProps): Pick<Login.IProps, 'login'> => {
-		return { login: state.login }
-	},
-	(dispatch: Dispatch): Pick<Login.IProps, 'actions'> => ({
-		actions: bindActionCreators(omit(LoginActions, 'Type'), dispatch),
-	})
+  (state: RootState, ownProps): Pick<Login.IProps, 'login'> => {
+    return { login: state.login }
+  },
+  (dispatch: Dispatch): Pick<Login.IProps, 'actions'> => ({
+    actions: bindActionCreators(omit(LoginActions, 'Type'), dispatch),
+  }),
 )
 export class LoginApp extends React.Component<Login.IProps> {
-	constructor(props: Login.IProps, context?: any) {
-		super(props, context)
-	}
+  constructor(props: Login.IProps, context?: any) {
+    super(props, context)
+  }
 
-	componentDidMount() {
-		// 如果登录过来，直接进入后台
-		let token = localStorage.getItem(CONFIG.APP.tokenKey) as any
-		token = JSON.parse(token)
+  componentDidMount() {
+    // 如果登录过来，直接进入后台
+    let token = localStorage.getItem(CONFIG.APP.tokenKey) as any
+    token = JSON.parse(token)
 
-		if (token && token.expires_in > Date.now()) {
-			this.props.history.push('/#DASHBOARD')
-		}
-	}
+    if (token && token.expires_in > Date.now()) {
+      this.props.history.push('/#DASHBOARD')
+    }
+  }
 
-	render() {
-		const { login, actions } = this.props
+  render() {
+    const { login, actions } = this.props
 
-		if (login && login.access_token) {
-			this.props.history.push('/#DASHBOARD')
-			return null
-		}
-		return <Login token={login} onLogin={actions.signIn} />
-	}
+    if (login && login.access_token) {
+      this.props.history.push('/#DASHBOARD')
+      return null
+    }
+    return <Login token={login} onLogin={actions.signIn} />
+  }
 }

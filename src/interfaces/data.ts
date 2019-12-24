@@ -1,5 +1,5 @@
 export interface IResponseData {
-	message: string
-	result: any
-	status: string
+  message: string
+  result: any
+  status: string
 }

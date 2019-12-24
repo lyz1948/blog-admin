@@ -1,86 +1,86 @@
 .siderNav {
-	position: fixed;
-	float: left;
-	height: 100%;
-	width: 200px;
-	background-color: #283847;
-	z-index: 10;
+  position: fixed;
+  float: left;
+  height: 100%;
+  width: 200px;
+  background-color: #283847;
+  z-index: 10;
 }
 
 .profile {
-	padding: 20px;
-	color: #fff;
-	text-align: center;
-	background: #273747;
-	border-bottom: 1px solid #2e3f50;
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+  background: #273747;
+  border-bottom: 1px solid #2e3f50;
 }
 
 .profile .siteTitle {
-	font-size: 30px;
-	color: #fcfcfc;
+  font-size: 30px;
+  color: #fcfcfc;
 }
 
 .profile .name {
-	height: 45px;
-	padding: 10px 0;
-	font-size: 1.5rem;
+  height: 45px;
+  padding: 10px 0;
+  font-size: 1.5rem;
 }
 
 .profile .slogan {
-	font-size: 0.88rem;
+  font-size: 0.88rem;
 }
 
 .siderNav .navItem {
-	color: #fff;
-	border-bottom: 1px solid #2e3f50;
-	cursor: default;
+  color: #fff;
+  border-bottom: 1px solid #2e3f50;
+  cursor: default;
 }
 
 .siderNav .navItem .content {
-	position: relative;
-	padding: 0 20px;
-	line-height: 45px;
+  position: relative;
+  padding: 0 20px;
+  line-height: 45px;
 }
 
 .siderNav .navItem .content:hover {
-	background-color: #425668;
+  background-color: #425668;
 }
 
 .siderNav .subNav {
-	padding: 8px 0;
-	color: #79fded;
-	background-color: #2b3b4c;
-	/* background-color: #2e4050; */
+  padding: 8px 0;
+  color: #79fded;
+  background-color: #2b3b4c;
+  /* background-color: #2e4050; */
 }
 
 .siderNav .subNav .content {
-	padding-left: 36px;
-	line-height: 35px;
+  padding-left: 36px;
+  line-height: 35px;
 }
 
 .siderNav .navItem .dropIcon {
-	position: absolute;
-	right: 10px;
+  position: absolute;
+  right: 10px;
 }
 
 .siderNav .text {
-	color: #79fded;
-	font-size: 14px;
-	font-weight: 500;
+  color: #79fded;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .hand {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .line {
-	position: relative;
+  position: relative;
 }
 
 .line::after {
-	content: '';
-	position: absolute;
-	width: 100%;
-	height: 1px;
-	box-shadow: 0 1px 2px #827d7d;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  box-shadow: 0 1px 2px #827d7d;
 }

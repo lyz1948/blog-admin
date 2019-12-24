@@ -1,16 +1,16 @@
 export interface CategoryDataModel {
-	data: CategoryModel[]
-	pagination: any
-	result?: any
+  data: CategoryModel[]
+  pagination: any
+  result?: any
 }
 
 export interface CategoryModel {
-	name: string
-	slug: string
-	description: string
-	pid: object
-	extends?: []
-	[propName: string]: any
+  name: string
+  slug: string
+  description: string
+  pid: object
+  extends?: []
+  [propName: string]: any
 }
 
 // export namespace CategoryModel {
