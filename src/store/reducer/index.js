@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux-immutable'
 
-import { authReducer } from './login'
+import { authReducer } from './auth'
 import { articleReducer } from './article'
 import { categoryReducer } from './category'
-import { settingsReducer } from './article'
+import { settingsReducer } from './settings'
 
 export default combineReducers({
   auth: authReducer,

@@ -8,7 +8,7 @@ const defaultState = fromJS({
 
 export const articleReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case actionTypes.CATEGORY_CREATE:
+    case actionTypes.ARTICLE_LIST:
       return state.set('articleList', action.data)
 
     default:

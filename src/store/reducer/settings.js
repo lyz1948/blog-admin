@@ -8,7 +8,7 @@ const defaultState = fromJS({
 
 export const settingsReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case actionTypes.SETTINGS:
+    case actionTypes.SITE_INFO:
       return state.set('siteInfo', action.data)
 
     default:
