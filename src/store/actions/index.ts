@@ -1,6 +1,0 @@
-export * from './tag'
-export * from './article'
-export * from './category'
-export * from './user'
-export * from './login'
-export * from './site'
