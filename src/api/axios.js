@@ -28,11 +28,12 @@ service.interceptors.response.use(
     const errMsg = error.toString()
     const code = errMsg.substr(errMsg.indexOf('code') + 5)
     if (code === '500') {
-      console.log('500 错误了')
-      return { code: 0, message: '错误了', status: 'fail', result: {} }
+      return Promise.reject({
+        code: 0,
+        message: '错误了',
+        status: 'fail',
+        result: {},
+      })
     }
-    return new Promise(resolve =>
-      resolve({ message: '错误了', status: 'fail' }),
-    )
   },
 )

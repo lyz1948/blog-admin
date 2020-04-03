@@ -92,6 +92,11 @@ export const GlobalStyle = createGlobalStyle`
 	.flex {
 		display: flex;
 	}
+
+	.flex-middle {
+		justify-content: center;
+		align-items: center;
+	}
 	
 	.flex-end {
 		justify-content: flex-end;
@@ -103,6 +108,10 @@ export const GlobalStyle = createGlobalStyle`
 
 	.flex-60 {
 		flex: 0 0 60%;
+	}
+
+	.pos-a {
+		position: absolute;
 	}
 
 	.module {

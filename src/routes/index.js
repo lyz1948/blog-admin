@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import BlankLayout from '../Layout/BlankLayout'
 import AdminLayout from '../Layout/AdminLayout'
 
-const Login = lazy(() => import('../pages/Login'))
+const Auth = lazy(() => import('../pages/Auth'))
 const Dashboard = lazy(() => import('../pages/Dashboard'))
 const Settings = lazy(() => import('../pages/Settings'))
 const ArticleAdd = lazy(() => import('../components/Article/ArticleAdd'))
@@ -79,7 +79,7 @@ export default [
       },
       {
         path: '/login',
-        component: SuspenseComponent(Login),
+        component: SuspenseComponent(Auth),
       },
     ],
   },

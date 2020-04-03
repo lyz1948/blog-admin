@@ -14,9 +14,10 @@ export const changeLoadding = data => ({
 
 export const handleSignin = user => {
   return dispatch => {
+    dispatch(changeLoadding(true))
     signIn(user).then(res => {
       dispatch(changeSignin(res.result))
-      dispatch(changeLoadding(true))
+      dispatch(changeLoadding(false))
     })
   }
 }

@@ -2,7 +2,6 @@ import * as actionTypes from '../constants/auth'
 import { fromJS } from 'immutable'
 
 const defaultState = fromJS({
-  authorized: false,
   loading: false,
   userInfo: {},
 })

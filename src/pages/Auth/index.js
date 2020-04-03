@@ -1,12 +1,12 @@
 import React, { memo, useEffect, useRef } from 'react'
-import { connect } from "react-redux"
+import { connect } from 'react-redux'
 import { Base64 } from 'js-base64'
 import { Button } from 'antd'
 import { Tips } from '../../utils'
 import { Container } from './style'
 import * as actionTypes from '../../store/actions/auth'
 
-function Login(props) {
+function Auth(props) {
   const { userInfo: userInfoImmutable } = props
   const { signinDispatch } = props
 
@@ -24,20 +24,20 @@ function Login(props) {
     if (usernameRef.current.value && passwordRef.current.value) {
       Tips.error('用户名或密码错误！')
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo])
 
   const handleSubmit = () => {
     const name = usernameRef.current.value
     let password = passwordRef.current.value
-    
+
     if (!name) {
       Tips.warning('用户名不能缺少！')
       return
     }
 
     password = password ? Base64.encode(password) : ''
-    
+
     if (!password) {
       Tips.warning('密码不能缺少！')
       return
@@ -61,12 +61,24 @@ function Login(props) {
         <div className="login-form">
           <p>用户名</p>
           <div className="input-wrapper">
-            <input className="form-input" type="text" placeholder="用户名" ref={usernameRef} onKeyDown={handleEnter} />
+            <input
+              className="form-input"
+              type="text"
+              placeholder="用户名"
+              ref={usernameRef}
+              onKeyDown={handleEnter}
+            />
           </div>
 
           <p>密码</p>
           <div className="input-wrapper">
-            <input className="form-input" type="password" placeholder="密码" ref={passwordRef} onKeyDown={handleEnter} />
+            <input
+              className="form-input"
+              type="password"
+              placeholder="密码"
+              ref={passwordRef}
+              onKeyDown={handleEnter}
+            />
           </div>
 
           <div className="input-wrapper">
@@ -75,8 +87,7 @@ function Login(props) {
               type="primary"
               htmlType="submit"
               className="login-form-button"
-              onClick={handleSubmit}
-            >
+              onClick={handleSubmit}>
               登录
             </Button>
           </div>
@@ -95,8 +106,8 @@ const mapDispatchToProps = dispatch => {
   return {
     signinDispatch(data) {
       dispatch(actionTypes.handleSignin(data))
-    }
+    },
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Login))
+export default connect(mapStateToProps, mapDispatchToProps)(memo(Auth))
