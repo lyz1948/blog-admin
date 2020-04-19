@@ -46,7 +46,7 @@ const formTextarea = () => {
     color: #d3e5f7;
     background-color: #4d5b69;
     background-clip: padding-box;
-    border: none;
+    border: 1px solid transparent;
     resize: none;
   `
 }

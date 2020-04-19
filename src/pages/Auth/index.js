@@ -1,96 +1,105 @@
-import React, { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Base64 } from 'js-base64'
-import { Button } from 'antd'
 import { Tips } from '../../utils'
 import { Container } from './style'
+import { Form, Input, Button } from 'antd'
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import * as actionTypes from '../../store/actions/auth'
+import * as CONFIG from '../../config/app.config'
 
 function Auth(props) {
   const { userInfo: userInfoImmutable } = props
   const { signinDispatch } = props
-
-  const usernameRef = useRef('')
-  const passwordRef = useRef('')
+  const layout = {
+    wrapperCol: {
+      span: 24,
+    },
+  }
 
   let userInfo = userInfoImmutable.toJS()
+  let token = localStorage.getItem(CONFIG.APP.tokenKey)
+
+  useEffect(() => {
+    if (token) {
+      directToDashboard()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
   useEffect(() => {
     if (userInfo.access_token) {
-      props.history.push(`/dashboard`)
-      return
-    }
-
-    if (usernameRef.current.value && passwordRef.current.value) {
-      Tips.error('用户名或密码错误！')
+      localStorage.setItem(CONFIG.APP.tokenKey, userInfo.access_token)
+      directToDashboard()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo])
 
-  const handleSubmit = () => {
-    const name = usernameRef.current.value
-    let password = passwordRef.current.value
-
-    if (!name) {
-      Tips.warning('用户名不能缺少！')
-      return
-    }
-
-    password = password ? Base64.encode(password) : ''
-
-    if (!password) {
-      Tips.warning('密码不能缺少！')
-      return
-    }
-
-    const user = { name, password }
-    signinDispatch(user)
+  const directToDashboard = () => {
+    props.history.push(`/dashboard`)
+    return
   }
 
-  const handleEnter = ev => {
-    if (ev.keyCode === 13) {
-      handleSubmit()
-    }
+  const onFinish = values => {
+    let { username, password } = values
+    password = password ? Base64.encode(password) : ''
+
+    const user = { username, password }
+    signinDispatch(user).then(res => {
+      if (res) {
+        directToDashboard()
+      } else {
+        Tips.error('用户名或密码错误！')
+      }
+    })
   }
 
   return (
     <Container>
       <div className="login-content">
         <h3>博客管理系统后台登录</h3>
-
+        
         <div className="login-form">
-          <p>用户名</p>
-          <div className="input-wrapper">
-            <input
-              className="form-input"
-              type="text"
-              placeholder="用户名"
-              ref={usernameRef}
-              onKeyDown={handleEnter}
-            />
-          </div>
+          <Form
+            {...layout}
+            name="basic"
+            size={"large"}
+            initialValues={{
+              username: 'admin',
+            }}
+            onFinish={onFinish}>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入用户名!',
+                },
+              ]}>
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
+            </Form.Item>
 
-          <p>密码</p>
-          <div className="input-wrapper">
-            <input
-              className="form-input"
-              type="password"
-              placeholder="密码"
-              ref={passwordRef}
-              onKeyDown={handleEnter}
-            />
-          </div>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入密码!',
+                },
+              ]}>
+              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="密码" />
+            </Form.Item>
 
-          <div className="input-wrapper">
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-              onClick={handleSubmit}>
-              登录
-            </Button>
-          </div>
+            <Form.Item>
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                className="login-form-button">
+                登录
+              </Button>
+            </Form.Item>
+          </Form>
         </div>
       </div>
     </Container>
@@ -99,13 +108,12 @@ function Auth(props) {
 
 const mapStateToProps = state => ({
   userInfo: state.getIn(['auth', 'userInfo']),
-  loading: state.getIn(['auth', 'loading']),
 })
 
 const mapDispatchToProps = dispatch => {
   return {
     signinDispatch(data) {
-      dispatch(actionTypes.handleSignin(data))
+      return dispatch(actionTypes.handleSignin(data))
     },
   }
 }

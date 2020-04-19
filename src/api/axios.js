@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as CONFIG from '../config/app.config'
-import { getToken, getStatus } from '../utils'
+import { getToken, getStatus, Tips } from '../utils'
 
 const token = getToken()
 
@@ -14,6 +14,8 @@ service.interceptors.request.use(config => {
     Authorization: 'Bearer ' + token,
   })
   return config
+}, error => {
+  console.log(error)
 })
 
 service.interceptors.response.use(
@@ -21,6 +23,7 @@ service.interceptors.response.use(
     if (getStatus(response)) {
       return Promise.resolve(response.data)
     } else {
+      Tips.error(response.message)
       return Promise.reject(response)
     }
   },
@@ -28,12 +31,8 @@ service.interceptors.response.use(
     const errMsg = error.toString()
     const code = errMsg.substr(errMsg.indexOf('code') + 5)
     if (code === '500') {
-      return Promise.reject({
-        code: 0,
-        message: '错误了',
-        status: 'fail',
-        result: {},
-      })
+      console.log('请求失败')
+      // Tips.error('请求错误')
     }
   },
 )

@@ -7,6 +7,7 @@ const defaultState = fromJS({
 })
 
 export const authReducer = (state = defaultState, action) => {
+  if (!action.data) return state
   switch (action.type) {
     case actionTypes.SIGNIN:
       return state.set('userInfo', action.data)

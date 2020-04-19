@@ -6,7 +6,7 @@ import { GlobalStyle } from './assets/styles/global'
 
 import store from './store/index'
 import routes from './routes'
-import 'antd/dist/antd.css'
+// import 'antd/dist/antd.css'
 
 function App() {
   return (

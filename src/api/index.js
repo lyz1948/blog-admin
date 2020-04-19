@@ -2,12 +2,12 @@ import { service } from './axios'
 import { formatQuery } from '../utils'
 
 // 获取网站信息
-export const fetchSiteInfo = () => {
+export const fetchSite = () => {
   return service.get('site')
 }
 
 // 更新网站信息
-export const updateSiteInfo = option => {
+export const updateSite = option => {
   return service.put('site', option)
 }
 
@@ -55,7 +55,7 @@ export const uploadThumb = file => {
   return service.post('upload/article', file)
 }
 
-// 上传文章缩略图
+// 上传头像
 export const uploadAvatar = file => {
   return service.post('upload/avatar', file)
 }
@@ -134,7 +134,9 @@ export const deleteTag = id => {
  * @param user 用户名和密码
  */
 export const signIn = user => {
-  return service.post('user/signin', { ...user })
+  return service.post('user/signin', { ...user }).catch(err => {
+    console.log('error', err)
+  })
 }
 
 /**

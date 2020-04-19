@@ -81,11 +81,6 @@ function Sidebar(props) {
             <NavItem>全局设置</NavItem>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="7">
-          <NavLink to="/login">
-            <NavItem>登录</NavItem>
-          </NavLink>
-        </Menu.Item>
       </Menu>
     </Container>
   )

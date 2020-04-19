@@ -58,6 +58,10 @@ export const GlobalStyle = createGlobalStyle`
 		color: #fff;
 	}
 
+	input[type='text'], textarea {
+		outline: none;
+	}
+
 	::placeholder {
 		font-size: ${styles['font-medium']};
 	}
@@ -140,23 +144,31 @@ export const GlobalStyle = createGlobalStyle`
       font-size: 14px;
       font-weight: 500;
       color: #a6c3dc;
-    }
+		}
+		.form-input, .text-area {
+			flex: 1;
+			&:hover, &:focus {
+				border-color: #37b6c4;
+			}
+		}
     .form-input {
-      flex: 1;
-			${styles.formInput()}
+			${styles.formInput()};
     }
     .text-area {
-      flex: 1;
-      ${styles.formTextarea()}
+			${styles.formTextarea()};
     }
     .radio-box {
       background-color: #6c757d;
       line-height: 36px;
       padding-right: ${styles['font-small']};
-      font-size: ${styles['font-medium']};
+			font-size: ${styles['font-medium']};
+			transition: all .3s;
       &.info {
-        background-color: #17a2b8;
+				background-color: #17a2b8;
         border-color: #17a2b8;
+				&:hover {
+					background-color: #37b6c4;
+				}
       }
       &:first-child {
         border-radius: 3px 0 0 3px;
