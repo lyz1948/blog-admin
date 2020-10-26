@@ -17,7 +17,6 @@ export namespace TopNav {
     logout: () => void
   }
 }
-
 export class TopNav extends React.Component<TopNav.IProps> {
   constructor(props: TopNav.IProps, context: any) {
     super(props, context)
